@@ -15,8 +15,9 @@ export default definePage({
   description: 'Mattress disposal fee at public landfills and transfer stations in 2026: from free in Sacramento County to $40 each, and the bulky-load rules of some sites.',
   h1: 'Mattress disposal fee: what the dump adds for each mattress',
   intro: (h) => {
-    const has = h.E.DUMPS.filter((f) => f.mattress != null).sort((a, b) => a.mattress! - b.mattress!); const none = h.E.DUMPS.filter(h.E.noMattressRule).length;
-    return `${has[0].mattress === 0 ? `Nothing extra in ${has[0].place}` : `From ${h.fee(has[0].mattress!)} each in ${has[0].place}`}, up to ${h.fee(has[has.length - 1].mattress!)} each in ${has[has.length - 1].place}, at the public dumps that print a mattress price; ${none} of the ${h.E.DUMPS.length} print none, and the tool says so.`;
+    const has = h.E.mattressPriceSites().sort((a, b) => a.mattress! - b.mattress!); const rule = h.E.mattressRuleSites().length;
+    // One count everywhere (naive test, 2026-11-09: “7 print a mattress price”, “15 print none” and “9 sites with a mattress rule”).
+    return `${has[0].mattress === 0 ? `Nothing extra in ${has[0].place}` : `From ${h.fee(has[0].mattress!)} each in ${has[0].place}`}, up to ${h.fee(has[has.length - 1].mattress!)} each in ${has[has.length - 1].place}. Of the ${h.E.DUMPS.length} public dumps we checked, ${rule} have a mattress rule (${has.length} a price per mattress, ${rule - has.length} a higher rate for the load); the other ${h.E.DUMPS.length - rule} print no mattress price, so ask at the gate.`;
   },
   resume: (h) => {
     const hasFee = h.E.DUMPS.filter((f) => f.mattress != null && f.mattress > 0).sort((a, b) => a.mattress! - b.mattress!);
@@ -36,19 +37,26 @@ export default definePage({
       const one = h.est(f.id, { mattresses: 1, lbs: LBS }); const none = h.est(f.id, { lbs: LBS });
       if (one.total == null || none.total == null) return null;
       const priced = !h.E.noMattressRule(f);
-      const rule = f.mattress != null ? (f.mattress === 0 ? 'Household mattresses free' : `${h.fee(f.mattress)} each`) : f.htFlat ? 'Whole load pays the higher bulky-load rate' : f.htAdd != null ? `${h.fee(f.htAdd)} extra for items over six feet` : 'No mattress price on the list: ask at the gate';
-      return { k: priced ? one.total - none.total : 1e9, row: [h.fl(f), f.metro, rule, priced ? h.fee(one.total - none.total) : 'not printed', `${one.from ? 'from ' : ''}${h.fee(one.total)}${h.E.isFreeResident(one) ? ' (residents)' : ''}${priced ? '' : ' + mattress'}`] };
-    }).filter((x): x is { k: number; row: string[] } => x != null).sort((a, b) => a.k - b.k).map((x) => x.row);
-    const n = h.E.DUMPS.filter((f) => !h.E.noMattressRule(f)).length;
+      const rule = f.mattress != null ? (f.mattress === 0 ? 'Household mattresses free' : `${h.fee(f.mattress)} each`) : f.htFlat ? `The load pays ${h.fee(f.htFlat.pickup!)} instead of ${h.fee(f.flat!.pickup!)} with a mattress` : f.htAdd != null ? `${h.fee(f.htAdd)} extra for items over six feet` : 'No mattress price on the list: ask at the gate';
+      return { priced, k: priced ? one.total - none.total : none.total, row: priced ? [h.fl(f), f.metro, rule, h.fee(one.total - none.total), `${one.from ? 'from ' : ''}${h.fee(one.total)}${h.E.isFreeResident(one) ? ' (residents)' : ''}`] : [h.fl(f), f.metro, `${one.from ? 'from ' : ''}${h.fee(one.total)}${h.E.isFreeResident(one) ? ' (residents)' : ''}`] };
+    }).filter((x): x is { priced: boolean; k: number; row: string[] } => x != null).sort((a, b) => a.k - b.k);
+    // The sites with no mattress price folded apart (naive test, 2026-11-09: fifteen cards saying “ask at the gate”).
+    const withRule = rows.filter((x) => x.priced).map((x) => x.row); const without = rows.filter((x) => !x.priced).map((x) => x.row);
+    const n = withRule.length;
     return `
-<h2>Mattress fees at every public site we read</h2>
-<p>For each site: its mattress rule, what one mattress adds to a pickup with ${h.num(LBS)} lbs of household junk (the load of the main calculator), and the total. The ${n} sites with a mattress rule come first, cheapest first; the others print no mattress price, so their total is the load alone.</p>
-${h.table(['Site', 'Area', 'Mattress rule', 'One mattress adds', 'Load with it'], rows, `Price lists checked on ${h.D.read}, resident rates.`, ['l', 'l', 'l', 'r', 'r'])}
-<p>Two California counties use a bulky-load rule instead of a price per mattress. In Riverside County a pickup with a mattress pays the higher flat rate of ${h.fee(h.F('riverside').htFlat!.pickup!)} instead of ${h.fee(h.F('riverside').flat!.pickup!)}, so one mattress or three cost the same; the county calls it the hard-to-handle rate. At the Orange County landfills, a pickup under ${h.num(h.F('oc-ca').flatMaxLbs!.pickup!)} lbs pays ${h.fee(h.F('oc-ca').htAdd!)} more if it carries items longer than six feet, and a heavier load is weighed at ${h.fee(h.F('oc-ca').htPerTon!)} a ton instead of ${h.fee(h.F('oc-ca').perTon!)}.</p>
-
 <h2>Cheaper ways to get rid of a mattress</h2>
 <p>Before paying at the gate, three things are worth a call. Your city may collect bulky items at the curb, sometimes free a few times a year. A store delivering a new mattress may take the old one away, often for a fee printed at checkout. And California, Connecticut, Oregon and Rhode Island run state mattress recycling programs, funded by a small fee paid when a new mattress is sold, with drop-off sites that take used mattresses from residents at no charge; the ${h.src('mrc_bbm', 'Bye Bye Mattress site')} of the Mattress Recycling Council finds the nearest one. We have not read the terms of each drop-off site, so check its page before you go.</p>
 <p>If you do take it to the dump, put the mattress on top of the load and keep it dry: a soaked mattress weighs far more, and at a weighed site you pay for the water.</p>
+
+<h2>Mattress fees at the ${n} sites with a mattress rule</h2>
+<p>For each site: its mattress rule, what one mattress adds to a pickup with ${h.num(LBS)} lbs of household junk (the load of the main calculator), and the total. Sorted by what one mattress adds, lowest first.</p>
+${h.table(['Site', 'Area', 'Mattress rule', 'One mattress adds', 'Load with it'], withRule, `Price lists checked on ${h.D.read}, resident rates.`, ['l', 'l', 'l', 'r', 'r'])}
+<p>The other ${without.length} public sites print no mattress price. Ask at the gate whether they take mattresses and what they charge; the load alone costs:</p>
+<details class="plie not-prose my-4"><summary class="font-semibold text-accent-700 underline underline-offset-2">Show the ${without.length} sites with no mattress price</summary>
+${h.table(['Site', 'Area', `Pickup, ${h.num(LBS)} lbs, without the mattress`], without, `Price lists checked on ${h.D.read}, resident rates.`, ['l', 'l', 'r'])}
+</details>
+<p>Two California counties use a bulky-load rule instead of a price per mattress. In Riverside County a pickup with a mattress pays a higher flat rate, ${h.fee(h.F('riverside').htFlat!.pickup!)} instead of ${h.fee(h.F('riverside').flat!.pickup!)}, so one mattress or three cost the same (the county’s word for it is the “hard-to-handle” rate). At the Orange County landfills, a pickup under ${h.num(h.F('oc-ca').flatMaxLbs!.pickup!)} lbs pays ${h.fee(h.F('oc-ca').htAdd!)} more if it carries items longer than six feet, and a heavier load is weighed at ${h.fee(h.F('oc-ca').htPerTon!)} a ton instead of ${h.fee(h.F('oc-ca').perTon!)}.</p>
+
 `;
   },
 });

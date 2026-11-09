@@ -1,4 +1,5 @@
 import { definePage } from '../../lib/guide-types';
+import { PICKUP_LBS } from '../../lib/mini-specs';
 
 export default definePage({
   id: 'truckload-dump-cost',
@@ -15,14 +16,15 @@ export default definePage({
   h1: 'Cost to dump a truck load: measure the bed, then read the schedule',
   intro: (h) => {
     const lbs = h.E.cubicYards(6.5, 5, 2) * h.E.DENSITY.msw.lbs; const all = h.E.compare({ ...h.LOAD, lbs }); const pay = all.filter((x) => (x.e.total as number) > 0);
-    return `A standard pickup bed (6½ × 5 ft) piled 2 ft high holds about ${h.num(Math.round(lbs))} lbs of household junk, which pays ${h.fee(pay[0].e.total as number)} to ${h.fee(all[all.length - 1].e.total as number)} at the public dumps we checked. Type the size of your own pile below.`;
+    // Says why this range is not the home page's (naive test, 2026-11-09: 600 lbs, “about 660” and 662 read as three answers).
+    return `A standard pickup bed (6½ × 5 ft) piled 2 ft high holds about ${h.num(Math.round(lbs))} lbs of household junk, a little more than the ${h.num(PICKUP_LBS)} lb load of the home page, so it pays ${h.fee(pay[0].e.total as number)} to ${h.fee(all[all.length - 1].e.total as number)} at the public dumps we checked. Type the size of your own pile below.`;
   },
   resume: (h) => {
     const sd = h.F('san-diego'); const rv = h.F('riverside'); const oc = h.F('oc-ca'); const sl = h.F('salt-lake');
     return `The cost to dump a pickup truck load at a public landfill depends less on the size of the pile than on the rule the site uses. Some sites charge a flat fee per vehicle and never weigh a pickup: ${h.fee(sl.flat!.pickup!)} at ${sl.name}, ${h.fee(rv.flat!.pickup!)} at the Riverside County landfills and ${h.fee(sd.flat!.pickup!)} at ${sd.name} in San Diego, on schedules read on ${h.D.read}. Others weigh every load and charge by the ton above a minimum. A few combine the two: ${oc.name.replace(' landfills', '')} in Orange County charge ${h.fee(oc.flat!.pickup!)} for a pickup under ${h.num(oc.flatMaxLbs!.pickup!)} lbs, then weigh anything heavier. Loose household trash weighs about ${h.num(h.E.DENSITY.msw.lbs)} lbs a cubic yard on the EPA factors, so a typical bed holds a few hundred pounds, and on a weighed schedule that usually means the minimum charge.`;
   },
   faqs: (h) => [
-    { q: 'How much does a pickup truck load of trash weigh?', a: `It depends on the bed and how high you pile it. A bed six and a half feet long and five feet wide, filled two feet high, holds about 2.4 cubic yards. At the EPA factor of ${h.num(h.E.DENSITY.msw.lbs)} lbs a cubic yard for loose household trash, that is roughly ${h.num(Math.round(h.E.cubicYards(6.5, 5, 2) * h.E.DENSITY.msw.lbs / 10) * 10)} lbs. The same space filled with broken concrete would weigh over a ton, more than many half-ton pickups are rated to carry.` },
+    { q: 'How much does a pickup truck load of trash weigh?', a: `It depends on the bed and how high you pile it. A bed six and a half feet long and five feet wide, filled two feet high, holds about 2.4 cubic yards. At the EPA factor of ${h.num(h.E.DENSITY.msw.lbs)} lbs a cubic yard for loose household trash, that is about ${h.num(Math.round(h.E.cubicYards(6.5, 5, 2) * h.E.DENSITY.msw.lbs))} lbs. The same space filled with broken concrete would weigh over a ton, more than many half-ton pickups are rated to carry.` },
     { q: 'Is it cheaper to dump by weight or at a flat rate?', a: 'For light, bulky loads such as furniture, boxes or brush, a weighed schedule is often cheaper because the load pays only the minimum. For heavy loads such as roofing, tile or dirt, a flat vehicle rate wins, which is why flat-rate sites often weigh trailers or send dense material to another lane. You cannot choose the method at a given site; you can choose the site.' },
     { q: 'Do I need to cover my load?', a: 'Yes, almost everywhere, and the penalty is written into the schedules we read. Seattle adds a few dollars, Riverside County twenty-five, Dallas forty, and San Bernardino County charges double the normal fee. A tarp tied down at the corners is enough. Loose items that fly off on the highway can also lead to a separate traffic fine under state law.' },
   ],
@@ -46,7 +48,7 @@ ${h.table(['Site', 'Area', `${h.num(LBS)} lbs`, '1,600 lbs', `Rule for the ${h.n
 
 <h2>What the flat rate covers</h2>
 <p>Flat rates have limits printed beside them. The Riverside County rate covers a pickup or a trailer with a bed up to eight feet; ${h.F('salt-lake').name} weighs trailers towed by a one-ton truck or bigger; the Sacramento County stations weigh any vehicle with a trailer and any load with nine or more tires. Miramar puts a pickup towing a trailer in a second tier at ${h.fee(h.F('san-diego').flat!.trailer!)}. Read the line for your vehicle on the site’s page, linked in the table, before you go.</p>
-<p>Mattresses, tires and refrigerators cost extra at most sites, sometimes a lot more than the load itself. The ${h.a('home', 'full calculator')} adds them line by line.</p>
+<p>Mattresses, tires and refrigerators cost extra at many sites, sometimes a lot more than the load itself. The ${h.a('home', 'full calculator')} adds them line by line.</p>
 `;
   },
 });

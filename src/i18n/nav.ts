@@ -3,7 +3,7 @@ import { PAGES, pageById } from '../lib/guides';
 import type { Group } from '../lib/guide-types';
 export interface NavLink { href: string; label: string } export interface NavCategory { label: string; links: NavLink[] }
 const CORE: Record<string, string> = { home: 'Dump fee calculator', method: 'How the fees are read and priced', about: 'About', widget: 'Embed the calculator', contact: 'Contact', editorial: 'Editorial policy', privacy: 'Privacy', terms: 'Legal notice', cookies: 'Cookies' };
-const GROUP_LABEL: Record<Group, string> = { fees: 'Landfill and transfer station fees', items: 'Mattresses, tires and appliances', tools: 'Weight and comparison tools', metro: 'Fees in your area' };
+const GROUP_LABEL: Record<Group, string> = { fees: 'Landfill and transfer station fees', items: 'Couches, mattresses, tires and appliances', tools: 'Dumpster or dump run, load weight', metro: 'Fees in your area' };
 export const GROUPS_ORDER: Group[] = ['fees', 'items', 'metro', 'tools'];
 export const groupLabel = (g: Group) => GROUP_LABEL[g];
 export const label = (id: string, _lang: Locale = 'en') => CORE[id] ?? pageById(id)?.nav ?? id;
@@ -13,7 +13,7 @@ function categoriesCompletes(lang: Locale): NavCategory[] {
   return GROUPS_ORDER.map((g) => ({ label: GROUP_LABEL[g], links: inGroup(g, lang) })).filter((c) => c.links.length);
 }
 // Top menu: short labels, never on two lines (full labels stay in the footer).
-const COURT: Record<string, string> = { 'Landfill and transfer station fees': 'Dump fees', 'Mattresses, tires and appliances': 'Items', 'Weight and comparison tools': 'Tools', 'Fees in your area': 'By area' };
+const COURT: Record<string, string> = { 'Landfill and transfer station fees': 'Dump fees', 'Couches, mattresses, tires and appliances': 'Items', 'Dumpster or dump run, load weight': 'Tools', 'Fees in your area': 'By area' };
 export const navCategories = (lang: Locale, court = true): NavCategory[] =>
   categoriesCompletes(lang).map((c) => (court ? { ...c, label: COURT[c.label] ?? c.label } : c));
 export const navDirect = (_lang: Locale): NavLink[] => [];

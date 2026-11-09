@@ -30,7 +30,7 @@ export default definePage({
 <h2>McCommas Bluff Landfill</h2>
 ${h.schedule('dallas')}
 <p>The $4 in added fees is two fees of $2 a ton each, a customer processing fee and an environmental fee. They apply to customers paying for single loads at the window, which is how most residents pay. The city’s landfill page also lists the Northwest Transfer Station on Bachman Lake at a higher gate rate of ${h.fee(71.28)} a ton, which makes McCommas Bluff the cheaper of the two city sites for the same load.</p>
-<p><strong>A mattress or a sofa:</strong> the city’s rate page gives no separate price for them, so the calculator counts no extra fee and says so. Ask at the weigh station whether the landfill takes mattresses, or check the city’s bulky-item pickup first. The ${h.a('mattress-disposal', 'mattress page')} lists the sites that do print a mattress price.</p>
+<p><strong>A couch or a mattress:</strong> the city’s rate page gives no separate price for either. A couch is priced with the load, by its weight; some sites refuse upholstered furniture, so ask at the weigh station. For a mattress, ask there too, or check the city’s bulky-item pickup first. The ${h.a('mattress-disposal', 'mattress page')} lists the sites that do print a mattress price.</p>
 
 <h2>El Paso, Greater El Paso Landfill</h2>
 ${h.schedule('el-paso')}

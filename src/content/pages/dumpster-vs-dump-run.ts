@@ -1,4 +1,5 @@
 import { definePage } from '../../lib/guide-types';
+import { VERSUS_LBS } from '../../lib/mini-specs';
 
 export default definePage({
   id: 'dumpster-vs-dump-run',
@@ -25,7 +26,7 @@ export default definePage({
     return `
 <h2>How the comparison is made</h2>
 <p>The total weight is split evenly over the trips. Each trip pays the load fee of the site for its share of the weight, then items such as mattresses or tires are added once. Driving is trips times miles there and back times the cost per mile. The difference with the quote is shown either way: when the quote is lower, the tool says so.</p>
-<p>The example loaded is 3,000 lbs in two pickup trips of 30 miles. The quote field is at 0, so the tool first shows what doing it yourself costs; type the quote you were given to see which is cheaper.</p>
+<p>The example loaded is ${h.num(VERSUS_LBS)} lbs, two pickup loads like the one on the home page, in two trips of 30 miles. The quote field is at 0, so the tool first shows what doing it yourself costs; type the quote you were given to see which is cheaper.</p>
 <p>Fewer trips do not always mean lower fees. Take ${dk.name} in DeKalb County, near Atlanta: each 1,500 lb trip falls in the county’s last weight band below one ton, ${h.fee(dk.tiers![dk.tiers!.length - 1].fee)}, so the fees come to ${h.fee(2 * dk.tiers![dk.tiers!.length - 1].fee)} before driving. Send it in one trip of 3,000 lbs and the load is weighed at ${h.fee(dk.perTon!)} a ton instead, ${h.fee(h.tot('dekalb', { lbs: 3000 }))}, against ${h.fee(2 * dk.tiers![dk.tiers!.length - 1].fee)} for the two trips.</p>
 <p>Some cities change the sum entirely. A Phoenix resident paying for city trash service may bring one load up to a ton a month at no charge, at the ${h.fl(ph, 'city’s transfer stations')}. The tool counts every trip under a ton as free there, so spread such trips over separate months, or the second one pays the ${h.fee(ph.minCharge!)} minimum or ${h.fee(ph.perTon!)} a ton.</p>
 

@@ -31,6 +31,8 @@ const total = (f: Facility, L: Load) => E.estimate(f, L).total;
 const effNote = (f: Facility) => `${E.priceListLine(f)}, checked on ${displayDate(E.READ_ON, 'en-US')}.`;
 /** Weight of “a pickup load of trash” everywhere on the site: the main calculator's default (naive test, 4th round). */
 export const PICKUP_LBS = 600;
+/** Example of the dumpster comparison: two pickup loads (naive test, 2026-11-09: 3,000 lbs was far from a couch, a mattress and some debris). */
+export const VERSUS_LBS = 2 * PICKUP_LBS;
 const lbsIn = (def: number, label = 'Weight of the load') => ({ id: 'lbs', label, def, unit: 'lbs', max: 20000, help: 'The scale weighs it; a guess is fine here' });
 
 /** Items (mattresses, tires, appliances): the total the reader pays, then what the items add. */
@@ -51,7 +53,9 @@ function itemSpec(kind: 'mattresses' | 'tires' | 'freon', title: string, has: (f
       const ownLine = e1.lines.some((x) => !x.label.startsWith('Load') && x.label !== (f.perLoadExtraLabel ?? 'Per-load fee'));
       if (v.withLoad === 1 && !unpriced && !ownLine && n > 0) { rows.push(['Same load without them', fee(t0)]); rows.push([`So the ${formatNumber(n, 0)} ${noun} add`, fee(t1 - t0)]); }
       const head = v.withLoad === 1 ? (unpriced ? `You pay for the load (${noun} not priced)` : `You pay, load and ${formatNumber(n, 0)} ${noun}`) : `${formatNumber(n, 0)} ${noun} at ${f.name}`;
-      return { head: [head, fee(t1)], rows, note: effNote(f) };
+      // The free routes under the price, not ten screens down (naive test, 2026-11-09).
+      const free = kind === 'mattresses' ? ' Before you pay: your city may pick up a mattress at the curb, sometimes free. In California, Connecticut, Oregon and Rhode Island, state drop-off sites take used mattresses free (Bye Bye Mattress program).' : '';
+      return { head: [head, fee(t1)], rows, note: `${effNote(f)}${free}` };
     },
   };
 }
@@ -67,7 +71,7 @@ const SPECS: Record<string, MiniSpec> = {
     },
   },
   pickup: {
-    title: 'A pickup bed measured, weighed and priced', cta: 'Every fee for this load, line by line', ctaPage: 'home',
+    title: 'A pickup bed measured, weighed and priced', cta: 'Add a couch, a mattress or tires on the main calculator', ctaPage: 'home',
     inputs: [facIn(() => true, E.EXAMPLE_ID), { id: 'len', label: 'Length of the pile', def: 6.5, unit: 'ft', max: 40, decimals: 1, help: 'Measure your bed or trailer' }, { id: 'wid', label: 'Width', def: 5, unit: 'ft', max: 10, decimals: 1 }, { id: 'hei', label: 'Average height', def: 2, unit: 'ft', max: 10, decimals: 1 }, { id: 'mat', label: 'What is in it', def: 0, options: MAT_OPT }],
     run: (v) => {
       const f = fac(v.fac); const mat = pick(MAT, v.mat); const cy = E.cubicYards(v.len, v.wid, v.hei);
@@ -84,7 +88,7 @@ const SPECS: Record<string, MiniSpec> = {
     },
   },
   couch: {
-    title: 'A couch or large furniture at the dump', cta: 'Price mattresses and tires in the same load', ctaPage: 'home',
+    title: 'A couch or large furniture at the dump', cta: 'Add a mattress, tires or remodel debris to this load', ctaPage: 'home',
     inputs: [facIn(() => true, E.EXAMPLE_ID), { id: 'n', label: 'Couches and large furniture', def: 1, unit: 'items', max: 20 }, lbsIn(PICKUP_LBS, 'Weight of the load, furniture included'), { id: 'veh', label: 'Vehicle', def: 1, options: VEH_OPT }],
     run: (v) => {
       const f = fac(v.fac); const n = Math.max(0, Math.round(v.n)); const L0 = base({ lbs: v.lbs, vehicle: pick(VEH, v.veh) });
@@ -92,9 +96,9 @@ const SPECS: Record<string, MiniSpec> = {
       if (e1.total == null) return { head: ['You pay', 'not priced'], rows: [['Reason', e1.rule]], note: effNote(f) };
       const rows: Array<[string, string]> = e1.lines.map((x) => [x.label, fee(x.amount)]);
       if (n > 0 && E.hasBulkyRule(f) && e0.total != null && e1.total !== e0.total) { rows.push(['Same load without the furniture', fee(e0.total)]); rows.push(['So the furniture adds', fee(e1.total - e0.total)]); }
-      else if (n > 0 && f.htFlat) rows.push(['Couch or furniture', `the price list names mattresses only for its bulky-load rate (${fee(f.htFlat[pick(VEH, v.veh)] ?? f.htFlat.pickup!)}): ask at the gate`]);
-      else if (n > 0) rows.push(['Couch or furniture', 'no fee of its own on this price list: priced with the load']);
-      return { head: [n > 0 ? 'You pay, load and furniture' : 'You pay for the load', `${e1.from ? 'from ' : ''}${fee(e1.total)}`], rows, note: `${effNote(f)} Some sites refuse upholstered furniture: ask at the gate.` };
+      // One wording on every page (engine `couchRule`), naive test, 2026-11-09.
+      else if (n > 0) rows.push(['Couch or furniture', E.couchRule(f)]);
+      return { head: [n > 0 ? 'You pay, load and furniture' : 'You pay for the load', `${e1.from ? 'from ' : ''}${fee(e1.total)}`], rows, note: `Some sites refuse upholstered furniture: ask at the gate. Before you pay: your city may pick up a couch at the curb, sometimes free, and a charity may take one in good condition. ${effNote(f)}` };
     },
   },
   // Every site, so a reader whose dump prints no mattress price still finds it and is told so.
@@ -130,9 +134,9 @@ const SPECS: Record<string, MiniSpec> = {
   },
   versus: {
     title: 'Hauling it yourself against a quote', cta: 'How much your load weighs', ctaPage: 'load-weight-calculator',
-    inputs: [facIn(() => true, E.EXAMPLE_ID), { id: 'veh', label: 'Vehicle', def: 1, options: VEH_OPT }, lbsIn(3000, 'Total weight to get rid of'), { id: 'trips', label: 'Trips to the dump', def: 2, max: 30 }, { id: 'miles', label: 'Miles there and back, per trip', def: 30, unit: 'mi', max: 500 }, { id: 'cents', label: 'Cost of driving, per mile', def: P.mileage.businessCents, unit: '¢', max: 300, help: `The federal standard rate for a car, gas and wear included (IRS, the tax agency, ${P.mileage.period}). Lower it if you count gas only` }, { id: 'rental', label: 'Truck or trailer rental, if any', def: 0, unit: '$', max: 10000, help: '0 if you drive your own' }, { id: 'quote', label: 'Dumpster or junk removal quote', def: 0, unit: '$', max: 100000, help: 'Type the price you were quoted; 0 until you have one' }, { id: 'mt', label: 'Mattresses in the load', def: 0, max: 20, avance: true, help: 'Added once, at the site’s mattress fee' }],
+    inputs: [facIn(() => true, E.EXAMPLE_ID), { id: 'veh', label: 'Vehicle', def: 1, options: VEH_OPT }, lbsIn(VERSUS_LBS, 'Total weight to get rid of'), { id: 'trips', label: 'Trips to the dump', def: 2, max: 30 }, { id: 'miles', label: 'Miles there and back, per trip', def: 30, unit: 'mi', max: 500 }, { id: 'cents', label: 'Cost of driving, per mile', def: P.mileage.businessCents, unit: '¢', max: 300, help: `The federal standard rate for a car, gas and wear included (IRS, the tax agency, ${P.mileage.period}). Lower it if you count gas only` }, { id: 'rental', label: 'Truck or trailer rental, if any', def: 0, unit: '$', max: 10000, help: '0 if you drive your own' }, { id: 'quote', label: 'Dumpster or junk removal quote', def: 0, unit: '$', max: 100000, help: 'Type the price you were quoted; 0 until you have one' }, { id: 'cb', label: 'Couches and large furniture', def: 0, max: 20, help: 'Priced with the load at most sites' }, { id: 'mt', label: 'Mattresses in the load', def: 0, max: 20, help: 'Added once, at the site’s mattress fee' }],
     run: (v) => {
-      const f = fac(v.fac); const r = E.versusQuote(f, base({ lbs: v.lbs, vehicle: pick(VEH, v.veh), mattresses: Math.max(0, Math.round(v.mt ?? 0)) }), v.trips, v.miles, v.cents, v.quote);
+      const f = fac(v.fac); const r = E.versusQuote(f, base({ lbs: v.lbs, vehicle: pick(VEH, v.veh), mattresses: Math.max(0, Math.round(v.mt ?? 0)), bulky: Math.max(0, Math.round(v.cb ?? 0)) }), v.trips, v.miles, v.cents, v.quote);
       if (!r) return { head: ['Hauling it yourself', 'not priced'], rows: [['Reason', 'This site takes no trash']] };
       const rental = Math.max(0, v.rental || 0); const self = Math.round((r.self + rental) * 100) / 100; const diff = Math.round((r.quote - self) * 100) / 100;
       const rows: Array<[string, string]> = [[`Dump fees, ${r.trips} trip${r.trips > 1 ? 's' : ''}`, fee(r.fees)], ['Driving', fee(r.driving)]];

@@ -67,7 +67,7 @@ export const EXAMPLE_ID = 'salt-lake';
 export const facilityIndex = (id: string) => DUMPS.findIndex((f) => f.id === id);
 export const LBS_PER_TON = 2000;
 export const VEHICLE_LABEL: Record<Vehicle, string> = { car: 'Car, SUV or minivan', pickup: 'Pickup or cargo van', trailer: 'Pickup towing a trailer' };
-export const MATERIAL_LABEL: Record<Material, string> = { trash: 'Household trash and junk', yard: 'Yard waste and brush', cd: 'Construction debris' };
+export const MATERIAL_LABEL: Record<Material, string> = { trash: 'Household trash and junk', yard: 'Yard waste and brush', cd: 'Construction or remodel debris' };
 
 export interface Load { vehicle: Vehicle; lbs: number; material: Material; mattresses: number; tires: number; freon: number; resident: boolean;
   /** Couches, sofas and other large furniture: no fee of their own, but they trigger a bulky-load rule where the schedule has one. */
@@ -86,7 +86,8 @@ const money = (n: number) => `$${n.toFixed(2).replace(/\.00$/, '')}`;
 export function weighed(f: Facility, lbs: number, rate: number, min: number | undefined): { fee: number; rule: string } {
   const raw = rate * tons(lbs) + (f.perTonExtra ?? 0) * tons(lbs);
   const all = rate + (f.perTonExtra ?? 0);
-  const extra = f.perTonExtra ? ` (${money(rate)} + ${money(f.perTonExtra)} in added fees)` : '';
+  // “$45.78 + $4 in added fees” read as $4 on top of the bill (naive test, 2026-11-09): both are per ton.
+  const extra = f.perTonExtra ? ` (${money(rate)} a ton plus ${money(f.perTonExtra)} a ton in added fees)` : '';
   if (min != null && raw < min) return { fee: min, rule: `Minimum charge ${money(min)}, the least any load pays${f.minCoversLbs ? ` (covers up to ${f.minCoversLbs} lbs)` : ''}` };
   return { fee: r2(raw), rule: `${(tons(lbs)).toFixed(2)} tons at ${money(all)} a ton${extra}` };
 }
@@ -122,7 +123,7 @@ export function baseFee(f: Facility, L: Load): { fee: number | null; rule: strin
   const flat = (ht && f.htFlat?.[L.vehicle] != null ? f.htFlat[L.vehicle] : flatTable?.[L.vehicle]);
   const flatMax = f.flatMaxLbs?.[L.vehicle];
   if (flat != null && (flatMax == null || lbs < flatMax)) {
-    const label = ht && f.htFlat?.[L.vehicle] != null ? 'Flat bulky-load rate: a mattress or other bulky item puts the whole load on it' : `${flatMax != null ? `Flat fee for this vehicle under ${flatMax.toLocaleString('en-US')} lbs; heavier loads are weighed` : 'Flat fee for this vehicle, whatever the weight'}${nr?.flat ? ` (${nr.label})` : ''}`;
+    const label = ht && f.htFlat?.[L.vehicle] != null ? 'Higher flat rate for a load with a mattress (the county’s rule for bulky items)' : `${flatMax != null ? `Flat fee for this vehicle under ${flatMax.toLocaleString('en-US')} lbs; heavier loads are weighed` : 'Flat fee for this vehicle, whatever the weight'}${nr?.flat ? ` (${nr.label})` : ''}`;
     return { fee: flat, rule: label };
   }
   const rate = ht && f.htPerTon ? f.htPerTon : (nr?.perTon ?? f.perTon);
@@ -238,6 +239,20 @@ export function residentHelp(f: Facility): string | undefined {
 export const noMattressRule = (f: Facility) => f.mattress == null && f.htAdd == null && !f.htFlat && !f.htPerTon;
 /** True when the price list has a bulky-load rule that a couch or large furniture triggers. */
 export const hasBulkyRule = (f: Facility) => f.htAdd != null;
+/**
+ * What a couch or sofa costs at a site, in one wording used on every page (naive test, 2026-11-09: the area
+ * pages said “ask at the gate whether the site takes them”, the couch page “priced with the load”).
+ */
+export function couchRule(f: Facility): string {
+  if (hasBulkyRule(f)) return `${money(f.htAdd!)} more on a light flat-rate load (items over six feet, furniture named)`;
+  if (f.htFlat) return 'the higher bulky-load rate names mattresses only: ask at the gate';
+  return 'no fee of its own on this price list: priced with the load';
+}
+/** Sites that price a couch with the load, with no rule of their own for it. */
+export const couchWithLoad = () => DUMPS.filter((f) => !hasBulkyRule(f) && !f.htFlat);
+/** Sites with a mattress rule (a price per mattress or a higher rate for a load with one), and those with a price per mattress. */
+export const mattressRuleSites = () => DUMPS.filter((f) => !noMattressRule(f));
+export const mattressPriceSites = () => DUMPS.filter((f) => f.mattress != null);
 
 const money0 = (n: number) => (Math.abs(n - Math.round(n)) < 0.005 ? formatMoney(Math.round(n), 0) : formatMoney(n, 2));
 /**
@@ -254,8 +269,10 @@ export function rankInState(f: Facility, all: Array<{ f: Facility; e: Estimate }
   if (same.length <= 1) return { state: `The only ${st} site we priced.`, national };
   const lessHere = same.filter((x) => (x.e.total as number) < (mine.e.total as number) - 0.004);
   const lo = same[0];
-  const free = (x: { e: Estimate }) => (isFreeResident(x.e) ? ' for residents' : '');
+  // Two sentences, the lowest site named with its own verb (naive test, 2026-11-09: “Most expensive …: Washington
+  // County charges $0” was read as Washington County being the most expensive).
+  const loTxt = isFreeResident(lo.e) ? `${lo.f.name} (${lo.f.metro}) is free for its qualifying residents for the same load.` : `${lo.f.name} (${lo.f.metro}) charges ${money0(lo.e.total as number)} for the same load.`;
   if (lessHere.length === 0) return { state: `Cheapest of the ${same.length} ${st} sites we priced.`, national };
-  if (same[same.length - 1].f.id === f.id || same.filter((x) => (x.e.total as number) > (mine.e.total as number) + 0.004).length === 0) return { state: `Most expensive of the ${same.length} ${st} sites we priced: ${lo.f.name} (${lo.f.metro}) charges ${money0(lo.e.total as number)}${free(lo)} for the same load.`, national };
-  return { state: `${lessHere.length} of the ${same.length} ${st} sites we priced charge less: ${lo.f.name} (${lo.f.metro}) charges ${money0(lo.e.total as number)}${free(lo)}.`, national };
+  if (same[same.length - 1].f.id === f.id || same.filter((x) => (x.e.total as number) > (mine.e.total as number) + 0.004).length === 0) return { state: `The highest of the ${same.length} ${st} sites we priced. ${loTxt}`, national };
+  return { state: `${lessHere.length} of the ${same.length} ${st} sites we priced charge less. ${loTxt}`, national };
 }

@@ -15,7 +15,11 @@ type Row = [string, string, string, string, string, string];
 const ROWS = LITE as Row[];
 const CODES = [...new Set(ROWS.map((r) => r[3]))].sort((a, b) => (STATE_NAMES[a] ?? a).localeCompare(STATE_NAMES[b] ?? b));
 const OPTS = CODES.map((c) => ({ value: c, label: STATE_NAMES[c] ?? c }));
-const OWN: Record<string, string> = { P: 'Public', R: 'Private', O: 'Other' };
+// Owner names carried EPA abbreviations (“SSD #5”, “NUERA”) that told the reader nothing (naive test, 2026-11-09):
+// the column says who runs the site in plain words, and the name opens a map search, the only way to a phone
+// number and hours, which the EPA file does not hold.
+const OWN: Record<string, string> = { P: 'Public body', R: 'Private company', O: 'Other' };
+const mapHref = (r: Row) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([spell(r[0]), r[1], STATE_NAMES[r[3]] ?? r[3]].filter(Boolean).join(', '))}`;
 /** “Arlington LF” → “Arlington Landfill”: the EPA abbreviation spelled out. */
 const spell = (name: string) => name.replace(/\bLF\b/g, 'Landfill').replace(/\bSLF\b/g, 'Sanitary Landfill').replace(/\bMSW\b/g, 'Municipal Solid Waste');
 const FIRST = 20;
@@ -45,7 +49,7 @@ export default function LandfillFinder({ state = 'TX', idPrefix = 'lf', schedule
     <div data-chrome className="rechner border border-navy-300 bg-white p-4 sm:p-5">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,20rem)_1fr]">
         <form className="grid content-start gap-4" onSubmit={(e) => e.preventDefault()}>
-          <SelectField id={`${idPrefix}-st`} label="State or territory" value={st} onChange={pickState} options={OPTS} help="Pick your state" />
+          <SelectField id={`${idPrefix}-st`} label="State or territory" value={picked ? st : ''} onChange={(x) => { if (x) pickState(x); }} options={picked ? OPTS : [{ value: '', label: 'Choose your state' }, ...OPTS]} help={picked ? 'Pick another state' : `Until you do, the list below is an example: ${STATE_NAMES[st] ?? st}`} />
           <Toggle id={`${idPrefix}-own`} label="Show" value={own} onChange={setOwn} options={[{ value: 'all', label: 'All open' }, { value: 'pub', label: 'Public only' }]} />
         </form>
         <div data-resultat aria-live="polite" className="self-start border-l-4 border-accent-500 bg-accent-50 p-4">
@@ -59,9 +63,9 @@ export default function LandfillFinder({ state = 'TX', idPrefix = 'lf', schedule
         </div>
       </div>
       <div className="mt-4 border-t border-navy-200 pt-3">
-        <p className="mb-2 text-sm text-navy-800">{list.length > FIRST && !all ? `Showing ${FIRST} of ${list.length}: ${order}.` : `All ${list.length} shown: ${order}.`} Call before you drive: some landfills take no loads from residents.</p>
-        <table className="w-full text-sm"><thead><tr><th scope="col" className="py-1 pr-2 text-left text-xs uppercase text-navy-700">Landfill</th><th scope="col" className="py-1 pr-2 text-left text-xs uppercase text-navy-700">City, county</th><th scope="col" className="py-1 text-left text-xs uppercase text-navy-700">Owner</th></tr></thead>
-          <tbody>{visible.map((r) => <tr key={r[0] + r[1]} className="border-b border-navy-100"><td className="py-1 pr-2 text-navy-900">{spell(r[0])}</td><td className="py-1 pr-2 text-navy-700">{[r[1], r[2] && `${r[2]} County`].filter(Boolean).join(', ')}</td><td className="py-1 text-navy-700">{OWN[r[4]]}{r[5] ? `: ${r[5]}` : ''}</td></tr>)}</tbody>
+        <p className="mb-2 text-sm text-navy-800">{list.length > FIRST && !all ? `Showing ${FIRST} of ${list.length}: ${order}.` : `All ${list.length} shown: ${order}.`} Some landfills take loads only from trucking companies, and the EPA list has no phone numbers: tap a name to find it on a map, with its phone and hours, and call before you go.</p>
+        <table className="w-full text-sm"><thead><tr><th scope="col" className="py-1 pr-2 text-left text-xs uppercase text-navy-700">Landfill</th><th scope="col" className="py-1 pr-2 text-left text-xs uppercase text-navy-700">City, county</th><th scope="col" className="py-1 text-left text-xs uppercase text-navy-700">Run by</th></tr></thead>
+          <tbody>{visible.map((r) => <tr key={r[0] + r[1]} className="border-b border-navy-100"><td className="py-1 pr-2 text-navy-900"><a href={mapHref(r)} target="_blank" rel="nofollow noopener noreferrer" className="text-accent-700 underline underline-offset-2">{spell(r[0])}</a></td><td className="py-1 pr-2 text-navy-700">{[r[1], r[2] && `${r[2]} County`].filter(Boolean).join(', ')}</td><td className="py-1 text-navy-700">{OWN[r[4]]}</td></tr>)}</tbody>
         </table>
         {list.length > FIRST && <button type="button" onClick={() => setAll(!all)} className="mt-3 rounded border border-navy-300 px-3 py-1.5 text-sm font-medium text-navy-800 hover:bg-navy-50">{all ? `Show the first ${FIRST} only` : `Show all ${list.length}`}</button>}
       </div>

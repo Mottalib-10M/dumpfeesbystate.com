@@ -162,7 +162,7 @@ const crumbAside = Astro.slots.has('crumb-aside') ? (await Astro.slots.render('c
       <slot />
     </main>
     <footer class="mt-16 border-t border-navy-200 bg-navy-50">
-      <div class="mx-auto max-w-6xl px-4 py-12">
+      <div class="mx-auto max-w-6xl px-4 py-6">
         {/* Site map folded under one title: it repeated three screens of links at the foot of every page on a phone (naive test, 4th round). */}
         <details class="plie"><summary class="text-sm font-semibold text-navy-900">Every page of {SITE_NAMES[lang]}</summary>
         <div class="mt-4 grid grid-cols-2 gap-8 md:grid-cols-4">
@@ -170,15 +170,17 @@ const crumbAside = Astro.slots.has('crumb-aside') ? (await Astro.slots.render('c
         </div>
         </details>
         {popular.length > 0 && (<div class="mt-8 border-t border-navy-200 pt-6"><h2 class="mb-2 text-sm font-semibold text-navy-900">{ui.footerPopular}</h2><p class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-navy-600">{popular.map((p) => <a href={p.href} class="hover:text-navy-900">{p.label}</a>)}</p></div>)}
-        <div class="mt-8 border-t border-navy-200 pt-8">
-          <div class="flex flex-col items-center gap-2 text-center text-sm text-navy-500">
-            <p><span class="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-3 py-0.5 text-xs font-medium text-green-700"><span class="inline-block h-1.5 w-1.5 rounded-full bg-green-500" aria-hidden="true"></span>{ui.footerValidated} · {YEAR}</span></p>
-            <p>{ui.footerBrowser}</p>
-            <p>{ui.asOf} {YEAR}, {ui.lastUpdated} <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, LANG_TAGS[lang])}</time></p>
-            <p>&copy; {new Date().getFullYear()} {SITE_NAMES[lang]}. {ui.footerDisclaimer}</p>
-            <p>{ui.attribution}</p>
-            {(GA4_ID || CLARITY_ID) && CONSENT_MODE !== 'none' && <p><button type="button" data-consent-manage class="underline hover:text-navy-900">{consentStrings(lang).manage}</button></p>}
-          </div>
+        {/* One short block (brief of 2026-11-09, naive test: the same two screens of footer, with the date three times, under every page). */}
+        <div class="mt-6 border-t border-navy-200 pt-4 text-sm text-navy-600">
+          <p>&copy; {new Date().getFullYear()} {SITE_NAMES[lang]} · {ui.asOf} {YEAR}, {ui.lastUpdated} <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, LANG_TAGS[lang])}</time> · {ui.footerBrowser}</p>
+          <details class="plie mt-2"><summary class="cursor-pointer font-medium text-navy-800">Who publishes this site, and where the data come from</summary>
+            <div class="mt-2 space-y-2 text-xs text-navy-600">
+              <p>{ui.footerValidated}.</p>
+              <p>{ui.footerDisclaimer}</p>
+              <p>{ui.attribution}</p>
+            </div>
+          </details>
+          {(GA4_ID || CLARITY_ID) && CONSENT_MODE !== 'none' && <p class="mt-2"><button type="button" data-consent-manage class="underline hover:text-navy-900">{consentStrings(lang).manage}</button></p>}
         </div>
       </div>
     </footer>

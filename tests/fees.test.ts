@@ -122,7 +122,9 @@ describe('naive test, 4th round (2026-11-09)', () => {
     const L = { vehicle: 'pickup' as const, lbs: 600, material: 'trash' as const, mattresses: 0, tires: 0, freon: 0, resident: true };
     const all = compare(L);
     const sd = rankInState(byId('san-diego'), all);
-    expect(sd.state).toMatch(/^Most expensive of the \d+ California sites we priced: Badlands, Blythe, Lamb Canyon and El Sobrante landfills \(Riverside County\) charges \$15\.70/);
+    expect(sd.state).toMatch(/^The highest of the \d+ California sites we priced\. Badlands, Blythe, Lamb Canyon and El Sobrante landfills \(Riverside County\) charges \$15\.70 for the same load\.$/);
+    // The free site gets its own verb, never “charges $0” after “most expensive” (naive test, 2026-11-09).
+    expect(rankInState(byId('salt-lake'), all).state).toMatch(/^The highest of the 2 Utah sites we priced\. .+ is free for its qualifying residents for the same load\.$/);
     const rv = rankInState(byId('riverside'), all);
     expect(rv.state).toMatch(/^Cheapest of the \d+ California sites we priced\.$/);
     expect(rankInState(byId('dallas'), all).national).toMatch(/^\d+ of the 24 public sites we priced nationwide charge less for this load\.$/);
@@ -136,6 +138,17 @@ describe('naive test, 4th round (2026-11-09)', () => {
     expect(estimate(byId('oc-ca'), { ...L, bulky: 1 }).total).toBe(45);
     expect(estimate(byId('riverside'), { ...L, bulky: 1 }).total).toBe(15.7);
     expect(estimate(byId('salt-lake'), { ...L, bulky: 1 }).total).toBe(17);
+  });
+  it('one couch wording and one mattress count everywhere (naive test, 2026-11-09)', async () => {
+    const { couchRule, couchWithLoad, mattressRuleSites, mattressPriceSites, DUMPS } = await import('../src/lib/engine/fees');
+    expect(couchRule(byId('salt-lake'))).toBe('no fee of its own on this price list: priced with the load');
+    expect(couchRule(byId('riverside'))).toMatch(/names mattresses only/);
+    expect(couchWithLoad().length + 2).toBe(DUMPS.length);
+    expect(mattressRuleSites().length).toBe(mattressPriceSites().length + 2);
+  });
+  it('per-ton added fees are said to be per ton', () => {
+    const L = { vehicle: 'pickup' as const, lbs: 600, material: 'trash' as const, mattresses: 0, tires: 0, freon: 0, resident: true };
+    expect(estimate(byId('dallas'), L).rule).toMatch(/a ton plus \$4 a ton in added fees/);
   });
   it('price list dated in plain words', async () => {
     const { priceListLine, residentHelp, hasResidentRule } = await import('../src/lib/engine/fees');

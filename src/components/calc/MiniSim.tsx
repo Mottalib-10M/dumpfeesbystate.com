@@ -52,10 +52,11 @@ export default function MiniSim({ kind, lang = 'en', href, title, defaults = {},
   const champ = (i: MiniInput) => (i === facInput
     ? <div key="fac" className="grid gap-3">
       <div>
-        <SelectField id={fid('st')} label={exFac ? 'First, pick your state' : 'Your state'} value={curState} onChange={pickState} options={states.map((c) => ({ value: c, label: STATE_NAMES[c] ?? c }))} />
-        {exFac && <p className="mt-1 text-sm font-medium text-navy-900">Until you do, the figures are an example for {exFac.metro}, {STATE_NAMES[exFac.state] ?? exFac.state}.</p>}
+        {/* Empty until the reader picks (naive test, 2026-11-09: “Utah” under “First, pick your state” read as a guess). */}
+        <SelectField id={fid('st')} label={exFac ? 'First, pick your state' : 'Your state'} value={exFac ? '' : curState} onChange={(x) => { if (x) pickState(x); }} options={[...(exFac ? [{ value: '', label: 'Choose your state' }] : []), ...states.map((c) => ({ value: c, label: STATE_NAMES[c] ?? c }))]} />
+        {exFac && <p className="mt-1 text-sm font-medium text-navy-900">Until you do, the figures are an example for {exFac.metro}, {STATE_NAMES[exFac.state] ?? exFac.state}, with the other fields filled in: change any of them.</p>}
       </div>
-      <SelectField id={fid(i.id)} label="Public dump" value={String(v[i.id])} onChange={(x) => set(i.id)(Number(x))} options={i.options!.filter((o) => facOf(o)?.state === curState).map((o) => ({ ...o, label: o.label.replace(/^[A-Z]{2} · /, '') }))} help={i.help} />
+      <SelectField id={fid(i.id)} label="Public dump" value={exFac ? '' : String(v[i.id])} onChange={(x) => { if (x) set(i.id)(Number(x)); }} options={exFac ? [{ value: '', label: 'Choose your state first' }] : i.options!.filter((o) => facOf(o)?.state === curState).map((o) => ({ ...o, label: o.label.replace(/^[A-Z]{2} · /, '') }))} help={i.help} />
       {findHref && <a href={findHref} className="-mt-1 text-sm text-accent-700 underline underline-offset-2">Not sure which dump serves you?</a>}
     </div>
     : i.options
