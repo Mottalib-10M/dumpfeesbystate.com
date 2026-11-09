@@ -13,7 +13,7 @@ export default definePage({
   title: 'Orlando Dump Fees: Orange County Landfill Rates, Oct 2026',
   description: 'Orlando dump fees at the Orange County Landfill and transfer stations from October 1, 2026: garbage, debris, yard waste, plus Miami-Dade and Jacksonville.',
   h1: 'Orlando dump fees: Orange County’s landfill and transfer stations',
-  intro: (h) => h.areaIntro('orange-fl', ['miami-dade', 'jacksonville']),
+  intro: (h) => h.areaIntro('Orlando', 'orange-fl', ['miami-dade', 'jacksonville']),
   resume: (h) => {
     const f = h.F('orange-fl'); const md = h.F('miami-dade'); const j = h.F('jacksonville');
     return `Orange County Utilities runs the Orange County Landfill and two transfer stations, Porter and McLeod Road, and under the rates effective October 1, 2026 all three charge ${h.fee(f.perTon!)} a ton for Class I household garbage, with a ${h.fee(f.minCharge!)} minimum. A light pickup load therefore costs little more than the minimum. Yard waste is ${h.fee(f.yard!.perTon!)} a ton at the landfill, but pays the garbage rate at a transfer station. Class III material, meaning construction debris, furniture and clean fill, goes to the landfill only, at ${h.fee(f.cd!.perTon!)} a ton. Passenger tires are ${h.fee(f.tire!)} each up to ${f.tireMax}. Elsewhere in Florida the spread is wide: Miami-Dade charges ${h.fee(md.perTon!)} a ton to non-contract customers, while Jacksonville’s Trail Ridge Landfill lists ${h.fee(j.perTon!)} a ton, with a one-dollar charge for the first ${h.num(j.smallLoad!.maxLbs)} lbs.`;
@@ -24,7 +24,7 @@ export default definePage({
     { q: 'Is it really one dollar to dump in Jacksonville?', a: `The City of Jacksonville lists a ${h.fee(h.F('jacksonville').smallLoad!.fee)} charge for the first ${h.num(h.F('jacksonville').smallLoad!.maxLbs)} lbs at the Trail Ridge Landfill and ${h.fee(h.F('jacksonville').perTon!)} a ton above it, for household garbage and building materials. Yard waste is ${h.fee(h.F('jacksonville').yard!.perTon!)} a ton. The page prints no effective date, so check it before going.` },
   ],
   body: (h) => `
-<h2>Orange County, from October 1, 2026</h2>
+<h2>Orlando dump fees: Orange County, from October 1, 2026</h2>
 ${h.schedule('orange-fl')}
 <p>Orange County charges the same garbage rate at the landfill and at the transfer stations, so the nearest site is the right one for ordinary trash. The landfill is the only one of the three that takes construction debris and furniture at the Class III rate and yard waste at its own rate, so for those loads the drive may be worth it. More than eight tires, or truck tires, are charged by the ton at a much higher rate.</p>
 

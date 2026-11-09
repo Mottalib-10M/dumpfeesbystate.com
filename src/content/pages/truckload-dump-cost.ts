@@ -17,7 +17,7 @@ export default definePage({
   intro: (h) => {
     const lbs = h.E.cubicYards(6.5, 5, 2) * h.E.DENSITY.msw.lbs; const all = h.E.compare({ ...h.LOAD, lbs }); const pay = all.filter((x) => (x.e.total as number) > 0);
     // Says why this range is not the home page's (naive test, 2026-11-09: 600 lbs, “about 660” and 662 read as three answers).
-    return `A standard pickup bed (6½ × 5 ft) piled 2 ft high holds about ${h.num(Math.round(lbs))} lbs of household junk, a little more than the ${h.num(PICKUP_LBS)} lb load of the home page, so it pays ${h.fee(pay[0].e.total as number)} to ${h.fee(all[all.length - 1].e.total as number)} at the public dumps we checked. Type the size of your own pile below.`;
+    return `A standard pickup bed (6½ × 5 ft) piled 2 ft high holds about ${h.num(Math.round(lbs))} lbs of household junk, a little more than the ${h.num(PICKUP_LBS)} lb load of the home page, so the cost to dump that truck load is ${h.fee(pay[0].e.total as number)} to ${h.fee(all[all.length - 1].e.total as number)} at the public dumps we checked. Type the size of your own pile below.`;
   },
   resume: (h) => {
     const sd = h.F('san-diego'); const rv = h.F('riverside'); const oc = h.F('oc-ca'); const sl = h.F('salt-lake');
@@ -36,7 +36,7 @@ export default definePage({
     const ids = h.E.DUMPS.map((f) => f.id);
     const rows = ids.map((id) => { const e = h.est(id, L()); const e2 = h.est(id, { lbs: 1600 }); return { k: e.total ?? 1e9, r: [h.fl(id), h.F(id).metro, e.total == null ? 'n/a' : `${e.from ? 'from ' : ''}${h.fee(e.total)}${h.E.isFreeResident(e) ? ' (free resident load)' : ''}`, e2.total == null ? 'n/a' : `${e2.from ? 'from ' : ''}${h.fee(e2.total)}`, e.rule] }; }).sort((a, b) => a.k - b.k).map((x) => x.r);
     return `
-<h2>The same pickup at every public site we read, cheapest first</h2>
+<h2>What it costs to dump this truck load at every public site we read, cheapest first</h2>
 <p>All ${h.E.DUMPS.length} public sites we checked, which price a pickup by a flat fee, by weight, or both. Two loads, priced at the resident rate: ${h.num(LBS)} lbs of mixed household trash, the bed in the calculator above, and 1,600 lbs, the same bed piled higher with heavier material. The last line of each site gives the rule for the ${h.num(LBS)} lb load.</p>
 <details class="plie not-prose my-4"><summary class="font-semibold text-accent-700 underline underline-offset-2">Show the ${h.E.DUMPS.length} sites</summary>
 ${h.table(['Site', 'Area', `${h.num(LBS)} lbs`, '1,600 lbs', `Rule for the ${h.num(LBS)} lb load`], rows, `Price lists checked on ${h.D.read}. Resident rates, no mattress, tire or appliance in the load.`, ['l', 'l', 'r', 'r', 'l'])}

@@ -17,7 +17,7 @@ export default definePage({
   intro: (h) => {
     const has = h.E.mattressPriceSites().sort((a, b) => a.mattress! - b.mattress!); const rule = h.E.mattressRuleSites().length;
     // One count everywhere (naive test, 2026-11-09: “7 print a mattress price”, “15 print none” and “9 sites with a mattress rule”).
-    return `${has[0].mattress === 0 ? `Nothing extra in ${has[0].place}` : `From ${h.fee(has[0].mattress!)} each in ${has[0].place}`}, up to ${h.fee(has[has.length - 1].mattress!)} each in ${has[has.length - 1].place}. Of the ${h.E.DUMPS.length} public dumps we checked, ${rule} have a mattress rule (${has.length} a price per mattress, ${rule - has.length} a higher rate for the load); the other ${h.E.DUMPS.length - rule} print no mattress price, so ask at the gate.`;
+    return `The mattress disposal fee at the dump ranges from ${has[0].mattress === 0 ? 'nothing extra' : `${h.fee(has[0].mattress!)} each`} in ${has[0].place} to ${h.fee(has[has.length - 1].mattress!)} each in ${has[has.length - 1].place}. Of the ${h.E.DUMPS.length} public dumps we checked, ${rule} have a mattress rule (${has.length} a price per mattress, ${rule - has.length} a higher rate for the load); the other ${h.E.DUMPS.length - rule} print no mattress price, so ask at the gate.`;
   },
   resume: (h) => {
     const hasFee = h.E.DUMPS.filter((f) => f.mattress != null && f.mattress > 0).sort((a, b) => a.mattress! - b.mattress!);
@@ -48,7 +48,7 @@ export default definePage({
 <p>Before paying at the gate, three things are worth a call. Your city may collect bulky items at the curb, sometimes free a few times a year. A store delivering a new mattress may take the old one away, often for a fee printed at checkout. And California, Connecticut, Oregon and Rhode Island run state mattress recycling programs, funded by a small fee paid when a new mattress is sold, with drop-off sites that take used mattresses from residents at no charge; the ${h.src('mrc_bbm', 'Bye Bye Mattress site')} of the Mattress Recycling Council finds the nearest one. We have not read the terms of each drop-off site, so check its page before you go.</p>
 <p>If you do take it to the dump, put the mattress on top of the load and keep it dry: a soaked mattress weighs far more, and at a weighed site you pay for the water.</p>
 
-<h2>Mattress fees at the ${n} sites with a mattress rule</h2>
+<h2>Mattress disposal fees at the ${n} dumps with a mattress rule</h2>
 <p>For each site: its mattress rule, what one mattress adds to a pickup with ${h.num(LBS)} lbs of household junk (the load of the main calculator), and the total. Sorted by what one mattress adds, lowest first.</p>
 ${h.table(['Site', 'Area', 'Mattress rule', 'One mattress adds', 'Load with it'], withRule, `Price lists checked on ${h.D.read}, resident rates.`, ['l', 'l', 'l', 'r', 'r'])}
 <p>The other ${without.length} public sites print no mattress price. Ask at the gate whether they take mattresses and what they charge; the load alone costs:</p>

@@ -13,7 +13,7 @@ export default definePage({
   title: 'Inland Empire Dump Fees: Riverside and San Bernardino 2026',
   description: 'Inland Empire dump fees in 2026: Riverside County’s flat rate for a car or pickup and its hard-to-handle rate, and San Bernardino’s fee up to 300 lbs.',
   h1: 'Inland Empire dump fees: Riverside County and San Bernardino County',
-  intro: (h) => h.areaIntro('riverside', ['san-bernardino']),
+  intro: (h) => h.areaIntro('Inland Empire', 'riverside', ['san-bernardino']),
   resume: (h) => {
     const r = h.F('riverside'); const s = h.F('san-bernardino');
     return `The two counties of the Inland Empire both run their own landfills and both publish low rates for household loads, built in different ways. Riverside County’s Department of Waste Resources charges, under its schedule effective July 1, 2026, a flat ${h.fee(r.flat!.pickup!)} for a car, van, SUV or pickup with a bed up to eight feet, and ${h.fee(r.flat!.trailer!)} for a pickup with a trailer. A load with a mattress or a box spring, which the ordinance counts as hard to handle, moves to a higher flat rate of ${h.fee(r.htFlat!.pickup!)}. San Bernardino County charges ${h.fee(s.smallLoad!.fee)} for up to ${h.num(s.smallLoad!.maxLbs)} lbs of ordinary household waste and ${h.fee(s.perTon!)} a ton, prorated, above that, under pricing effective July 1, 2023 that was still the posted schedule on ${h.D.read}. Both are well below the Miramar and Orange County rates nearer the coast.`;
@@ -24,7 +24,7 @@ export default definePage({
     { q: 'How many tires can I bring to a Riverside County landfill?', a: `Residents may bring passenger tires at ${h.fee(h.F('riverside').tire!)} each, five a day at most. San Bernardino County takes tires off the rim, up to nine a load, at ${h.fee(h.F('san-bernardino').tire!)} each. Larger numbers are treated as commercial loads and priced differently, so split them over several days or take them to a tire shop.` },
   ],
   body: (h) => `
-<h2>Riverside County landfills</h2>
+<h2>Inland Empire dumps run by Riverside County</h2>
 ${h.schedule('riverside')}
 <p>Riverside County runs the Badlands, Blythe, Lamb Canyon and El Sobrante landfills under one schedule. A pickup of routine trash pays the flat rate whatever it weighs, so a heavy load is cheap here. Vehicles that are not on the flat-rate list pay ${h.fee(h.F('riverside').perTon!)} a ton with a ${h.fee(h.F('riverside').minCharge!)} minimum. Green waste has its own flat rates, a few dollars above the routine ones. An uncovered load pays a surcharge.</p>
 

@@ -14,9 +14,9 @@ const kief = h.tot('sac-nars', { freon: 3 });
 const sea = h.F('seattle');
 ---
 <PageLayout title="Dump Fees by State Method: Schedules, EPA Data and Limits" description="How Dump Fees by State reads landfill fee schedules, applies minimums, flat rates and item fees to a load, turns volume to weight and builds its landfill list." lang={lang} jsonLd={[articleSchema({ title: 'How the fees are read and priced', description: 'Method of Dump Fees by State', path: route('method', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Method', path: route('method', lang) }])]} breadcrumbs={[{ label: 'Method' }]}>
-  <header class="mb-6"><p class="kicker">Method</p><h1 class="mt-1 text-3xl font-bold text-navy-900 md:text-4xl">How the fees are read and priced</h1></header>
+  <header class="mb-6"><p class="kicker">Method</p><h1 class="mt-1 text-3xl font-bold text-navy-900 md:text-4xl">Dump Fees by State method: how each fee is read and priced</h1></header>
   <div class="prose prose-slate max-w-none">
-    <p>Every calculator calls one engine of pure functions, fed by three files: the fee file of {E.FACILITIES.length} public schedules, the parameter file of EPA and IRS factors, and the landfill list built by a script from the EPA database. No fee is typed into a page. The fee pages were read on {displayDate(P.retrieved_at, 'en-US')}. Updates are made by hand; nothing is fetched automatically.</p>
+    <p>Every calculator on Dump Fees by State calls one engine of pure functions, fed by three files: the fee file of {E.FACILITIES.length} public schedules, the parameter file of EPA and IRS factors, and the landfill list built by a script from the EPA database. No fee is typed into a page. The fee pages were read on {displayDate(P.retrieved_at, 'en-US')}. Updates are made by hand; nothing is fetched automatically.</p>
 
     <h2>Reading a schedule</h2>
     <p>Each schedule was opened on the website of the county, city or public authority that runs the site, and read whole. For each one we record the effective date the page gives (or that it gives none), the rule for household trash brought by a resident, the minimum charge and how much weight it covers when the page says so, flat rates by vehicle and their limits, rates for non-residents where they differ, yard waste and construction debris rates, and the fees for mattresses, tires and refrigerant appliances with any free allowance or limit. When a page says something we cannot turn into a rule without guessing, we leave it out and say so in a note. For example, DeKalb County prints a minimum processing fee that we do not add to its weight bands, because the schedule does not say how the two combine. Fairfax County prints three weighed minimums, small, medium and large, which we match to a car, a pickup and a vehicle with a trailer.</p>
@@ -37,7 +37,7 @@ const sea = h.F('seattle');
     <h2>Tests</h2>
     <p>Run on every build: hand-worked loads on flat-rate, weighed, banded and mixed schedules; resident and non-resident rates; hard-to-handle rules; free tires and appliances; the Sacramento County example; a load with no printed fee returning none; volume-to-weight conversions; the do-it-yourself comparison; and the number of open landfills in the EPA file. A failing test stops the build.</p>
 
-    <h2>What is left out</h2>
+    <h2>What Dump Fees by State leaves out</h2>
     <ul>
       <li>private landfills and transfer stations, which publish no schedule we could read, and dumpster or junk removal prices;</li>
       <li>sales tax, card fees, penalties for uncovered or mixed loads, and commercial account rates;</li>

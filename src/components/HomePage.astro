@@ -93,7 +93,7 @@ const groups = GROUPS_ORDER.map((g) => ({ g, pages: PAGES.filter((p) => p.group 
 <PageLayout title="Dump Fees by State 2026: Landfill Cost Calculator by Load" description="Dump fees by state for 2026: what your car or pickup load costs at a public landfill or transfer station, from its own fee schedule, with mattresses and tires." lang={lang} jsonLd={jsonLd} faqs={faqs}>
   <header class="mb-3">
     <h1 class="text-[1.75rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">Dump fees by state: what your load will cost at a public landfill</h1>
-    <p class="mt-2 text-base text-navy-800 sm:text-lg">A pickup with {h.num(DEF.lbs)} lbs of household junk pays <strong>{fee(defPay.e.total as number)} to {fee(defHi.e.total as number)}</strong> at the public dumps we checked, and nothing once a month for qualifying residents of {freeNames.join(' and ')}.</p>
+    <p class="mt-2 text-base text-navy-800 sm:text-lg">Dump fees vary by state and by site: a pickup with {h.num(DEF.lbs)} lbs of household junk pays <strong>{fee(defPay.e.total as number)} to {fee(defHi.e.total as number)}</strong> at the public dumps we checked, and nothing once a month for qualifying residents of {freeNames.join(' and ')}.</p>
     <p class="mt-2 text-sm text-navy-900"><strong>{stateCodes.length} states covered so far:</strong> {stateWords} ({n} public dumps, official price lists). <a href="#which-dump" class="text-accent-700 underline underline-offset-2">Not in the list? How to find your dump</a></p>
     <p class="mt-1 text-xs text-navy-700">Independent site, not a waste hauler or a landfill operator. No ZIP code, no phone number.</p>
   </header>
@@ -150,7 +150,7 @@ const groups = GROUPS_ORDER.map((g) => ({ g, pages: PAGES.filter((p) => p.group 
   </div>
 
   <section class="not-prose my-10" aria-labelledby="all-title">
-    <h2 id="all-title" class="text-2xl font-bold text-navy-900">Every public price list we checked</h2>
+    <h2 id="all-title" class="text-2xl font-bold text-navy-900">Dump fees by state: every public price list we checked</h2>
     <p class="mt-2 text-navy-800">Two typical loads at each site, resident rates, no mattress: a car with 120 lbs of bags and a pickup with 600 lbs of household junk. Sorted by state. Tap a site name (underlined) to open its official price list.</p>
     <details class="plie mt-3"><summary class="font-semibold text-accent-700 underline underline-offset-2">Show the {n} price lists</summary>
     <Fragment set:html={h.table(['Site', 'Area', 'Car, 120 lbs', 'Pickup, 600 lbs', 'Price list dated'], rows, `Checked on the official pages on ${h.D.read}. “Residents, once a month”: a free monthly load for residents of that city or county, not a mistake.`, ['l', 'l', 'r', 'r', 'l'])} />

@@ -13,7 +13,7 @@ export default definePage({
   title: 'Yard Waste Disposal Fee: Brush and Leaves at the Dump, 2026',
   description: 'Yard waste disposal fee at public landfills and transfer stations in 2026: the green waste rate of each site against its trash rate, and what sorting saves.',
   h1: 'Yard waste disposal fee: a separate rate, often a lower one',
-  intro: 'Pick a site, a vehicle and a weight. The tool prices the load as yard waste and as trash, and shows what keeping it clean saves.',
+  intro: 'Pick a site, a vehicle and a weight: the tool works out the yard waste disposal fee for the load, the trash fee for the same load, and what keeping it clean saves.',
   resume: (h) => {
     const kc = h.F('king-county'); const br = h.F('broome'); const sk = h.F('sac-kiefer');
     return `A yard waste disposal fee is the rate a landfill or transfer station charges for branches, brush, leaves and grass clippings kept apart from trash, because that material goes to a compost or mulch pile instead of the landfill cell. On most public schedules it is lower than the trash rate. At the King County stations it is ${h.fee(kc.yard!.perTon!)} a ton against ${h.fee(kc.perTon!)} for garbage, and a sedan with yard waste pays a ${h.fee(kc.yard!.min!)} minimum instead of ${h.fee(kc.minCharge!)}. ${br.name} charges ${h.fee(br.yard!.perTon!)} a ton for yard waste against ${h.fee(br.perTon!)}. It is not always cheaper: at ${sk.name} in Sacramento County, green waste is weighed at ${h.fee(sk.yard!.perTon!)} a ton, while a pickup of trash pays a flat ${h.fee(sk.flat!.pickup!)}. Schedules read on ${h.D.read}. A load counts as yard waste only if it is clean: a bag of trash or a piece of lumber in it moves the whole load to the trash rate.`;
@@ -27,7 +27,7 @@ export default definePage({
     const rows = h.E.DUMPS.filter((f) => f.yard).map((f) => { const y = h.est(f.id, { material: 'yard', lbs: 500 }); const t = h.est(f.id, { lbs: 500 }); const yr = f.yard!; const rule = yr.flat?.pickup != null ? `${h.fee(yr.flat.pickup)} flat for a pickup` : `${h.fee(yr.perTon!)} a ton${yr.min ? `, ${h.fee(yr.min)} minimum` : ''}`; return [h.fl(f), f.metro, rule, y.total == null ? 'n/a' : h.fee(y.total), t.total == null ? 'n/a' : h.fee(t.total)]; });
     const sd = h.F('san-diego'); const fx = h.F('fairfax');
     return `
-<h2>Yard waste against trash, 500 lbs in a pickup</h2>
+<h2>Yard waste disposal fee against trash, 500 lbs in a pickup</h2>
 ${h.table(['Site', 'Area', 'Yard waste rule', 'As yard waste', 'As trash'], rows, `Schedules read on ${h.D.read}, resident rates.`, ['l', 'l', 'l', 'r', 'r'])}
 <p>Flat-rate sites often have a separate flat rate for green waste. Miramar charges a pickup ${h.fee(sd.yard!.flat!.pickup!)} for clean green waste against ${h.fee(sd.flat!.pickup!)} for trash, and Larimer County ${h.fee(h.F('larimer').yard!.flat!.pickup!)} against ${h.fee(h.F('larimer').flat!.pickup!)}. Fairfax County splits further: brush pays ${h.fee(fx.brush!.perTon!)} a ton, or ${h.fee(fx.brush!.flat!.pickup!)} for a pickup, while leaves and grass pay ${h.fee(fx.yard!.perTon!)}.</p>
 

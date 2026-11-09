@@ -87,17 +87,18 @@ export function helpers(strict = false) {
     schedule: (id: string) => { const f = E.byId(id); return table(['Line of the price list', 'Fee'], scheduleRows(f).map(([a, b]) => [a, b]), `${f.operator}: <a href="${f.url}" target="_blank" rel="nofollow noopener noreferrer">${f.name} fee schedule</a>, ${f.effective ? `effective ${displayDate(f.effective, 'en-US')}` : f.effectiveText}, read on ${displayDate(P.retrieved_at, 'en-US')}.`, ['l', 'r']); },
     /**
      * Standfirst of an area page: the answer in one sentence, for the same load as the calculator's default
-     * (a pickup with 600 lbs of household junk), from the engine (brief of 2026-11-09).
+     * (a pickup with 600 lbs of household junk), from the engine (brief of 2026-11-09). It opens with the
+     * searched term (“Atlanta dump fees”, RECETTE §13); other areas of the page follow in a second sentence.
      */
-    areaIntro: (id: string, also: string[] = []) => {
+    areaIntro: (area: string, id: string, also: string[] = []) => {
       const who = (f: Facility) => f.place.replace(/^City of/, 'the City of');
-      const say = (x: string, first: boolean) => {
-        const f = F(x); const e = est(x); const w = first ? who(f).replace(/^the/, 'The') : who(f);
+      const say = (x: string) => {
+        const f = F(x); const e = est(x); const w = who(f);
         if (e.total == null) return `${w} prints no price for it at ${f.name}`;
         if (E.isFreeResident(e)) return `${w} charges qualifying residents nothing at ${f.name}`;
         return `${w} charges ${e.from ? 'from ' : ''}${fee(e.total)} at ${f.name}`;
       };
-      return `${say(id, true)} for a pickup with ${formatNumber(LOAD.lbs, 0)} lbs of household junk${also.length ? `; ${also.map((x) => say(x, false)).join('; ')}` : ''}. Change the weight or add a mattress below.`;
+      return `${area} dump fees for a pickup with ${formatNumber(LOAD.lbs, 0)} lbs of household junk: ${say(id)}.${also.length ? ` Also on this page: ${also.map((x) => say(x)).join('; ')}.` : ''} Change the weight or add a mattress below.`;
     },
     src: (key: SourceKey, text?: string) => { const s = P.sources[key]; return `<a href="${s.url}" target="_blank" rel="nofollow noopener noreferrer">${text ?? s.label.en}</a>`; },
     box: (title: string, html: string, kind: 'info' | 'tip' | 'warning' | 'example' = 'info') => `<div class="callout callout-${kind}"><span class="callout-title">${title}</span>${html}</div>`,

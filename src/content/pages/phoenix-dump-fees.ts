@@ -13,7 +13,7 @@ export default definePage({
   title: 'Phoenix Dump Fees: One Free Load a Month and $55 a Ton After',
   description: 'Phoenix dump fees at the 27th Avenue and North Gateway transfer stations: one free load a month up to a ton for residents, then $55 a ton, and Tucson beside it.',
   h1: 'Phoenix dump fees: the free monthly load and what comes after',
-  intro: (h) => h.areaIntro('phoenix'),
+  intro: (h) => h.areaIntro('Phoenix', 'phoenix'),
   resume: (h) => {
     const f = h.F('phoenix'); const t = h.F('tucson');
     return `Phoenix lets its residents dump for free once a month. A household that pays for full city trash service may bring one load of up to one ton, once per calendar month, to the 27th Avenue or North Gateway transfer station at no charge. Anything above one ton is charged at ${h.fee(f.perTon!)} a ton, and other customers pay ${h.fee(f.perTon!)} a ton with a ${h.fee(f.minCharge!)} minimum. The city also takes up to five automobile tires a year from a resident, rims removed. Phoenix’s page prints no effective date for these rates; we read it on ${h.D.read}. In Tucson, the city’s Los Reales Sustainability Campus charges residents who bring their own load ${h.fee(t.smallLoad!.fee)} a load up to ${h.num(t.smallLoad!.maxLbs)} lbs plus a ${h.fee(t.perLoadExtra!)} environmental fee, under a schedule effective July 1, 2026.`;
@@ -25,7 +25,7 @@ export default definePage({
   ],
   body: (h) => {
     return `
-<h2>City of Phoenix transfer stations</h2>
+<h2>Phoenix dump fees at the city transfer stations</h2>
 ${h.schedule('phoenix')}
 <p>For a Phoenix household with city service, the arithmetic is simple: plan your clean-outs so that each month’s load stays under a ton. A garage of boxes and furniture rarely reaches that weight; a pickup of concrete or dirt can pass it. Above the ton, the city collects a cash deposit and charges the excess by weight, which at ${h.fee(h.F('phoenix').perTon!)} a ton is still among the lower rates we read.</p>
 <p>The free load changes how to compare a dumpster quote. Ten pickup loads spread over ten months cost nothing at the gate, so the only real cost is your time and driving. A dumpster makes sense when the job cannot wait. The ${h.a('dumpster-vs-dump-run', 'comparison tool')} lets you type the quote and the number of trips.</p>

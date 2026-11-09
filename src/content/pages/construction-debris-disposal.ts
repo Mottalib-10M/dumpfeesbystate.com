@@ -13,7 +13,7 @@ export default definePage({
   title: 'Construction Debris Disposal Fee: C&D Rates per Ton, 2026',
   description: 'Construction debris disposal fee at public landfills in 2026: the C&D rate per ton of each site, and what drywall, shingles and concrete weigh in a pickup.',
   h1: 'Construction debris disposal fee: heavy loads, separate rates',
-  intro: 'Pick a site, a weight and a vehicle. The tool prices the load at the site’s construction debris rate and, for comparison, at its trash rate.',
+  intro: 'Pick a site, a weight and a vehicle: the tool works out the construction debris disposal fee at the site’s own rate and, for comparison, what the same load pays as trash.',
   resume: (h) => {
     const sd = h.F('san-diego'); const sl = h.F('salt-lake'); const of = h.F('orange-fl');
     return `A construction debris disposal fee is the rate a landfill charges for remodeling waste such as drywall, lumber, roofing shingles, tile, brick and concrete, often called C&D. Because this material is heavy, the rate per ton matters far more than for household trash: a pickup bed of shingles can weigh over a ton. Public schedules read on ${h.D.read} show wide gaps. ${sl.name} takes clean concrete, asphalt, soil or sod at ${h.fee(sl.cd!.perTon!)} a ton, and Orange County in Florida takes Class III debris at its landfill for ${h.fee(of.cd!.perTon!)}. ${sd.name} weighs construction debris at ${h.fee(sd.cd!.perTon!)} a ton, more than twice its trash rate. Several sites limit what a homeowner may bring: Fairfax County takes brick, concrete, dirt and shingles up to two cubic yards a day.`;
@@ -28,7 +28,7 @@ export default definePage({
     const D = h.E.DENSITY;
     const wrows = ['cd', 'drywall', 'lumber', 'roofing', 'concrete', 'dirt', 'carpet'].map((k) => [D[k].label, h.num(D[k].lbs), h.num(D[k].lbs * 2.4)]);
     return `
-<h2>Construction debris rates on public schedules</h2>
+<h2>Construction debris disposal fees on public schedules</h2>
 ${h.table(['Site', 'Area', 'Rate', 'What the rate covers', 'One ton'], rows, `Schedules read on ${h.D.read}, resident rates.`, ['l', 'l', 'r', 'l', 'r'])}
 <p>The label column matters as much as the price. Salt Lake County’s low rate is for clean concrete, asphalt, soil or sod only; drywall and lumber go with mixed trash at the flat rate. The Solid Waste Authority of Central Ohio (SWACO) has taken construction debris at its landfill only since September 29, 2025. Orange County in Florida takes Class III material at the landfill, not at its transfer stations.</p>
 

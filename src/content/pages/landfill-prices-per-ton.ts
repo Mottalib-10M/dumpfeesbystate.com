@@ -13,7 +13,7 @@ export default definePage({
   title: 'Landfill Prices per Ton 2026: Public Gate Rates Compared',
   description: 'Landfill prices per ton in 2026, read on county and city fee schedules: the gate rate of each public site, its minimum charge, and what your weighed load pays.',
   h1: 'Landfill prices per ton: the rate printed by each public site',
-  intro: 'Pick the public dump nearest you and a weight. The fee comes from that site’s own price list, then the same load is priced at every other site we checked. A site that charges a flat fee per vehicle shows that fee instead.',
+  intro: 'To compare landfill prices per ton, pick the public dump nearest you and a weight. The fee comes from that site’s own price list, then the same load is priced at every other site we checked. A site that charges a flat fee per vehicle shows that fee instead.',
   resume: (h) => {
     const t = h.E.perTonTable(); const lo = t[0]; const hi = t[t.length - 1];
     return `A landfill price per ton, also called the tipping fee or gate rate, is what the weigh station at the gate charges for each ton of waste you bring, and almost every public site adds a minimum charge for light loads. On the ${t.length} public schedules we read on ${h.D.read}, the per-ton rate for household trash runs from ${h.fee(lo.all)} at ${lo.f.name} (${lo.f.metro}) to ${h.fee(hi.all)} at ${hi.f.name} (${hi.f.metro}). Transfer stations in large cities charge the most, because the waste is trucked again to a distant landfill. Most loads from a household weigh well under a ton, so the minimum charge, not the per-ton rate, usually sets the bill: a 400 lb load at ${h.F('seattle').name} pays the ${h.fee(h.F('seattle').minCharge!)} minimum, not 0.2 tons at ${h.fee(h.F('seattle').perTon!)}. The calculator applies the right rule for the site you pick.`;
@@ -30,7 +30,7 @@ export default definePage({
     const half = t[Math.floor(t.length / 2)];
     const dal = h.F('dallas'); const kc = h.F('king-county');
     return `
-<h2>Every per-ton rate we read, lowest first</h2>
+<h2>Every landfill price per ton we read, lowest first</h2>
 <p>The table lists the rate for household trash brought by a resident. Flat-rate sites appear with the rate they charge once a load is too heavy or too large for the flat fee. The middle of the list is ${h.fee(half.all)} a ton, at ${half.f.name}.</p>
 ${h.table(['Site', 'Area', 'Per ton', 'Minimum', 'Price list dated'], rows, `Price lists checked on the official pages on ${h.D.read}. Tap a site name to open its page.`, ['l', 'l', 'r', 'r', 'l'])}
 

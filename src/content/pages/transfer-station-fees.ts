@@ -13,7 +13,7 @@ export default definePage({
   title: 'Transfer Station Fees 2026: Minimum Charges for Small Loads',
   description: 'Transfer station fees for a small load in 2026: the minimum charge, flat vehicle rates and bag prices at public stations and landfills, from their schedules.',
   h1: 'Transfer station fees: what a small load really pays',
-  intro: 'Choose a vehicle and a weight. The tool ranks every public schedule we read for that load, from the cheapest to the most expensive.',
+  intro: 'Choose a vehicle and a weight: the tool ranks the transfer station fees and landfill gate fees of every public schedule we read for that load, from the cheapest to the most expensive.',
   resume: (h) => {
     const s = h.F('seattle'); const k = h.F('king-county'); const fx = h.F('fairfax');
     return `Transfer station fees for a household load are set mostly by the minimum charge, because a car or a pickup of trash rarely weighs more than the few hundred pounds that the minimum covers. On schedules read on ${h.D.read}, Seattle’s two city stations charge ${h.fee(s.minCharge!)}, which covers up to ${h.num(s.minCoversLbs!)} lbs, and ${h.fee(s.perTon!)} a ton above it; the King County stations around the city charge ${h.fee(k.minCharge!)} per vehicle and ${h.fee(k.perTon!)} a ton. Fairfax County in Virginia sets three minimums by size of vehicle, from ${h.fee(fx.minByVehicle!.car!)} to ${h.fee(fx.minByVehicle!.trailer!)}, and also prices a few bags without weighing the car. A transfer station is not a landfill: waste is tipped on a floor, reloaded and hauled to a distant landfill, which is why its rates are higher than the gate of a landfill in the same region.`;

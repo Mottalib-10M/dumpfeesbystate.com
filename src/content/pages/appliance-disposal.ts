@@ -28,7 +28,7 @@ export default definePage({
     const s = h.F('seattle'); const nars = h.F('sac-nars');
     const W = h.P.weights;
     return `
-<h2>Appliance fees on public schedules</h2>
+<h2>Refrigerator and appliance fees on public schedules</h2>
 ${h.table(['Site', 'Area', 'Refrigerant appliance', 'Free allowance', 'One fridge adds to a pickup load'], rows, `Schedules read on ${h.D.read}, resident rates.`, ['l', 'l', 'r', 'r', 'r'])}
 <p>Seattle’s rule is worth reading in full: ${s.freonNote}. Sacramento County gives its own worked example on the North Area Recovery Station page, a pickup with trash and three refrigerators: the ${h.fee(nars.flat!.pickup!)} pickup rate, two appliances free and ${h.fee(nars.freon!)} for the third, ${h.fee(h.tot('sac-nars', { freon: 3 }))} in all. The calculator reproduces it.</p>
 

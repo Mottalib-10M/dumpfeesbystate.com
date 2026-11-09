@@ -13,7 +13,7 @@ export default definePage({
   title: 'San Diego Dump Fees: Miramar Landfill Rates from July 2026',
   description: 'San Diego dump fees at Miramar Landfill from July 1, 2026: the flat rate for a car or pickup, the rate for waste from outside the city, green waste and debris.',
   h1: 'San Diego dump fees at Miramar Landfill',
-  intro: (h) => h.areaIntro('san-diego'),
+  intro: (h) => h.areaIntro('San Diego', 'san-diego'),
   resume: (h) => {
     const f = h.F('san-diego');
     return `Miramar Landfill, run by the City of San Diego Environmental Services Department, charges people who bring their own load a flat rate per vehicle rather than by weight. Under the schedule effective July 1, 2026 through June 30, 2027, a car, SUV, pickup, van or a trailer up to five by nine by four feet pays ${h.fee(f.flat!.pickup!)} a load of city waste, and a pickup towing a trailer or a larger trailer pays ${h.fee(f.flat!.trailer!)}. Waste from outside the City of San Diego pays more: ${h.fee(f.nonRes!.flat!.pickup!)} and ${h.fee(f.nonRes!.flat!.trailer!)}. Clean green waste has its own lower flat rate of ${h.fee(f.yard!.flat!.pickup!)} for the first tier, while construction and demolition debris is weighed at ${h.fee(f.cd!.perTon!)} a ton, far above the trash rate of ${h.fee(f.perTon!)} for weighed loads. The flat rates already include the state recycling fee. Uncovered loads pay a penalty, and appliances and electronics must go elsewhere.`;
@@ -26,7 +26,7 @@ export default definePage({
   body: (h) => {
     const f = h.F('san-diego');
     return `
-<h2>The Miramar price list for people who bring their own load</h2>
+<h2>The Miramar price list: San Diego dump fees for people who bring their own load</h2>
 ${h.schedule('san-diego')}
 <p>The two flat rates depend on the size of the vehicle and trailer, not on weight. The first covers cars, SUVs, pickups, vans and trailers up to five by nine by four feet; the second covers a pickup towing a trailer and larger trailers. “Outside the City of San Diego” means waste from a neighboring city such as Poway, El Cajon or Chula Vista. For a full pickup of heavy material, the flat rate is a bargain. For a few bags, it is expensive: the same ${h.fee(f.flat!.pickup!)} applies to a car with one bag. Neighbors in Orange County and Riverside County charge much less for a light load, as the list of other California sites under the calculator shows.</p>
 <p>Green waste must be clean to get the lower rate: no trash, soil, rock or lumber. Construction debris at ${h.fee(f.cd!.perTon!)} a ton is where loads get expensive quickly; a ton of drywall and tile costs more than three flat trash loads. Sort recyclable concrete and metal out of a remodel load before you go. Fees change every July 1, and the city posts the new schedule on its ${h.fl(f, 'fee page')}.</p>

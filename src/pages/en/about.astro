@@ -13,9 +13,9 @@ const n = PAGES.length + 3;
 <PageLayout title="Dump Fees by State: who reads these landfill fee schedules" description="Who publishes Dump Fees by State, why it reads county and city fee schedules one by one instead of quoting national ranges, and where its landfill list is from." lang={lang} jsonLd={[personSchema(lang), organizationSchema(lang), profilePageSchema({ path: route('about', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'About', path: route('about', lang) }])]} breadcrumbs={[{ label: 'About' }]}>
   <header class="mb-6"><p class="kicker">About</p><h1 class="mt-1 text-3xl font-bold text-navy-900 md:text-4xl">Who reads the fee schedules on Dump Fees by State</h1></header>
   <div class="prose prose-slate max-w-none">
-    <div class="not-prose mb-6"><p class="text-lg font-semibold text-navy-900">{AUTHOR_NAME}</p><p class="text-navy-700">{AUTHOR_ROLE[lang]}</p></div>
+    <div class="not-prose mb-6"><div class="text-lg font-semibold text-navy-900">{AUTHOR_NAME}</div><div class="text-navy-700">{AUTHOR_ROLE[lang]}</div></div>
     <p>Dump Fees by State is published by Radif Partners, a company that builds free calculators on public data. It is for people in the United States who are about to take a load to the dump themselves: a homeowner clearing a garage, a tenant moving out, someone finishing a small remodel or a yard clean-up, and anyone weighing a dumpster quote against a few trips in a pickup.</p>
-    <h2>Why this site exists</h2>
+    <h2>Why Dump Fees by State exists</h2>
     <p>Search for the cost of going to the dump and most pages give a national range with no source, then ask for a ZIP code so that a hauler or a dumpster company can call. The real prices exist: counties, cities and public waste authorities publish their gate rates, minimum charges and item fees. But each one does it in its own format, on its own page, and nobody had set them side by side or priced a given load on them.</p>
     <p>So this site reads those schedules one by one, notes the date each gives, and turns them into a calculator that shows which line applies to your load. We print no fee we have not read on the operator’s own page, and no dumpster prices, because none are published.</p>
     <h2>Where the figures come from</h2>

@@ -16,7 +16,7 @@ export default definePage({
   title: 'Dallas Dump Fees: McCommas Bluff Landfill Rate from Oct 2026',
   description: 'Dallas dump fees at McCommas Bluff Landfill from October 1, 2026: the gate rate per ton, the processing and environmental fees, and El Paso’s starting price.',
   h1: 'Dallas dump fees at McCommas Bluff Landfill',
-  intro: (h) => h.areaIntro('dallas', ['el-paso']),
+  intro: (h) => h.areaIntro('Dallas', 'dallas', ['el-paso']),
   resume: (h) => {
     const f = h.F('dallas');
     return `The City of Dallas owns McCommas Bluff Landfill${TXPUB[0].name === MB.name ? ', the public landfill that took the most waste in Texas on the EPA list' : ''}, about ${h.num1((MB.tpy as number) / 1e6)} million tons in ${MB.tpyYear}. From October 1, 2026, under the rates of the city’s 2026-27 budget year, the gate rate is ${h.fee(f.perTon!)} a ton, up from $43.60. Customers paying for single loads by cash, check or card also pay a customer processing fee and an environmental fee of two dollars a ton each, so a walk-up customer pays ${h.fee(f.perTon! + f.perTonExtra!)} a ton in all. The city’s page prints no minimum charge for a light load, so the calculator prices it by weight; expect the weigh station at the gate to apply its own minimum if it has one. An uncovered load costs forty dollars more. The rate page gives no separate mattress price: ask the weigh station at the gate whether it takes mattresses before you go, or ask the city about bulky-item pickup. Texas has more open landfills on the EPA list than any state but California, yet few of their gate rates are published: we read Dallas and a starting price for El Paso.`;
@@ -27,7 +27,7 @@ export default definePage({
     { q: 'Can Austin residents take trash to the city drop-off center?', a: `No. Austin’s Recycle and Reuse Drop-off Center takes recycling, reusable items and household hazardous waste, free for Austin and Travis County residents by appointment, except tires at ${h.fee(h.F('austin').tire!)} each. It does not take trash, furniture or mattresses. For those, look at the Texas list of open landfills on this site.` },
   ],
   body: (h) => `
-<h2>McCommas Bluff Landfill</h2>
+<h2>McCommas Bluff Landfill, the City of Dallas dump</h2>
 ${h.schedule('dallas')}
 <p>The $4 in added fees is two fees of $2 a ton each, a customer processing fee and an environmental fee. They apply to customers paying for single loads at the window, which is how most residents pay. The city’s landfill page also lists the Northwest Transfer Station on Bachman Lake at a higher gate rate of ${h.fee(71.28)} a ton, which makes McCommas Bluff the cheaper of the two city sites for the same load.</p>
 <p><strong>A couch or a mattress:</strong> the city’s rate page gives no separate price for either. A couch is priced with the load, by its weight; some sites refuse upholstered furniture, so ask at the weigh station. For a mattress, ask there too, or check the city’s bulky-item pickup first. The ${h.a('mattress-disposal', 'mattress page')} lists the sites that do print a mattress price.</p>

@@ -26,7 +26,7 @@ export default definePage({
     const plain = h.E.couchWithLoad().length;
     const free = all.filter((x) => h.E.isFreeResident(x.e)).map((x) => x.f.place.replace(/^City of /, ''));
     // The $0 sites named in the same sentence (naive test, 2026-11-09: “$9.09 to $75” above a list starting at $0).
-    return `Usually nothing extra: ${plain} of the ${h.E.DUMPS.length} public price lists we read price a couch with the load, so a pickup of ${h.num(LBS)} lbs with a couch pays ${h.fee(paid[0].e.total as number)} to ${h.fee(all[all.length - 1].e.total as number)}, and nothing once a month for qualifying residents of ${free.join(' and ')}.`;
+    return `The couch disposal fee at the dump is usually nothing extra: ${plain} of the ${h.E.DUMPS.length} public price lists we read price a couch with the load, so a pickup of ${h.num(LBS)} lbs with a couch pays ${h.fee(paid[0].e.total as number)} to ${h.fee(all[all.length - 1].e.total as number)}, and nothing once a month for qualifying residents of ${free.join(' and ')}.`;
   },
   resume: (h) => {
     const oc = h.F('oc-ca'); const rv = h.F('riverside');
@@ -52,7 +52,7 @@ export default definePage({
 <p>Before paying at the gate, look at three cheaper routes. Your city may collect bulky items at the curb, on a schedule or on request; the rules and limits are on its trash page. A store delivering new furniture may take the old piece away. And a couch in good condition can go to a charity that picks up furniture, if it accepts it. We have read none of those programs for this site, so we print no terms for them.</p>
 <p>If you do take it to the dump, take the cushions off and load them separately so nothing blows away on the road, and tie the load down: an uncovered load pays a penalty at most of these sites. ${h.a('mattress-disposal', 'A mattress')} is a different matter, with fees of its own at several sites.</p>
 
-<h2>A couch at each public site we read</h2>
+<h2>The couch disposal fee at each public dump we read</h2>
 <p>Each site with its rule for a couch or sofa, and the total for a pickup carrying the couch with ${h.num(LBS)} lbs in all, the same load as the main calculator. Resident rates; cheapest first. “Priced with the load” means the price list has no couch fee; some sites still refuse upholstered furniture, so ask at the gate wherever you go.</p>
 <details class="plie not-prose my-4"><summary class="font-semibold text-accent-700 underline underline-offset-2">Show the ${rows.length} sites</summary>
 ${h.table(['Site', 'Area', 'Couch rule', `Pickup, ${h.num(LBS)} lbs with a couch`], rows, `Price lists checked on ${h.D.read}.`, ['l', 'l', 'l', 'r'])}

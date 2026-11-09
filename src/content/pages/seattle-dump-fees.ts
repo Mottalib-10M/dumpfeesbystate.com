@@ -13,7 +13,7 @@ export default definePage({
   title: 'Seattle Dump Fees 2026: City Stations and King County Rates',
   description: 'Seattle dump fees in 2026: the $37 minimum and per-ton rate at the North and South transfer stations, King County station rates, and the 2027 rise announced.',
   h1: 'Seattle dump fees: city stations and King County stations',
-  intro: (h) => h.areaIntro('seattle', ['king-county']),
+  intro: (h) => h.areaIntro('Seattle', 'seattle', ['king-county']),
   resume: (h) => {
     const s = h.F('seattle'); const k = h.F('king-county');
     return `Seattle residents hauling their own waste use the city’s North and South transfer stations, run by Seattle Public Utilities. Since April 1, 2026 they charge ${h.fee(s.minCharge!)} for a load of garbage up to ${h.num(s.minCoversLbs!)} lbs and ${h.fee(s.perTon!)} a ton above it; yard waste pays ${h.fee(s.yard!.perTon!)} a ton with a ${h.fee(s.yard!.min!)} minimum. Outside the city, King County’s Solid Waste Division runs its own stations at a higher rate: ${h.fee(k.minCharge!)} per vehicle and ${h.fee(k.perTon!)} a ton in 2026. King County has already announced its 2027 rates for people who bring their own load, ${h.fee(k.next!.minCharge!)} minimum and ${h.fee(k.next!.perTon!)} a ton from January 1, 2027. These are the highest per-ton rates among the public schedules we read, so the scale and the minimum matter more here than almost anywhere else in the country.`;
@@ -26,7 +26,7 @@ export default definePage({
   body: (h) => {
     const k = h.F('king-county');
     return `
-<h2>Seattle Public Utilities, North and South stations</h2>
+<h2>Seattle dump fees at the North and South stations (Seattle Public Utilities)</h2>
 ${h.schedule('seattle')}
 <p>The minimum is generous in weight: ${h.num(h.F('seattle').minCoversLbs!)} lbs covers most car loads and many pickups of light junk. The per-ton rate takes over above it, and a heavy load of roofing or soil adds up fast. Yard waste, kept clean, pays a lower rate and a lower minimum, so a pickup of brush costs well under the same weight of garbage.</p>
 

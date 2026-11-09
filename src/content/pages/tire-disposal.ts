@@ -13,7 +13,7 @@ export default definePage({
   title: 'Tire Disposal Fee 2026: Per-Tire Rates and Limits by Site',
   description: 'Tire disposal fee at public landfills and transfer stations in 2026: the price per passenger tire, the limit per load, and the sites where four tires are free.',
   h1: 'Tire disposal fee: the price per tire and how many you can bring',
-  intro: 'Pick a site and the number of tires. The tool applies its price per tire, its free allowance and its limit per load.',
+  intro: 'Pick a site and the number of tires: the tool works out the tire disposal fee from its price per tire, its free allowance and its limit per load.',
   resume: (h) => {
     const t = h.E.FACILITIES.filter((f) => f.tire != null && f.tireMode !== 'load').sort((a, b) => a.tire! - b.tire!);
     return `A tire disposal fee is charged per tire at most public landfills, because tires do not compact, trap air and water, and are usually set aside from the rest of the load. On the schedules we read on ${h.D.read}, the price for a car or light-truck tire off the rim runs from ${h.fee(t[0].tire!)} at ${t[0].name} to ${h.fee(t[t.length - 1].tire!)} at ${t[t.length - 1].name}. Two sites price tires differently: ${h.F('seattle').name} charge ${h.fee(h.F('seattle').tire!)} per load of up to ${h.F('seattle').tireMax} tires, and the Sacramento County sites take ${h.F('sac-kiefer').tireFree} tires a day free, then charge ${h.fee(h.F('sac-kiefer').tire!)} each up to ${h.F('sac-kiefer').tireMax}. Almost every schedule caps the count per load, often between four and fifteen, and charges more for a tire on its rim or for a truck tire. A tire shop usually takes old tires when it fits new ones, and the fee is then on its invoice.`;

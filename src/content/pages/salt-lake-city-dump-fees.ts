@@ -13,7 +13,7 @@ export default definePage({
   title: 'Salt Lake City Dump Fees: The Valley Landfill Flat Rate 2026',
   description: 'Salt Lake City dump fees at the Salt Lake Valley Landfill: one flat rate for a car, pickup or hand-unloaded trailer, item fees, and St. George’s free loads.',
   h1: 'Salt Lake City dump fees: one flat rate for most household loads',
-  intro: (h) => h.areaIntro('salt-lake', ['washington-ut']),
+  intro: (h) => h.areaIntro('Salt Lake City', 'salt-lake', ['washington-ut']),
   resume: (h) => {
     const f = h.F('salt-lake');
     return `The Salt Lake Valley Landfill, owned by Salt Lake County, has one of the simplest schedules we read: ${h.fee(f.flat!.pickup!)} for a car, an SUV, a pickup up to a one-ton truck, or a trailer unloaded by hand, whatever the weight. Heavier trailers towed by trucks of one ton or more are weighed at ${h.fee(f.perTon!)} a ton with a ${h.fee(f.minCharge!)} minimum. Mixed household trash may include green waste, concrete, asphalt, soil and sod at the flat rate, and clean loads of concrete, asphalt, soil or sod alone have a lower weighed rate of ${h.fee(f.cd!.perTon!)} a ton. Items are added on top: ${h.fee(f.mattress!)} per mattress or box spring for residents, ${h.fee(f.freon!)} per refrigerant appliance and ${h.fee(f.tire!)} per tire, ${f.tireMax} a load at most. The county’s page prints no effective date for this schedule; we read it on ${h.D.read}.`;
@@ -26,7 +26,7 @@ export default definePage({
   body: (h) => {
     const f = h.F('salt-lake');
     return `
-<h2>Salt Lake Valley Landfill</h2>
+<h2>Salt Lake City dump fees at the Salt Lake Valley Landfill</h2>
 ${h.schedule('salt-lake')}
 <p>The flat rate rewards heavy loads. A pickup of broken concrete from a patio, weighed at many other sites, pays the same ${h.fee(f.flat!.pickup!)} as a load of cardboard here. Where it costs more is items: a load with two mattresses and four tires adds ${h.fee(2 * f.mattress! + 4 * f.tire!)} to the vehicle rate, more than the load itself. If you can, take tires back to a tire shop and check whether your city offers a bulky waste pickup for mattresses.</p>
 <p>Because flat-rate vehicles are not weighed, there is no minimum charge to plan around here. Items are counted at the window instead, so tell the attendant how many mattresses, tires and appliances are in the load; they are added to the vehicle rate one by one.</p>
