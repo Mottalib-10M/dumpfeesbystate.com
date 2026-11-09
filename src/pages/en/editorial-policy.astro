@@ -1,0 +1,29 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { AUTHOR_NAME, CONTACT_EMAIL, LAST_UPDATED, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { FACILITIES } from '../../lib/engine/fees';
+import { displayDate } from '../../lib/format';
+const LAST_UPDATED_TEXT = displayDate(LAST_UPDATED, 'en-US');
+const lang = 'en';
+---
+<PageLayout title={`Editorial policy of ${SITE_NAMES[lang]}: sources, tests, corrections`} description="Which official fee pages and EPA files Dump Fees by State uses, why it prints no private or dumpster prices, how the fee engine is tested and how errors are fixed." lang={lang} noindex={true} breadcrumbs={[{ label: 'Editorial policy' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Editorial and corrections policy</h1>
+    <p>People read these pages with a load in the truck or a clean-out to plan. A wrong fee sends them to the wrong site or makes them pay for a dumpster they did not need. So every fee on the site is tied to the official page it was read on, with the date that page gives for it, and every figure is computed by the engine, never typed into a page.</p>
+    <h2>Sources we use</h2>
+    <ul>
+      <li>the published fee schedules of {FACILITIES.length} public landfills, transfer stations and drop-off centers, each read on the website of the county, city or public authority that runs it;</li>
+      <li>the EPA Landfill Methane Outreach Program database for the list of open landfills and their owners;</li>
+      <li>the EPA volume-to-weight conversion factors for turning a pile into pounds, and the EPA Section 608 page for refrigerant appliances;</li>
+      <li>the IRS standard mileage rate as a default cost of driving, which the user can change.</li>
+    </ul>
+    <h2>What we refuse to print</h2><p>Fees we have not read on the operator’s own page, national averages from private reports, and dumpster or junk removal prices, for which no public price list exists. A place without a published schedule gets no figure: the site gives the method and the link instead. We do not copy text from the schedules; we read the amounts and the rules and link to the page.</p>
+    <h2>Testing</h2><p>Every build runs the engine tests: loads worked by hand on each kind of schedule (flat rates, weight bands, minimum charges, hard-to-handle rates, resident allowances, free tires and appliances), the Sacramento County example printed on its own page, the EPA conversion of a volume to a weight, and the count of open landfills in the EPA file. A failing test stops the build.</p>
+    <h2>Review cycle</h2><p>Every schedule was read on {LAST_UPDATED_TEXT}, manual update. Public bodies usually change their rates on January 1, July 1 or October 1, and each schedule on the site shows its own effective date, so a reader can tell when it may have moved.</p>
+    <h2>Corrections</h2>
+    <ol><li>We open the official page again.</li><li>We correct the data file or the engine and add a test for the case.</li><li>The pages rebuild and show the new date.</li></ol>
+    <p>Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Published by {AUTHOR_NAME}.</p>
+    <h2>Independence</h2><p>No hauler, landfill operator, dumpster company or public body pays for or reviews what is published here; the site takes no commission and carries no affiliate link, quote form or callback. Use of EPA data does not imply endorsement by the EPA. See also the <a href={route('method', lang)}>method</a>. Version: {LAST_UPDATED}.</p>
+  </div>
+</PageLayout>

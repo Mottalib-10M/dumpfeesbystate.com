@@ -1,0 +1,49 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { route } from '../../i18n/routes';
+import { breadcrumbSchema, articleSchema } from '../../lib/seo';
+import { displayDate } from '../../lib/format';
+import { P, type SourceKey } from '../../lib/engine/params';
+import { helpers } from '../../lib/helpers';
+import { LMOP } from '../../lib/lmop';
+const lang = 'en';
+const h = helpers(true);
+const { E, fee } = h;
+const L = (k: SourceKey, t?: string) => `<a href="${P.sources[k].url}" target="_blank" rel="nofollow noopener">${t ?? P.sources[k].label.en}</a>`;
+const kief = h.tot('sac-nars', { freon: 3 });
+const sea = h.F('seattle');
+---
+<PageLayout title="Dump Fees by State Method: Schedules, EPA Data and Limits" description="How Dump Fees by State reads landfill fee schedules, applies minimums, flat rates and item fees to a load, turns volume to weight and builds its landfill list." lang={lang} jsonLd={[articleSchema({ title: 'How the fees are read and priced', description: 'Method of Dump Fees by State', path: route('method', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Method', path: route('method', lang) }])]} breadcrumbs={[{ label: 'Method' }]}>
+  <header class="mb-6"><p class="kicker">Method</p><h1 class="mt-1 text-3xl font-bold text-navy-900 md:text-4xl">How the fees are read and priced</h1></header>
+  <div class="prose prose-slate max-w-none">
+    <p>Every calculator calls one engine of pure functions, fed by three files: the fee file of {E.FACILITIES.length} public schedules, the parameter file of EPA and IRS factors, and the landfill list built by a script from the EPA database. No fee is typed into a page. The fee pages were read on {displayDate(P.retrieved_at, 'en-US')}. Updates are made by hand; nothing is fetched automatically.</p>
+
+    <h2>Reading a schedule</h2>
+    <p>Each schedule was opened on the website of the county, city or public authority that runs the site, and read whole. For each one we record the effective date the page gives (or that it gives none), the rule for household trash brought by a resident, the minimum charge and how much weight it covers when the page says so, flat rates by vehicle and their limits, rates for non-residents where they differ, yard waste and construction debris rates, and the fees for mattresses, tires and refrigerant appliances with any free allowance or limit. When a page says something we cannot turn into a rule without guessing, we leave it out and say so in a note. For example, DeKalb County prints a minimum processing fee that we do not add to its weight bands, because the schedule does not say how the two combine. Fairfax County prints three weighed minimums, small, medium and large, which we match to a car, a pickup and a vehicle with a trailer.</p>
+    <p>Pages that refused automated reading (a 403 answer) were not read by any other means, and the places they serve get no figure. Private landfills publish no schedule that we found and are not priced.</p>
+
+    <h2>Pricing a load</h2>
+    <p>The engine applies the rules in this order. A resident allowance first: a load within it pays nothing (Phoenix, Washington County in Utah). Then construction debris or yard waste at their own rates when the load is of that material and the schedule prints one. For trash: a small-load fee below its weight limit; weight bands below one ton; a flat vehicle rate when the vehicle has one and the load is under any weight limit printed with it, switched to the hard-to-handle flat rate when a mattress is in the load and the schedule has one; otherwise the per-ton rate times the weight in tons (2,000 lbs), plus any per-ton fees, and never less than the minimum that applies. Then each item: mattresses, tires and refrigerant appliances at their printed fee, after any free allowance, with a note when the count passes the limit per load. A fee the schedule does not print is shown as missing, never estimated. Example: {sea.name}, 1,000 lbs: {fee(sea.perTon!)} × 0.5 tons = {fee(h.tot('seattle', { lbs: 1000 }))}; 300 lbs pays the {fee(sea.minCharge!)} minimum. Sacramento County’s own example, a pickup with trash and three refrigerators at the North Area Recovery Station, gives {fee(kief)}, as on its page.</p>
+
+    <h2>Volume to weight</h2>
+    <p>Cubic yards = length × width × height in feet ÷ 27. Weight = cubic yards × the EPA factor for the material, from the <Fragment set:html={L('epa_vw', 'EPA volume-to-weight conversion factors')} /> of April 2016: loose household trash {h.num(P.weights.msw_loose_lo)} to {h.num(P.weights.msw_loose_hi)} lbs a cubic yard (we use {h.num(E.DENSITY.msw.lbs)}), yard waste {h.num(P.weights.yard_loose)}, mixed construction debris {h.num(P.weights.cd_mixed)}, drywall {h.num(P.weights.drywall)}, shingles {h.num(P.weights.roofing)}, concrete {h.num(P.weights.concrete)}, dirt and sand {h.num(P.weights.dirt_sand)}. Items: refrigerator {h.num(P.weights.refrigerator)} lbs, washer {h.num(P.weights.washer)}. These describe loose material; wet or packed loads weigh more.</p>
+
+    <h2>Self-haul against a quote</h2>
+    <p>The total weight is divided evenly over the trips; each trip pays the load fee for its share, and items are added once. Driving = trips × miles there and back × cost per mile, by default the IRS business rate of {P.mileage.businessCents} cents for {P.mileage.period} (<Fragment set:html={L('irs_mileage')} />). The difference with the quote the user types is shown either way. Time, truck rental and labor are not counted.</p>
+
+    <h2>The landfill list</h2>
+    <p>The EPA file <code>lmopcompositedata.xlsx</code> (<Fragment set:html={L('lmop')} />) has one row per landfill gas project, so a landfill can appear several times. The script keeps one row per landfill ID ({h.num(LMOP.uniqueLandfills)} landfills) and keeps those whose status is open ({h.num(LMOP.open)}), with name, city, county, state, ownership type and owner as recorded by the EPA. EPA data are in the public domain (<Fragment set:html={L('epa_disclaimers')} />); the EPA does not endorse this site. The list covers municipal solid waste landfills only.</p>
+
+    <h2>Tests</h2>
+    <p>Run on every build: hand-worked loads on flat-rate, weighed, banded and mixed schedules; resident and non-resident rates; hard-to-handle rules; free tires and appliances; the Sacramento County example; a load with no printed fee returning none; volume-to-weight conversions; the do-it-yourself comparison; and the number of open landfills in the EPA file. A failing test stops the build.</p>
+
+    <h2>What is left out</h2>
+    <ul>
+      <li>private landfills and transfer stations, which publish no schedule we could read, and dumpster or junk removal prices;</li>
+      <li>sales tax, card fees, penalties for uncovered or mixed loads, and commercial account rates;</li>
+      <li>hazardous waste, electronics and other materials taken only at separate drop-offs;</li>
+      <li>state mattress and tire programs, which we have not read;</li>
+      <li>any change to a schedule after the date it was read: the weigh station at the gate applies its current schedule.</li>
+    </ul>
+  </div>
+</PageLayout>

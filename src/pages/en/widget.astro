@@ -1,0 +1,20 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { SITE_URL } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { breadcrumbSchema } from '../../lib/seo';
+const lang = 'en';
+const code = `<iframe src="${SITE_URL}/embed/dump-fee-calculator/" title="Dump fee calculator" width="100%" height="1000" style="border:0;max-width:1000px" loading="lazy"></iframe>`;
+---
+<PageLayout title="Embed the dump fee calculator on your own site" description="Show the dump fee calculator on your own site for free: one iframe, the official fee schedules of public landfills and transfer stations, no sign-up and no tracking." lang={lang} noindex={true} jsonLd={[breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Embed', path: route('widget', lang) }])]} breadcrumbs={[{ label: 'Embed' }]} showAuthor={false}>
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold text-navy-900 md:text-4xl">Embed the dump fee calculator</h1>
+    <p class="mt-3 text-lg text-navy-700">For a county or city website, a neighborhood association, a moving guide or a home improvement article: visitors pick a public landfill, a vehicle and a weight, add mattresses or tires, and see the fee from the site’s own schedule.</p>
+  </header>
+  <div class="prose prose-slate max-w-none">
+    <pre class="overflow-x-auto rounded-lg bg-navy-900 p-4 text-sm text-white"><code>{code}</code></pre>
+    <p>Conditions: keep the credit and source lines under the calculator visible and use it as it is, without warranty. When a schedule changes and the site is rebuilt, the embedded calculator follows.</p>
+    <p>Nothing your visitors type reaches us and the frame sets no cookie. Questions: <a href={route('contact', lang)}>contact</a>.</p>
+  </div>
+  <div class="mt-8 overflow-hidden rounded-xl border border-navy-200"><iframe src="/embed/dump-fee-calculator/" title="Dump fee calculator" width="100%" height="1000" style="border:0" loading="lazy"></iframe></div>
+</PageLayout>

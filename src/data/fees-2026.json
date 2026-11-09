@@ -1,0 +1,766 @@
+{
+ "_readme": "Every amount below was read on the official page in `url` on `read` (curl unless `via` says WebFetch). Nothing is estimated or taken from an aggregator. A field left out means the schedule does not print it, and the site then shows no figure for it. Vehicles: car = car, SUV or minivan; pickup = pickup or cargo van; trailer = pickup towing a trailer or a large trailer.",
+ "read": "2026-11-07",
+ "facilities": [
+  {
+   "id": "salt-lake",
+   "metro": "Salt Lake City",
+   "state": "UT",
+   "place": "Salt Lake County",
+   "name": "Salt Lake Valley Landfill",
+   "operator": "Salt Lake County (public)",
+   "kind": "landfill",
+   "url": "https://www.saltlakecounty.gov/landfill/pricing/",
+   "effective": null,
+   "effectiveText": "current schedule, no effective date printed",
+   "flat": {
+    "car": 17,
+    "pickup": 17,
+    "trailer": 17
+   },
+   "flatNote": "flat rate for cars, SUVs, pickups up to a 1-ton pickup and trailers unloaded by hand; trailers towed by 1-ton or larger trucks are weighed",
+   "perTon": 36,
+   "minCharge": 17,
+   "yard": {
+    "perTon": 36,
+    "flat": {
+     "car": 17,
+     "pickup": 17,
+     "trailer": 17
+    }
+   },
+   "cd": {
+    "perTon": 12,
+    "label": "clean concrete, asphalt, soil or sod"
+   },
+   "mattress": 18,
+   "freon": 20,
+   "tire": 4,
+   "tireMax": 12,
+   "notes": [
+    "Mixed trash may include green waste, concrete, asphalt, soil and sod at the flat rate.",
+    "Mattresses and box springs $18 each for residential customers.",
+    "Tires $4 each, 12 per load at most."
+   ]
+  },
+  {
+   "id": "dekalb",
+   "metro": "Atlanta",
+   "state": "GA",
+   "place": "DeKalb County",
+   "name": "Seminole Road Landfill",
+   "operator": "DeKalb County Sanitation (public)",
+   "kind": "landfill",
+   "url": "https://dekalbcountyga.gov/sites/default/files/2026-07/2026%20Landfill%2C%20Transfer%20Station%2C%20%26%20Animal%20Crematorium%20Fees%20-%20Final.pdf",
+   "effective": "2026-01-01",
+   "effectiveText": "2026 fee schedule",
+   "tiers": [
+    {
+     "maxLbs": 250,
+     "fee": 16.5
+    },
+    {
+     "maxLbs": 500,
+     "fee": 24.75
+    },
+    {
+     "maxLbs": 750,
+     "fee": 37.13
+    },
+    {
+     "maxLbs": 1000,
+     "fee": 55.69
+    },
+    {
+     "maxLbs": 1999,
+     "fee": 83.53
+    }
+   ],
+   "perTon": 99.8,
+   "yard": {
+    "perTon": 99.8
+   },
+   "cd": {
+    "perTon": 99.8,
+    "label": "construction and demolition material"
+   },
+   "freon": 50.4,
+   "tire": 3.5,
+   "notes": [
+    "Loads under 2,000 lbs pay the minimum scale fee of their weight band; heavier loads pay $99.80 a ton.",
+    "The schedule also lists a $14.70 minimum processing fee; we do not add it to the weight bands because the schedule does not say how the two combine.",
+    "Tires under 18 inches $3.50 each, over 18 inches $16, with rims $30.",
+    "Transfer stations (Central, East, North): $105 a ton."
+   ]
+  },
+  {
+   "id": "san-diego",
+   "metro": "San Diego",
+   "state": "CA",
+   "place": "City of San Diego",
+   "name": "Miramar Landfill",
+   "operator": "City of San Diego Environmental Services (public)",
+   "kind": "landfill",
+   "url": "https://www.sandiego.gov/sites/default/files/2024-06/simplified-fee-schedule.pdf",
+   "effective": "2026-07-01",
+   "effectiveText": "effective July 1, 2026 through June 30, 2027",
+   "flat": {
+    "car": 75,
+    "pickup": 75,
+    "trailer": 148
+   },
+   "flatNote": "Tier 1 (cars, SUVs, pickups, vans, trailers up to 5 x 9 x 4 ft) and Tier 2 (pickup with a trailer, larger trailers), city waste",
+   "perTon": 102,
+   "nonRes": {
+    "flat": {
+     "car": 86,
+     "pickup": 86,
+     "trailer": 156
+    },
+    "perTon": 108,
+    "label": "waste from outside the City of San Diego"
+   },
+   "yard": {
+    "perTon": 72,
+    "flat": {
+     "car": 50,
+     "pickup": 50,
+     "trailer": 109
+    }
+   },
+   "cd": {
+    "perTon": 241,
+    "label": "construction and demolition debris, weighed"
+   },
+   "notes": [
+    "Flat rates already include the state recycling fee ($15 a ton) and the city business tax where it applies.",
+    "Appliances, TVs and electronic waste must be disposed of elsewhere before entering the landfill.",
+    "Uncovered loads: $50."
+   ]
+  },
+  {
+   "id": "seattle",
+   "metro": "Seattle",
+   "state": "WA",
+   "place": "City of Seattle",
+   "name": "North and South transfer stations",
+   "operator": "Seattle Public Utilities (public)",
+   "kind": "transfer",
+   "url": "https://www.seattle.gov/utilities/your-services/collection-and-disposal/transfer-stations/rates",
+   "effective": "2026-04-01",
+   "effectiveText": "rates as of April 1, 2026",
+   "perTon": 174,
+   "minCharge": 37,
+   "minCoversLbs": 420,
+   "yard": {
+    "perTon": 132,
+    "min": 25
+   },
+   "freon": 9,
+   "freonNote": "$9 per appliance plus the tonnage rate when other material is in the load; $34 per appliance for an appliance-only load (2 at most)",
+   "tire": 16,
+   "tireMode": "load",
+   "tireMax": 4,
+   "notes": [
+    "The $37 minimum covers up to 420 lbs of garbage.",
+    "Vehicle tires only: $16 per load, 4 tires at most.",
+    "Unsecured loads: $3 minimum, $5 up to 1 ton, $10 above."
+   ]
+  },
+  {
+   "id": "king-county",
+   "metro": "Seattle",
+   "state": "WA",
+   "place": "King County",
+   "name": "King County transfer stations",
+   "operator": "King County Solid Waste Division (public)",
+   "kind": "transfer",
+   "url": "https://content.govdelivery.com/accounts/WAKING/bulletins/3f43a3b",
+   "effective": "2026-01-01",
+   "effectiveText": "2026 rates, effective January 1, 2026, approved by the King County Council on September 16, 2025",
+   "perTon": 243.38,
+   "minCharge": 40.25,
+   "yard": {
+    "perTon": 129.38,
+    "min": 20.7
+   },
+   "next": {
+    "effective": "2027-01-01",
+    "url": "https://content.govdelivery.com/accounts/WAKING/bulletins/4298929",
+    "minCharge": 43.5,
+    "perTon": 264.01,
+    "note": "2027 self-haul rates announced September 29, 2026, moderate risk waste surcharge and state refuse tax included"
+   },
+   "notes": [
+    "Self-haul minimum $40.25 per vehicle, $243.38 a ton above it in 2026.",
+    "Yard and wood waste: $20.70 for sedans and two-door hatchbacks, $129.38 a ton for all other vehicles."
+   ]
+  },
+  {
+   "id": "phoenix",
+   "metro": "Phoenix",
+   "state": "AZ",
+   "place": "City of Phoenix",
+   "name": "27th Avenue and North Gateway transfer stations",
+   "operator": "City of Phoenix Public Works (public)",
+   "kind": "transfer",
+   "url": "https://www.phoenix.gov/administration/departments/publicworks/about-us/transfer-stations.html",
+   "effective": null,
+   "effectiveText": "current page, no effective date printed",
+   "perTon": 55,
+   "minCharge": 40,
+   "residentFree": {
+    "maxLbs": 2000,
+    "label": "Phoenix residents who pay for full city trash service: one load up to a ton, once a month, free"
+   },
+   "notes": [
+    "Residents' loads over one ton leave a cash deposit and pay $55 a ton for the excess.",
+    "Residents may bring up to five automobile tires a year (rims removed).",
+    "Two CRT units per household per month free, then $20 each plus disposal.",
+    "Unsecured load penalty: $20."
+   ]
+  },
+  {
+   "id": "orange-fl",
+   "metro": "Orlando",
+   "state": "FL",
+   "place": "Orange County",
+   "name": "Orange County Landfill, Porter and McLeod Road transfer stations",
+   "operator": "Orange County Utilities, Solid Waste (public)",
+   "kind": "landfill",
+   "url": "https://ocfl.net/WaterGarbageRecycling/LandfillandTransferStations.aspx",
+   "effective": "2026-10-01",
+   "effectiveText": "effective October 1, 2026",
+   "perTon": 56.4,
+   "minCharge": 10,
+   "yard": {
+    "perTon": 48.7,
+    "min": 10
+   },
+   "cd": {
+    "perTon": 42.7,
+    "label": "Class III: construction and demolition debris, furniture, clean fill; landfill only"
+   },
+   "tire": 3,
+   "tireMax": 8,
+   "notes": [
+    "Class I garbage $56.40 a ton at the landfill and both transfer stations.",
+    "Yard waste $48.70 a ton at the landfill; at a transfer station it pays the Class I rate.",
+    "Up to 8 passenger tires $3 each; larger tire loads $249 a ton."
+   ]
+  },
+  {
+   "id": "oc-ca",
+   "metro": "Orange County, south of LA",
+   "state": "CA",
+   "place": "Orange County",
+   "name": "Olinda Alpha and Prima Deshecha landfills",
+   "operator": "OC Waste & Recycling (public)",
+   "kind": "landfill",
+   "url": "https://www.oclandfills.com/landfills/landfill-fees",
+   "effective": "2026-07-01",
+   "effectiveText": "effective July 1, 2026 through June 30, 2027",
+   "flat": {
+    "car": 15,
+    "pickup": 30
+   },
+   "flatMaxLbs": {
+    "car": 360,
+    "pickup": 880
+   },
+   "perTon": 92.7,
+   "htPerTon": 107.7,
+   "htAdd": 15,
+   "notes": [
+    "Autos, minivans and SUVs: $15 for loads under 360 lbs. Pickups and vans: $30 for loads under 880 lbs.",
+    "Over 880 lbs: $92.70 a ton, or $107.70 with hard-to-handle items.",
+    "Hard-to-handle items longer than six feet (wood, furniture, mattresses): $15 more."
+   ]
+  },
+  {
+   "id": "sac-kiefer",
+   "metro": "Sacramento",
+   "state": "CA",
+   "place": "Sacramento County",
+   "name": "Kiefer Landfill",
+   "operator": "Sacramento County Waste Management & Recycling (public)",
+   "kind": "landfill",
+   "url": "https://wmr.saccounty.gov/content/wmr/us/en/county-facilities/kiefer-landfill/fees.html",
+   "effective": "2026-01-01",
+   "effectiveText": "effective January 1, 2026",
+   "flat": {
+    "car": 10,
+    "pickup": 35
+   },
+   "flatNote": "cars, station wagons and small SUVs $10; small vans and large SUVs $20; pickups $35; large vans $45",
+   "perTon": 61.35,
+   "minCharge": 45,
+   "yard": {
+    "perTon": 115.65,
+    "min": 45
+   },
+   "mattress": 0,
+   "freon": 35,
+   "freonFree": 2,
+   "tire": 10,
+   "tireFree": 4,
+   "tireMax": 8,
+   "notes": [
+    "Vehicles with trailers, box trucks and loads with 9 or more tires are weighed.",
+    "Up to 2 large appliances a day and mattresses from non-business loads: no fee.",
+    "Passenger tires: 4 a day free, the 5th to 8th $10 each."
+   ]
+  },
+  {
+   "id": "sac-nars",
+   "metro": "Sacramento",
+   "state": "CA",
+   "place": "Sacramento County",
+   "name": "North Area Recovery Station",
+   "operator": "Sacramento County Waste Management & Recycling (public)",
+   "kind": "transfer",
+   "url": "https://wmr.saccounty.gov/content/wmr/us/en/county-facilities/north-area-recovery-station/fees.html",
+   "effective": "2026-01-01",
+   "effectiveText": "effective January 1, 2026",
+   "flat": {
+    "car": 10,
+    "pickup": 40
+   },
+   "flatNote": "cars, station wagons and small SUVs $10; small vans and large SUVs $20; pickups $40; large vans $50",
+   "perTon": 89.9,
+   "minCharge": 50,
+   "yard": {
+    "perTon": 115.65,
+    "min": 50
+   },
+   "mattress": 0,
+   "freon": 40,
+   "freonFree": 2,
+   "tire": 10,
+   "tireFree": 4,
+   "tireMax": 8,
+   "notes": [
+    "A pickup with trash and three refrigerators pays $40 + $40 = $80 (the county's own example).",
+    "Up to 2 large appliances a day and non-business mattresses: no fee."
+   ]
+  },
+  {
+   "id": "wake",
+   "metro": "Raleigh",
+   "state": "NC",
+   "place": "Wake County",
+   "name": "South Wake Landfill",
+   "operator": "Wake County Solid Waste (public)",
+   "kind": "landfill",
+   "url": "https://www.wake.gov/departments-government/waste-recycling/facilities/wake-county-solid-waste-landfill/south-wake-landfill/fees-payment-methods-haulers",
+   "effective": null,
+   "effectiveText": "current page for haulers, no effective date printed",
+   "perTon": 37,
+   "mattress": 15,
+   "notes": [
+    "$37 a ton includes the $2 a ton North Carolina excise tax.",
+    "Mattress or box spring $15 each.",
+    "The page is written for haulers and prints no minimum charge."
+   ]
+  },
+  {
+   "id": "fairfax",
+   "metro": "Fairfax (DC area)",
+   "state": "VA",
+   "place": "Fairfax County",
+   "name": "I-66 Transfer Station and I-95 Landfill Complex",
+   "operator": "Fairfax County Public Works (public)",
+   "kind": "transfer",
+   "url": "https://www.fairfaxcounty.gov/publicworks/sites/publicworks/files/Assets/documents/residential-waste-disposal-rates-fy2027.pdf",
+   "effective": "2026-07-01",
+   "effectiveText": "FY 2027 residential rates (July 1, 2026 to June 30, 2027)",
+   "perTon": 98,
+   "minByVehicle": {
+    "car": 39,
+    "pickup": 49,
+    "trailer": 98
+   },
+   "minNote": "the schedule prints three weighed minimums (small $39, medium $49, large $98); we match them to car, pickup and trailer",
+   "bags": [
+    {
+     "max": 5,
+     "fee": 21
+    },
+    {
+     "max": 10,
+     "fee": 28
+    }
+   ],
+   "yard": {
+    "perTon": 96
+   },
+   "brush": {
+    "perTon": 59,
+    "flat": {
+     "pickup": 28
+    }
+   },
+   "cd": {
+    "perTon": 109,
+    "label": "brick, concrete, dirt, rock, shingles (up to 2 cubic yards a day)"
+   },
+   "mattress": 17,
+   "freon": 15,
+   "tire": 14,
+   "tireMax": 10,
+   "notes": [
+    "Proof of Fairfax County residency may be asked.",
+    "Trash 1 to 5 bags $21, 6 to 10 bags $28; seniors (60 and over) $10 for 1 or 2 bags.",
+    "Appliance needing Freon or capacitor removal $15 each; white goods otherwise $98 a ton.",
+    "Mattress and box spring: $17 each as a large single item."
+   ]
+  },
+  {
+   "id": "swaco",
+   "metro": "Columbus",
+   "state": "OH",
+   "place": "Franklin County",
+   "name": "Franklin County Sanitary Landfill",
+   "operator": "Solid Waste Authority of Central Ohio (public)",
+   "kind": "landfill",
+   "url": "https://www.swaco.org/213/Rates",
+   "effective": null,
+   "effectiveText": "current rates page; SWACO's FAQ dates the $39.75 rate to April 1, 2017",
+   "perTon": 39.75,
+   "minCharge": 5,
+   "nonRes": {
+    "perTon": 43.75,
+    "label": "waste from outside the SWACO district"
+   },
+   "cd": {
+    "perTon": 39.75,
+    "label": "construction and demolition debris, landfill only since September 29, 2025"
+   },
+   "notes": [
+    "Residents pay a $5 minimum; the fee is prorated below one ton.",
+    "Jackson Pike Transfer Station $51.75 a ton, Morse Road Transfer Station $52.75 a ton (in-district).",
+    "Loads must be fully tarped."
+   ]
+  },
+  {
+   "id": "dallas",
+   "metro": "Dallas",
+   "state": "TX",
+   "place": "City of Dallas",
+   "name": "McCommas Bluff Landfill",
+   "operator": "City of Dallas Sanitation Services (public)",
+   "kind": "landfill",
+   "url": "https://dallascityhall.com/departments/sanitation/Pages/FY%202026-27%20Rate%20Changes.aspx",
+   "effective": "2026-10-01",
+   "effectiveText": "FY 2026-27 rates, effective October 1, 2026",
+   "perTon": 45.78,
+   "perTonExtra": 4,
+   "perTonExtraLabel": "customer processing fee $2 a ton and environmental fee $2 a ton",
+   "notes": [
+    "Gate rate $45.78 a ton from October 1, 2026 (was $43.60).",
+    "Customers paying by cash, check or card for single loads also pay a $2 a ton processing fee and a $2 a ton environmental fee.",
+    "Uncovered load: $40. Northwest Transfer Station (Bachman): $71.28 a ton gate rate on the city's landfill page."
+   ]
+  },
+  {
+   "id": "san-bernardino",
+   "metro": "Riverside–San Bernardino",
+   "state": "CA",
+   "place": "San Bernardino County",
+   "name": "County landfills and transfer stations",
+   "operator": "San Bernardino County Solid Waste Management (public)",
+   "kind": "landfill",
+   "url": "https://dpw.sbcounty.gov/solid-waste-management/fees/",
+   "effective": "2023-07-01",
+   "effectiveText": "pricing effective July 1, 2023, still the schedule posted on November 7, 2026",
+   "smallLoad": {
+    "maxLbs": 300,
+    "fee": 13.71,
+    "label": "up to 300 lbs of ordinary residential waste"
+   },
+   "perTon": 61.49,
+   "tire": 5.31,
+   "tireMax": 9,
+   "notes": [
+    "Up to 300 lbs of residential waste: $13.71. From 301 lbs: $61.49 a ton, prorated.",
+    "Tires off the rim, up to nine a load: $5.31 each.",
+    "Hard-to-handle and special handling: $53.14 a ton more, $26.57 minimum under 2,000 lbs.",
+    "Uncovered loads pay double."
+   ]
+  },
+  {
+   "id": "riverside",
+   "metro": "Riverside–San Bernardino",
+   "state": "CA",
+   "place": "Riverside County",
+   "name": "Badlands, Blythe, Lamb Canyon and El Sobrante landfills",
+   "operator": "Riverside County Department of Waste Resources (public)",
+   "kind": "landfill",
+   "url": "https://media.rivcocob.org/proceeds/2026/p2026_03_03_files/15.01001.pdf",
+   "effective": "2026-07-01",
+   "effectiveText": "Ordinance 779.26, Appendix A, effective July 1, 2026",
+   "flat": {
+    "car": 15.7,
+    "pickup": 15.7,
+    "trailer": 43.2
+   },
+   "flatNote": "flat-rate vehicles: car, van or SUV; pickup or trailer up to an 8 ft bed; pickup and trailer up to 4 ft high",
+   "htFlat": {
+    "car": 21.1,
+    "pickup": 21.1,
+    "trailer": 57.1
+   },
+   "perTon": 52.68,
+   "minCharge": 43.2,
+   "yard": {
+    "perTon": 52.68,
+    "flat": {
+     "car": 20.05,
+     "pickup": 20.07,
+     "trailer": 52.75
+    }
+   },
+   "tire": 6,
+   "tireMax": 5,
+   "notes": [
+    "Routine refuse $52.68 a ton for direct-haul customers; minimum load fee $43.20 for vehicles not on the flat-rate list.",
+    "Hard-to-handle flat rates: $21.10 car or pickup, $57.10 pickup with trailer.",
+    "Residential passenger tires: $6 each, five a day at most.",
+    "Uncovered load surcharge: $25."
+   ]
+  },
+  {
+   "id": "miami-dade",
+   "metro": "Miami",
+   "state": "FL",
+   "place": "Miami-Dade County",
+   "name": "North Dade and South Dade landfills, Resources Recovery Facility",
+   "operator": "Miami-Dade Department of Solid Waste Management (public)",
+   "kind": "landfill",
+   "url": "https://www.miamidade.gov/global/solidwaste/disposal-fees.page",
+   "effective": null,
+   "effectiveText": "rates the page says are effective as of October 1 (no year printed; the county's sheet dated October 1, 2025 shows $115.80)",
+   "perTon": 119.51,
+   "notes": [
+    "Non-contract disposal rate $119.51 a ton; the $78.56 contract rate is only for permitted haulers and municipalities.",
+    "Waste delivered to a Regional Transfer Station adds $17.86 a ton (non-contract).",
+    "Waste tires $140 a ton. No cash accepted."
+   ]
+  },
+  {
+   "id": "tucson",
+   "metro": "Tucson",
+   "state": "AZ",
+   "place": "City of Tucson",
+   "name": "Los Reales Sustainability Campus",
+   "operator": "City of Tucson Environmental Services (public)",
+   "kind": "landfill",
+   "url": "https://www.tucsonaz.gov/files/sharedassets/public/v/1/esd/documents/fy-2027-disposal-fees.pdf",
+   "via": "WebFetch (PDF saved, text extracted)",
+   "effective": "2026-07-01",
+   "effectiveText": "effective July 1, 2026",
+   "smallLoad": {
+    "maxLbs": 2000,
+    "fee": 18,
+    "label": "resident bringing their own load, loads of 2,000 lbs or less"
+   },
+   "perTon": 38,
+   "minCharge": 18,
+   "perLoadExtra": 2,
+   "perLoadExtraLabel": "environmental fee",
+   "yard": {
+    "perTon": 30.5,
+    "min": 18
+   },
+   "freon": 20,
+   "tire": 5,
+   "notes": [
+    "Residential self-haul: $18 a load up to 2,000 lbs; heavier loads pay the $38 a ton commercial rate.",
+    "Environmental fee $2 a load.",
+    "Passenger tires from residents who bring their own load $5 each; refrigerant appliances $20 each."
+   ]
+  },
+  {
+   "id": "larimer",
+   "metro": "Fort Collins",
+   "state": "CO",
+   "place": "Larimer County",
+   "name": "Larimer County Landfill",
+   "operator": "Larimer County Solid Waste (public)",
+   "kind": "landfill",
+   "url": "https://www.larimer.gov/solidwaste/landfill-fees",
+   "via": "WebFetch (the page refuses curl)",
+   "effective": "2026-01-01",
+   "effectiveText": "2026 fee schedule (2027 rates proposed, pending approval)",
+   "flat": {
+    "car": 20,
+    "pickup": 37
+   },
+   "flatNote": "flat fee including the Colorado surcharge; loose loads in trailers are charged by the cubic yard",
+   "yard": {
+    "flat": {
+     "car": 9,
+     "pickup": 16
+    }
+   },
+   "mattress": 40,
+   "freon": 36,
+   "tire": 7.5,
+   "notes": [
+    "Car, SUV or passenger van $20; pickup or cargo van $37.",
+    "Mattresses and box springs $40 each (recycled).",
+    "Auto and light truck tires up to 16.5 in. $7.50, $13.50 with rim.",
+    "Appliances with Freon $36 each."
+   ]
+  },
+  {
+   "id": "broome",
+   "metro": "Binghamton",
+   "state": "NY",
+   "place": "Broome County",
+   "name": "Broome County Landfill",
+   "operator": "Broome County Division of Solid Waste Management (public)",
+   "kind": "landfill",
+   "url": "https://broomecountyny.gov/solidwaste/landfill-fees",
+   "effective": null,
+   "effectiveText": "current page, no effective date printed",
+   "perTon": 55,
+   "minCharge": 5,
+   "yard": {
+    "perTon": 20,
+    "min": 5
+   },
+   "cd": {
+    "perTon": 55,
+    "label": "construction and demolition debris"
+   },
+   "freon": 10,
+   "tire": 4,
+   "tireMax": 15,
+   "notes": [
+    "Broome County residents only, with proof of residency.",
+    "Automatic $20 charge for uncovered loads.",
+    "Tires up to 20 in. rim $4 each, up to 15."
+   ]
+  },
+  {
+   "id": "jacksonville",
+   "metro": "Jacksonville",
+   "state": "FL",
+   "place": "City of Jacksonville",
+   "name": "Trail Ridge Landfill",
+   "operator": "City of Jacksonville Solid Waste (city-owned)",
+   "kind": "landfill",
+   "url": "https://www.jacksonville.gov/departments/office-of-administrative-services/solid-waste/disposal-operations",
+   "effective": null,
+   "effectiveText": "current page, no effective date printed",
+   "smallLoad": {
+    "maxLbs": 500,
+    "fee": 1,
+    "label": "first 500 lbs (residential rate listed by the city)"
+   },
+   "perTon": 30.3,
+   "yard": {
+    "perTon": 25
+   },
+   "freon": 20,
+   "tire": 1.5,
+   "notes": [
+    "Regular waste (household garbage, building materials) $30.30 a ton; yard waste $25 a ton.",
+    "The city lists a $1 charge for the first 500 lbs and $30.30 a ton above.",
+    "Passenger car tires $1.50 each at the weigh station at the gate; appliances $20 each."
+   ]
+  },
+  {
+   "id": "washington-ut",
+   "metro": "St. George",
+   "state": "UT",
+   "place": "Washington County",
+   "name": "Washington County landfill",
+   "operator": "Washington County Solid Waste District (public)",
+   "kind": "landfill",
+   "url": "https://www.washcosolidwasteut.gov/landfill-fees",
+   "effective": "2026-01-01",
+   "effectiveText": "2026 rate column of the approved master fee schedule",
+   "perTon": 37.15,
+   "residentFree": {
+    "maxLbs": 2000,
+    "label": "Washington County residents: one load under a ton a month, free"
+   },
+   "cd": {
+    "perTon": 32,
+    "label": "construction and demolition"
+   },
+   "freon": 38.64,
+   "tire": 3.5,
+   "tireMax": 12,
+   "notes": [
+    "Municipal solid waste $37.15 a ton.",
+    "Residential: less than one ton per month at no charge.",
+    "Uncovered loads pay double the trash rate."
+   ]
+  },
+  {
+   "id": "el-paso",
+   "metro": "El Paso",
+   "state": "TX",
+   "place": "City of El Paso",
+   "name": "Greater El Paso Landfill",
+   "operator": "City of El Paso Environmental Services (public)",
+   "kind": "landfill",
+   "url": "https://www.elpasotexas.gov/assets/Press-Releases/2025.12.03-NEWS-RELEASE_City-Constructing-New-Cells-at-Greater-El-Paso-Landfill.pdf",
+   "effective": null,
+   "effectiveText": "city news release of December 3, 2025",
+   "smallLoad": {
+    "maxLbs": 2000,
+    "fee": 16,
+    "label": "per truckload under one ton (\"fees begin at\")",
+    "from": true
+   },
+   "notes": [
+    "The city says disposal fees begin at $16 per truckload for waste under one ton; it publishes no per-ton rate on that page.",
+    "Formerly the Clint Landfill."
+   ]
+  },
+  {
+   "id": "blount",
+   "metro": "Knoxville",
+   "state": "TN",
+   "place": "Blount County",
+   "name": "Alcoa/Maryville/Blount County Sanitary Landfill",
+   "operator": "City of Alcoa Public Works (public)",
+   "kind": "landfill",
+   "url": "https://cityofalcoa-tn.gov/250/Landfill-Services",
+   "effective": null,
+   "effectiveText": "current page, no effective date printed",
+   "perTon": 60,
+   "minCharge": 15,
+   "minCoversLbs": 500,
+   "mattress": 25,
+   "freon": 20,
+   "notes": [
+    "Blount County residents and businesses only, proof required.",
+    "$15 minimum for 500 lbs or less, then $60 a ton.",
+    "Mattresses and box springs $25 each; refrigerated appliances $20."
+   ]
+  },
+  {
+   "id": "austin",
+   "metro": "Austin",
+   "state": "TX",
+   "place": "City of Austin",
+   "name": "Recycle & Reuse Drop-off Center",
+   "operator": "Austin Resource Recovery (public)",
+   "kind": "center",
+   "noTrash": true,
+   "url": "https://www.austintexas.gov/resource-recovery/recycle-and-reuse-drop-center",
+   "effective": null,
+   "effectiveText": "current page (FY 2027 fee schedule referenced)",
+   "tire": 6,
+   "notes": [
+    "Free for Austin and Travis County residents, by appointment, except tires at $6 each.",
+    "Takes recycling, reuse items and household hazardous waste, not trash, furniture or mattresses."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import LegalIdentity from '../../components/LegalIdentity.astro';
+import { CONTACT_EMAIL, LAST_UPDATED, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+const lang = 'en';
+---
+<PageLayout title={`Contact ${SITE_NAMES[lang]}: a fee changed, a site to add`} description="Write to Dump Fees by State when a landfill or transfer station has changed its fees, when a public fee schedule is missing, or to embed the dump fee calculator on your site." lang={lang} noindex={true} breadcrumbs={[{ label: 'Contact' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Contact</h1>
+    <p>Email: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. A person reads every message.</p>
+    <h2>A fee has changed</h2>
+    <p>Send the page address, the site concerned and the link to its current fee schedule on the county, city or authority website. We read the schedule, correct the data file, add a test for the case if the rule is new and date the change. We only use fees published by the operator itself: a price seen on a private site or quoted on the phone is not enough.</p>
+    <h2>A public site is missing</h2>
+    <p>If your county or city publishes its landfill or transfer station fees online and they are not here, send the link. Sites that publish no schedule, or whose pages refuse automated reading, cannot be added.</p>
+    <h2>What we cannot do</h2>
+    <p>We do not haul waste, rent dumpsters, book disposal or answer for a facility. Questions about what a site accepts, its hours or a charge at the weigh station at the gate go to the operator of that site. Please do not send personal details we do not need.</p>
+    <h2>Embedding the calculator</h2>
+    <p>County websites, neighborhood associations, home improvement writers and moving guides can show the dump fee calculator in an iframe at no cost. The code and the conditions are on the <a href={route('widget', lang)}>embed page</a>.</p>
+    <h2>Publisher</h2>
+    <LegalIdentity lang={lang} />
+    <p class="text-sm">Last updated: {LAST_UPDATED}.</p>
+  </div>
+</PageLayout>

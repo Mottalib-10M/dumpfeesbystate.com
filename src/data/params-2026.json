@@ -1,0 +1,223 @@
+{
+ "_readme": "Sources of the site. Fees are in fees-2026.json (one official page per facility, read on the date below); the landfill list is built by scripts/data/build-landfills.py from the EPA LMOP file; load weights come from the EPA volume-to-weight memo.",
+ "year": 2026,
+ "retrieved_at": "2026-11-07",
+ "valid_from": "2026-01-01",
+ "valid_to": "2026-12-31",
+ "source": "County, city and authority fee schedules; EPA LMOP; EPA volume-to-weight factors",
+ "source_url": "https://www.epa.gov/lmop/lmop-landfill-and-project-database",
+ "weights": {
+  "_source": "epa_vw",
+  "msw_loose_lo": 250,
+  "msw_loose_hi": 300,
+  "yard_loose": 250,
+  "branches": 127,
+  "cd_mixed": 417,
+  "concrete": 860,
+  "asphalt_paving": 773,
+  "roofing": 731,
+  "dirt_sand": 929,
+  "drywall": 467,
+  "lumber": 169,
+  "carpet": 147,
+  "refrigerator": 250,
+  "washer": 150,
+  "dryer": 125,
+  "stove": 150,
+  "dishwasher": 125,
+  "tire_light": 22.5
+ },
+ "sources": {
+  "lmop": {
+   "url": "https://www.epa.gov/lmop/lmop-landfill-and-project-database",
+   "label": {
+    "en": "EPA, Landfill Methane Outreach Program, LMOP Landfill and Project Database (page updated July 31, 2026)"
+   }
+  },
+  "epa_vw": {
+   "url": "https://www.epa.gov/sites/default/files/2016-04/documents/volume_to_weight_conversion_factors_memorandum_04192016_508fnl.pdf",
+   "label": {
+    "en": "EPA, Office of Resource Conservation and Recovery, Volume-to-Weight Conversion Factors (April 2016)"
+   }
+  },
+  "epa_disclaimers": {
+   "url": "https://www.epa.gov/web-policies-and-procedures/epa-disclaimers",
+   "label": {
+    "en": "EPA, Disclaimers (public domain status of EPA-produced data, 17 U.S.C. § 105)"
+   }
+  },
+  "f_salt_lake": {
+   "url": "https://www.saltlakecounty.gov/landfill/pricing/",
+   "label": {
+    "en": "Salt Lake County, Salt Lake Valley Landfill: fees (current schedule, no effective date printed)"
+   }
+  },
+  "f_dekalb": {
+   "url": "https://dekalbcountyga.gov/sites/default/files/2026-07/2026%20Landfill%2C%20Transfer%20Station%2C%20%26%20Animal%20Crematorium%20Fees%20-%20Final.pdf",
+   "label": {
+    "en": "DeKalb County Sanitation, Seminole Road Landfill: fees (2026 fee schedule)"
+   }
+  },
+  "f_san_diego": {
+   "url": "https://www.sandiego.gov/sites/default/files/2024-06/simplified-fee-schedule.pdf",
+   "label": {
+    "en": "City of San Diego Environmental Services, Miramar Landfill: fees (effective July 1, 2026 through June 30, 2027)"
+   }
+  },
+  "f_seattle": {
+   "url": "https://www.seattle.gov/utilities/your-services/collection-and-disposal/transfer-stations/rates",
+   "label": {
+    "en": "Seattle Public Utilities, North and South transfer stations: fees (rates as of April 1, 2026)"
+   }
+  },
+  "f_king_county": {
+   "url": "https://content.govdelivery.com/accounts/WAKING/bulletins/3f43a3b",
+   "label": {
+    "en": "King County Solid Waste Division, King County transfer stations and drop boxes: fees (2026 rates, effective January 1, 2026, approved by the King County Council on September 16, 2025)"
+   }
+  },
+  "f_king_county_next": {
+   "url": "https://content.govdelivery.com/accounts/WAKING/bulletins/4298929",
+   "label": {
+    "en": "King County Solid Waste Division: 2027 rates announcement"
+   }
+  },
+  "f_phoenix": {
+   "url": "https://www.phoenix.gov/administration/departments/publicworks/about-us/transfer-stations.html",
+   "label": {
+    "en": "City of Phoenix Public Works, 27th Avenue and North Gateway transfer stations: fees (current page, no effective date printed)"
+   }
+  },
+  "f_orange_fl": {
+   "url": "https://ocfl.net/WaterGarbageRecycling/LandfillandTransferStations.aspx",
+   "label": {
+    "en": "Orange County Utilities, Solid Waste, Orange County Landfill, Porter and McLeod Road transfer stations: fees (effective October 1, 2026)"
+   }
+  },
+  "f_oc_ca": {
+   "url": "https://www.oclandfills.com/landfills/landfill-fees",
+   "label": {
+    "en": "OC Waste & Recycling, Olinda Alpha and Prima Deshecha landfills: fees (effective July 1, 2026 through June 30, 2027)"
+   }
+  },
+  "f_sac_kiefer": {
+   "url": "https://wmr.saccounty.gov/content/wmr/us/en/county-facilities/kiefer-landfill/fees.html",
+   "label": {
+    "en": "Sacramento County Waste Management & Recycling, Kiefer Landfill: fees (effective January 1, 2026)"
+   }
+  },
+  "f_sac_nars": {
+   "url": "https://wmr.saccounty.gov/content/wmr/us/en/county-facilities/north-area-recovery-station/fees.html",
+   "label": {
+    "en": "Sacramento County Waste Management & Recycling, North Area Recovery Station: fees (effective January 1, 2026)"
+   }
+  },
+  "f_wake": {
+   "url": "https://www.wake.gov/departments-government/waste-recycling/facilities/wake-county-solid-waste-landfill/south-wake-landfill/fees-payment-methods-haulers",
+   "label": {
+    "en": "Wake County Solid Waste, South Wake Landfill: fees (current page for haulers, no effective date printed)"
+   }
+  },
+  "f_fairfax": {
+   "url": "https://www.fairfaxcounty.gov/publicworks/sites/publicworks/files/Assets/documents/residential-waste-disposal-rates-fy2027.pdf",
+   "label": {
+    "en": "Fairfax County Public Works, I-66 Transfer Station and I-95 Landfill Complex: fees (FY 2027 residential rates (July 1, 2026 to June 30, 2027))"
+   }
+  },
+  "f_swaco": {
+   "url": "https://www.swaco.org/213/Rates",
+   "label": {
+    "en": "Solid Waste Authority of Central Ohio, Franklin County Sanitary Landfill: fees (current rates page; SWACO's FAQ dates the $39.75 rate to April 1, 2017)"
+   }
+  },
+  "f_dallas": {
+   "url": "https://dallascityhall.com/departments/sanitation/Pages/FY%202026-27%20Rate%20Changes.aspx",
+   "label": {
+    "en": "City of Dallas Sanitation Services, McCommas Bluff Landfill: fees (FY 2026-27 rates, effective October 1, 2026)"
+   }
+  },
+  "f_san_bernardino": {
+   "url": "https://dpw.sbcounty.gov/solid-waste-management/fees/",
+   "label": {
+    "en": "San Bernardino County Solid Waste Management, County landfills and transfer stations: fees (pricing effective July 1, 2023, still the schedule posted on November 7, 2026)"
+   }
+  },
+  "f_riverside": {
+   "url": "https://media.rivcocob.org/proceeds/2026/p2026_03_03_files/15.01001.pdf",
+   "label": {
+    "en": "Riverside County Department of Waste Resources, Badlands, Blythe, Lamb Canyon and El Sobrante landfills: fees (Ordinance 779.26, Appendix A, effective July 1, 2026)"
+   }
+  },
+  "f_miami_dade": {
+   "url": "https://www.miamidade.gov/global/solidwaste/disposal-fees.page",
+   "label": {
+    "en": "Miami-Dade Department of Solid Waste Management, North Dade and South Dade landfills, Resources Recovery Facility: fees (rates the page says are effective as of October 1 (no year printed; the county's sheet dated October 1, 2025 shows $115.80))"
+   }
+  },
+  "f_tucson": {
+   "url": "https://www.tucsonaz.gov/files/sharedassets/public/v/1/esd/documents/fy-2027-disposal-fees.pdf",
+   "label": {
+    "en": "City of Tucson Environmental Services, Los Reales Sustainability Campus: fees (effective July 1, 2026)"
+   }
+  },
+  "f_larimer": {
+   "url": "https://www.larimer.gov/solidwaste/landfill-fees",
+   "label": {
+    "en": "Larimer County Solid Waste, Larimer County Landfill: fees (2026 fee schedule (2027 rates proposed, pending approval))"
+   }
+  },
+  "f_broome": {
+   "url": "https://broomecountyny.gov/solidwaste/landfill-fees",
+   "label": {
+    "en": "Broome County Division of Solid Waste Management, Broome County Landfill: fees (current page, no effective date printed)"
+   }
+  },
+  "f_jacksonville": {
+   "url": "https://www.jacksonville.gov/departments/office-of-administrative-services/solid-waste/disposal-operations",
+   "label": {
+    "en": "City of Jacksonville Solid Waste, Trail Ridge Landfill: fees (current page, no effective date printed)"
+   }
+  },
+  "f_washington_ut": {
+   "url": "https://www.washcosolidwasteut.gov/landfill-fees",
+   "label": {
+    "en": "Washington County Solid Waste District, Washington County landfill: fees (2026 rate column of the approved master fee schedule)"
+   }
+  },
+  "f_el_paso": {
+   "url": "https://www.elpasotexas.gov/assets/Press-Releases/2025.12.03-NEWS-RELEASE_City-Constructing-New-Cells-at-Greater-El-Paso-Landfill.pdf",
+   "label": {
+    "en": "City of El Paso Environmental Services, Greater El Paso Landfill: fees (city news release of December 3, 2025)"
+   }
+  },
+  "f_blount": {
+   "url": "https://cityofalcoa-tn.gov/250/Landfill-Services",
+   "label": {
+    "en": "City of Alcoa Public Works, Alcoa/Maryville/Blount County Sanitary Landfill: fees (current page, no effective date printed)"
+   }
+  },
+  "f_austin": {
+   "url": "https://www.austintexas.gov/resource-recovery/recycle-and-reuse-drop-center",
+   "label": {
+    "en": "Austin Resource Recovery, Recycle & Reuse Drop-off Center: fees (current page (FY 2027 fee schedule referenced))"
+   }
+  },
+  "irs_mileage": {
+   "url": "https://www.irs.gov/tax-professionals/standard-mileage-rates",
+   "label": {
+    "en": "IRS, Standard mileage rates (2026, July 1 to December 31: 76 cents a mile for business use)"
+   }
+  },
+  "epa_608": {
+   "url": "https://www.epa.gov/section608/stationary-refrigeration-safe-disposal-requirements",
+   "label": {
+    "en": "EPA, Section 608 of the Clean Air Act: stationary refrigeration safe disposal requirements (40 CFR Part 82, Subpart F)"
+   }
+  }
+ },
+ "mileage": {
+  "_source": "irs_mileage",
+  "businessCents": 76,
+  "period": "July 1 to December 31, 2026"
+ }
+}
