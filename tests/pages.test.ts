@@ -6,6 +6,7 @@
 import { describe, it, expect } from 'vitest';
 import { PAGES } from '../src/lib/guides';
 import { helpers } from '../src/lib/helpers';
+import { introText } from '../src/lib/guide-types';
 import { getSpec } from '../src/lib/mini-specs';
 import { P } from '../src/lib/engine/params';
 
@@ -43,7 +44,7 @@ describe.each(PAGES.map((p) => [p.id, p] as const))('%s', (_id, p) => {
   });
   it('body: length, no em dash, tools and sources exist', () => {
     const b = p.body(h);
-    const all = p.intro + p.resume(h) + b + p.faqs(h).map((f) => f.q + f.a).join(' ');
+    const all = introText(p, h) + p.resume(h) + b + p.faqs(h).map((f) => f.q + f.a).join(' ');
     expect(/—|&mdash;/.test(all), 'em dash').toBe(false);
     expect(/NaN|undefined|Infinity/.test(all), 'broken figure').toBe(false);
     const n = words(p.resume(h)) + words(b);
@@ -55,7 +56,7 @@ describe.each(PAGES.map((p) => [p.id, p] as const))('%s', (_id, p) => {
 });
 
 describe('mini-specs run on their defaults', () => {
-  it.each(['perton', 'pickup', 'weight', 'mattress', 'tires', 'freon', 'yard', 'cd', 'small', 'versus'])('%s', (k) => {
+  it.each(['perton', 'pickup', 'weight', 'mattress', 'couch', 'tires', 'freon', 'yard', 'cd', 'small', 'versus'])('%s', (k) => {
     const s = getSpec(k);
     const v = Object.fromEntries(s.inputs.map((i) => [i.id, i.def]));
     const o = s.run(v);

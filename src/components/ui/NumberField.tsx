@@ -34,7 +34,7 @@ export default function NumberField({ id, label, value, onChange, unit = '', min
       </div>
       {over
         ? <p id={`${id}-help`} role="status" className="mt-1 text-xs font-medium text-amber-700">≤ {formatNumber(max, Number.isInteger(max) ? 0 : decimals)}{unit ? ` ${unit}` : ''}</p>
-        : help && <p id={`${id}-help`} className="mt-1 text-xs text-navy-500">{help}</p>}
+        : help && <p id={`${id}-help`} className="mt-1 text-xs text-navy-700">{help}</p>}
     </div>
   );
 }

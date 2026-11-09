@@ -115,3 +115,33 @@ describe('plain-words result (naive test of 2026-11-08)', () => {
     expect(missingText(e.missing[0])).toEqual(['Mattress', 'no price on this site’s list, so not counted. Ask at the gate.']);
   });
 });
+
+describe('naive test, 4th round (2026-11-09)', () => {
+  it('rank in the state first, then a plain national count', async () => {
+    const { rankInState } = await import('../src/lib/engine/fees');
+    const L = { vehicle: 'pickup' as const, lbs: 600, material: 'trash' as const, mattresses: 0, tires: 0, freon: 0, resident: true };
+    const all = compare(L);
+    const sd = rankInState(byId('san-diego'), all);
+    expect(sd.state).toMatch(/^Most expensive of the \d+ California sites we priced: Badlands, Blythe, Lamb Canyon and El Sobrante landfills \(Riverside County\) charges \$15\.70/);
+    const rv = rankInState(byId('riverside'), all);
+    expect(rv.state).toMatch(/^Cheapest of the \d+ California sites we priced\.$/);
+    expect(rankInState(byId('dallas'), all).national).toMatch(/^\d+ of the 24 public sites we priced nationwide charge less for this load\.$/);
+  });
+  it('Riverside and San Bernardino carry distinct area names', () => {
+    expect(byId('riverside').metro).toBe('Riverside County');
+    expect(byId('san-bernardino').metro).toBe('San Bernardino County');
+  });
+  it('a couch triggers Orange County’s fee for items over six feet, not Riverside’s mattress rate', () => {
+    const L = { vehicle: 'pickup' as const, lbs: 600, material: 'trash' as const, mattresses: 0, tires: 0, freon: 0, resident: true };
+    expect(estimate(byId('oc-ca'), { ...L, bulky: 1 }).total).toBe(45);
+    expect(estimate(byId('riverside'), { ...L, bulky: 1 }).total).toBe(15.7);
+    expect(estimate(byId('salt-lake'), { ...L, bulky: 1 }).total).toBe(17);
+  });
+  it('price list dated in plain words', async () => {
+    const { priceListLine, residentHelp, hasResidentRule } = await import('../src/lib/engine/fees');
+    expect(priceListLine(byId('salt-lake'))).toBe('Salt Lake County price list (no date printed on it)');
+    expect(priceListLine(byId('dallas'))).toBe('City of Dallas price list (effective October 1, 2026)');
+    expect(residentHelp(byId('san-diego'))).toContain('Poway, El Cajon, Chula Vista');
+    expect(hasResidentRule(byId('salt-lake'))).toBe(false);
+  });
+});

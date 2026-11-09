@@ -4,7 +4,7 @@ export default definePage({
   id: 'san-diego-dump-fees',
   group: 'metro',
   order: 510,
-  tool: { kind: 'dump', props: { facility: 'san-diego', mattresses: 0 } },
+  tool: { kind: 'dump', props: { facility: 'san-diego' } },
   related: ['orange-county-dump-fees', 'inland-empire-dump-fees', 'yard-waste-disposal', 'home'],
   sources: ['f_san_diego'],
   slug: 'san-diego-dump-fees',
@@ -13,7 +13,7 @@ export default definePage({
   title: 'San Diego Dump Fees: Miramar Landfill Rates from July 2026',
   description: 'San Diego dump fees at Miramar Landfill from July 1, 2026: the flat rate for a car or pickup, the rate for waste from outside the city, green waste and debris.',
   h1: 'San Diego dump fees at Miramar Landfill',
-  intro: 'The calculator is set on Miramar. Change the vehicle, the weight or the material to see which line of the city’s schedule applies.',
+  intro: (h) => h.areaIntro('san-diego'),
   resume: (h) => {
     const f = h.F('san-diego');
     return `Miramar Landfill, run by the City of San Diego Environmental Services Department, charges people who bring their own load a flat rate per vehicle rather than by weight. Under the schedule effective July 1, 2026 through June 30, 2027, a car, SUV, pickup, van or a trailer up to five by nine by four feet pays ${h.fee(f.flat!.pickup!)} a load of city waste, and a pickup towing a trailer or a larger trailer pays ${h.fee(f.flat!.trailer!)}. Waste from outside the City of San Diego pays more: ${h.fee(f.nonRes!.flat!.pickup!)} and ${h.fee(f.nonRes!.flat!.trailer!)}. Clean green waste has its own lower flat rate of ${h.fee(f.yard!.flat!.pickup!)} for the first tier, while construction and demolition debris is weighed at ${h.fee(f.cd!.perTon!)} a ton, far above the trash rate of ${h.fee(f.perTon!)} for weighed loads. The flat rates already include the state recycling fee. Uncovered loads pay a penalty, and appliances and electronics must go elsewhere.`;

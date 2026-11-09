@@ -30,11 +30,11 @@ export default definePage({
     return `
 <h2>Construction debris rates on public schedules</h2>
 ${h.table(['Site', 'Area', 'Rate', 'What the rate covers', 'One ton'], rows, `Schedules read on ${h.D.read}, resident rates.`, ['l', 'l', 'r', 'l', 'r'])}
-<p>The label column matters as much as the price. Salt Lake County’s low rate is for clean concrete, asphalt, soil or sod only; drywall and lumber go with mixed trash at the flat rate. SWACO has taken construction debris at its landfill only since September 29, 2025. Orange County in Florida takes Class III material at the landfill, not at its transfer stations.</p>
+<p>The label column matters as much as the price. Salt Lake County’s low rate is for clean concrete, asphalt, soil or sod only; drywall and lumber go with mixed trash at the flat rate. The Solid Waste Authority of Central Ohio (SWACO) has taken construction debris at its landfill only since September 29, 2025. Orange County in Florida takes Class III material at the landfill, not at its transfer stations.</p>
 
 <h2>What the materials weigh</h2>
 ${h.table(['Material', 'Lbs per cubic yard', 'Lbs in 2.4 cubic yards'], wrows, 'EPA volume-to-weight conversion factors, April 2016. 2.4 cubic yards is a bed 6.5 by 5 feet, filled 2 feet high.', ['l', 'r', 'r'])}
-<p>That is why a bathroom tear-out can cost more at the scale than a whole garage clean-out. If the job is large, set the cost of several trips, with their weight, against a quote for a roll-off container on the ${h.a('dumpster-vs-dump-run', 'dumpster comparison page')}, which uses the price you were quoted and not a price we made up.</p>
+<p>That is why a bathroom tear-out can cost more at the scale than a whole garage clean-out. If the job is large, set the cost of several trips, with their weight, against a quote for a roll-off container (the open dumpster a truck drops at your home) on the ${h.a('dumpster-vs-dump-run', 'dumpster comparison page')}, which uses the price you were quoted and not a price we made up.</p>
 `;
   },
 });

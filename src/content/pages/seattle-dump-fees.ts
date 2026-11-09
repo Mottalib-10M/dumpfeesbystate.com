@@ -4,7 +4,7 @@ export default definePage({
   id: 'seattle-dump-fees',
   group: 'metro',
   order: 520,
-  tool: { kind: 'dump', props: { facility: 'seattle', also: 'king-county', lbs: 400, mattresses: 0 } },
+  tool: { kind: 'dump', props: { facility: 'seattle', also: 'king-county' } },
   related: ['transfer-station-fees', 'yard-waste-disposal', 'appliance-disposal', 'home'],
   sources: ['f_seattle', 'f_king_county', 'f_king_county_next'],
   slug: 'seattle-dump-fees',
@@ -13,7 +13,7 @@ export default definePage({
   title: 'Seattle Dump Fees 2026: City Stations and King County Rates',
   description: 'Seattle dump fees in 2026: the $37 minimum and per-ton rate at the North and South transfer stations, King County station rates, and the 2027 rise announced.',
   h1: 'Seattle dump fees: city stations and King County stations',
-  intro: 'The calculator opens on Seattle’s city stations with a 400 lb load. Switch to King County to compare the stations outside the city.',
+  intro: (h) => h.areaIntro('seattle', ['king-county']),
   resume: (h) => {
     const s = h.F('seattle'); const k = h.F('king-county');
     return `Seattle residents hauling their own waste use the city’s North and South transfer stations, run by Seattle Public Utilities. Since April 1, 2026 they charge ${h.fee(s.minCharge!)} for a load of garbage up to ${h.num(s.minCoversLbs!)} lbs and ${h.fee(s.perTon!)} a ton above it; yard waste pays ${h.fee(s.yard!.perTon!)} a ton with a ${h.fee(s.yard!.min!)} minimum. Outside the city, King County’s Solid Waste Division runs its own stations at a higher rate: ${h.fee(k.minCharge!)} per vehicle and ${h.fee(k.perTon!)} a ton in 2026. King County has already announced its 2027 rates for people who bring their own load, ${h.fee(k.next!.minCharge!)} minimum and ${h.fee(k.next!.perTon!)} a ton from January 1, 2027. These are the highest per-ton rates among the public schedules we read, so the scale and the minimum matter more here than almost anywhere else in the country.`;

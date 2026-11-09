@@ -12,7 +12,7 @@
    "kind": "landfill",
    "url": "https://www.saltlakecounty.gov/landfill/pricing/",
    "effective": null,
-   "effectiveText": "current schedule, no effective date printed",
+   "effectiveText": "no date printed on it",
    "flat": {
     "car": 17,
     "pickup": 17,
@@ -136,7 +136,8 @@
     "Flat rates already include the state recycling fee ($15 a ton) and the city business tax where it applies.",
     "Appliances, TVs and electronic waste must be disposed of elsewhere before entering the landfill.",
     "Uncovered loads: $50."
-   ]
+   ],
+   "residentHelp": "Yes for City of San Diego residents. Poway, El Cajon, Chula Vista and other cities: No, which pays more."
   },
   {
    "id": "seattle",
@@ -206,7 +207,7 @@
    "kind": "transfer",
    "url": "https://www.phoenix.gov/administration/departments/publicworks/about-us/transfer-stations.html",
    "effective": null,
-   "effectiveText": "current page, no effective date printed",
+   "effectiveText": "no date printed on it",
    "perTon": 55,
    "minCharge": 40,
    "residentFree": {
@@ -218,7 +219,8 @@
     "Residents may bring up to five automobile tires a year (rims removed).",
     "Two CRT units per household per month free, then $20 each plus disposal.",
     "Unsecured load penalty: $20."
-   ]
+   ],
+   "residentHelp": "Yes if you pay the City of Phoenix for full trash service: one load a month, up to a ton, is free. No for everyone else."
   },
   {
    "id": "orange-fl",
@@ -354,7 +356,7 @@
    "kind": "landfill",
    "url": "https://www.wake.gov/departments-government/waste-recycling/facilities/wake-county-solid-waste-landfill/south-wake-landfill/fees-payment-methods-haulers",
    "effective": null,
-   "effectiveText": "current page for haulers, no effective date printed",
+   "effectiveText": "page for haulers, no date printed on it",
    "perTon": 37,
    "mattress": 15,
    "notes": [
@@ -373,7 +375,7 @@
    "kind": "transfer",
    "url": "https://www.fairfaxcounty.gov/publicworks/sites/publicworks/files/Assets/documents/residential-waste-disposal-rates-fy2027.pdf",
    "effective": "2026-07-01",
-   "effectiveText": "FY 2027 residential rates (July 1, 2026 to June 30, 2027)",
+   "effectiveText": "residential rates for July 1, 2026 to June 30, 2027",
    "perTon": 98,
    "minByVehicle": {
     "car": 39,
@@ -425,12 +427,12 @@
    "kind": "landfill",
    "url": "https://www.swaco.org/213/Rates",
    "effective": null,
-   "effectiveText": "current rates page; SWACO's FAQ dates the $39.75 rate to April 1, 2017",
+   "effectiveText": "no date printed; the authority's own FAQ dates the $39.75 rate to April 1, 2017",
    "perTon": 39.75,
    "minCharge": 5,
    "nonRes": {
     "perTon": 43.75,
-    "label": "waste from outside the SWACO district"
+    "label": "waste from outside the district of the Solid Waste Authority of Central Ohio (SWACO)"
    },
    "cd": {
     "perTon": 39.75,
@@ -457,14 +459,14 @@
    "perTonExtra": 4,
    "perTonExtraLabel": "customer processing fee $2 a ton and environmental fee $2 a ton",
    "notes": [
-    "Gate rate $45.78 a ton from October 1, 2026 (was $43.60).",
+    "Price per ton at the gate: $45.78 from October 1, 2026 (was $43.60).",
     "Customers paying by cash, check or card for single loads also pay a $2 a ton processing fee and a $2 a ton environmental fee.",
-    "Uncovered load: $40. Northwest Transfer Station (Bachman): $71.28 a ton gate rate on the city's landfill page."
+    "Uncovered load: $40. Northwest Transfer Station (Bachman): $71.28 a ton at the gate, on the city's landfill page."
    ]
   },
   {
    "id": "san-bernardino",
-   "metro": "Riverside–San Bernardino",
+   "metro": "San Bernardino County",
    "state": "CA",
    "place": "San Bernardino County",
    "name": "County landfills and transfer stations",
@@ -490,7 +492,7 @@
   },
   {
    "id": "riverside",
-   "metro": "Riverside–San Bernardino",
+   "metro": "Riverside County",
    "state": "CA",
    "place": "Riverside County",
    "name": "Badlands, Blythe, Lamb Canyon and El Sobrante landfills",
@@ -539,7 +541,7 @@
    "kind": "landfill",
    "url": "https://www.miamidade.gov/global/solidwaste/disposal-fees.page",
    "effective": null,
-   "effectiveText": "rates the page says are effective as of October 1 (no year printed; the county's sheet dated October 1, 2025 shows $115.80)",
+   "effectiveText": "effective October 1, year not printed; the county's sheet of October 1, 2025 shows $115.80",
    "perTon": 119.51,
    "notes": [
     "Non-contract disposal rate $119.51 a ton; the $78.56 contract rate is only for permitted haulers and municipalities.",
@@ -623,7 +625,7 @@
    "kind": "landfill",
    "url": "https://broomecountyny.gov/solidwaste/landfill-fees",
    "effective": null,
-   "effectiveText": "current page, no effective date printed",
+   "effectiveText": "no date printed on it",
    "perTon": 55,
    "minCharge": 5,
    "yard": {
@@ -653,7 +655,7 @@
    "kind": "landfill",
    "url": "https://www.jacksonville.gov/departments/office-of-administrative-services/solid-waste/disposal-operations",
    "effective": null,
-   "effectiveText": "current page, no effective date printed",
+   "effectiveText": "no date printed on it",
    "smallLoad": {
     "maxLbs": 500,
     "fee": 1,
@@ -698,7 +700,8 @@
     "Municipal solid waste $37.15 a ton.",
     "Residential: less than one ton per month at no charge.",
     "Uncovered loads pay double the trash rate."
-   ]
+   ],
+   "residentHelp": "Yes for Washington County residents: one load a month, under a ton, is free. No for everyone else."
   },
   {
    "id": "el-paso",
@@ -732,7 +735,7 @@
    "kind": "landfill",
    "url": "https://cityofalcoa-tn.gov/250/Landfill-Services",
    "effective": null,
-   "effectiveText": "current page, no effective date printed",
+   "effectiveText": "no date printed on it",
    "perTon": 60,
    "minCharge": 15,
    "minCoversLbs": 500,
@@ -755,7 +758,7 @@
    "noTrash": true,
    "url": "https://www.austintexas.gov/resource-recovery/recycle-and-reuse-drop-center",
    "effective": null,
-   "effectiveText": "current page (FY 2027 fee schedule referenced)",
+   "effectiveText": "no date printed on it",
    "tire": 6,
    "notes": [
     "Free for Austin and Travis County residents, by appointment, except tires at $6 each.",

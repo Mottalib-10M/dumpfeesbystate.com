@@ -16,6 +16,7 @@ import { helpers, LOAD } from '../lib/helpers';
 import { byState, LMOP } from '../lib/lmop';
 import { LAST_UPDATED, AUTHOR_NAME } from '../data/site-config';
 import { displayDate } from '../lib/format';
+import { STATE_NAMES } from '../lib/states';
 import { faqSchema, webApplicationSchema, websiteSchema, organizationSchema } from '../lib/seo';
 const lang = 'en';
 const h = helpers(true);
@@ -39,6 +40,9 @@ const defMid = defAll[Math.floor(defAll.length / 2)];
 // Area pages, by state, linked right under the calculator (naive test, 2nd round: “Dallas and Texas
 // sites” was only found in the site map, thirty screens down).
 const areaPages = PAGES.filter((p) => p.group === 'metro' && p.tool?.props?.facility).map((p) => ({ p, st: F(String(p.tool!.props!.facility)).state })).sort((a, b) => a.st.localeCompare(b.st) || a.p.nav.localeCompare(b.p.nav));
+const areaByState = [...new Set(areaPages.map((x) => x.st))].map((st) => ({ st, name: STATE_NAMES[st] ?? st, pages: areaPages.filter((x) => x.st === st).map((x) => x.p) }));
+const freeNames = defAll.filter((x) => E.isFreeResident(x.e)).map((x) => `${x.f.place.replace(/^City of /, '')}, ${STATE_NAMES[x.f.state] ?? x.f.state}`);
+const tirDumps = E.DUMPS.filter((f) => f.tire != null).length;
 const ptTop = pt.slice(-2).map((x) => x.f.id);
 if (!ptTop.includes('king-county') || !ptTop.includes('seattle')) throw new Error('Home text: King County and Seattle are no longer the two highest per-ton rates');
 
@@ -48,7 +52,7 @@ const LOADS = [
   { name: 'A pickup of household junk', L: { ...LOAD, lbs: 600 } },
   { name: 'A pickup of remodel debris', L: { ...LOAD, lbs: 1800 } },
 ];
-const loadStats = LOADS.map((x) => { const c = E.compare(x.L); return { ...x, lo: c[0], hi: c[c.length - 1], mid: c[Math.floor(c.length / 2)], n: c.length }; });
+const loadStats = LOADS.map((x) => { const c = E.compare(x.L); return { ...x, lo: c[0], pay: c.find((y) => (y.e.total as number) > 0)!, hi: c[c.length - 1], mid: c[Math.floor(c.length / 2)], n: c.length }; });
 
 // Every schedule, one line each, sorted by state then area.
 const cell = (e: ReturnType<typeof E.estimate>) => (e.total == null ? 'no price listed' : `${e.from ? 'from ' : ''}${fee(e.total)}${E.isFreeResident(e) ? ' (residents, once a month)' : ''}`);
@@ -67,37 +71,41 @@ const pubAll = st.reduce((a, x) => a + x.pub, 0);
 const kc = F('king-county'); const ph = F('phoenix'); const sl = F('salt-lake'); const sw = F('swaco'); const sea = F('seattle');
 
 const faqs = [
-  { q: 'How much does it cost to go to the dump?', a: `For a household load in a car or pickup, the public price lists we read charge from nothing to about ${fee(defHi.e.total as number)}. Residents of Phoenix and of Washington County in Utah get a free monthly load up to a ton; a 600 lb pickup load pays ${fee(defPay.e.total as number)} at the cheapest site that charges for it and ${fee(defHi.e.total as number)} at the most expensive. The minimum charge or the flat vehicle rate usually decides the bill, not the weight.` },
+  { q: 'How much does it cost to go to the dump?', a: `For a household load in a car or pickup, the public price lists we read charge from nothing to about ${fee(defHi.e.total as number)}. Residents of Phoenix and of Washington County in Utah get a free monthly load up to a ton; a 600 lb pickup load pays ${fee(defPay.e.total as number)} at the cheapest site where you pay and ${fee(defHi.e.total as number)} at the most expensive. The minimum charge or the flat vehicle rate usually decides the bill, not the weight.` },
   { q: 'Do landfills charge by weight or by load?', a: `Both exist, and some sites combine them. Salt Lake County, Riverside County, Sacramento County and Miramar in San Diego charge a flat rate per car or pickup. Seattle, King County, Fairfax County and Columbus weigh every load and charge per ton above a minimum. Orange County in California charges a flat rate below a weight limit and weighs anything heavier. The calculator applies the rule of the site you pick.` },
   { q: 'What is the cheapest way to get rid of junk?', a: 'Usually your own city’s curbside bulky pickup, if it has one, then a public landfill or transfer station that offers residents a free or flat-rate load. Junk removal crews and dumpsters cost more but save labor and trips. Mattresses, tires and appliances are often cheaper to return to the store that sells the replacement, which may take the old one away.' },
   { q: 'Why are dump fees so different from one city to the next?', a: `Because they pay for different things. A landfill near town only buries the waste; a city transfer station reloads it and pays to truck or rail it to a distant landfill, which is why ${kc.name} charge ${fee(kc.perTon!)} a ton and ${F('wake').name} ${fee(F('wake').perTon!)}. Some counties fund disposal through property taxes or trash bills and charge residents little at the gate.` },
-  { q: 'Can I dump at a landfill outside my county?', a: 'Sometimes, often at a higher rate, and sometimes not at all. Miramar charges more for waste from outside the City of San Diego and SWACO more for waste from outside its district, while Broome County and Blount County take loads from their own residents only. Check the page of the site before you load the truck, and bring proof of address.' },
+  { q: 'Can I dump at a landfill outside my county?', a: 'Sometimes, often at a higher rate, and sometimes not at all. Miramar charges more for waste from outside the City of San Diego and the Solid Waste Authority of Central Ohio (SWACO) more for waste from outside its district, while Broome County and Blount County take loads from their own residents only. Check the page of the site before you load the truck, and bring proof of address.' },
   { q: 'Why does this site not show dumpster prices?', a: 'Because no rental company publishes a price list that we could read and reuse: dumpsters are quoted by ZIP code, size, weight allowance and number of days. Rather than print a national range with no source, the comparison page asks for the quote you were given and sets it against the public dump fees and the cost of driving the trips yourself.' },
   { q: 'Do I have to give a ZIP code or phone number?', a: 'No. The site has no quote form, no account and no callback. Every calculation runs in your browser and nothing you type is sent anywhere; the address bar only changes so that you can copy a link to your own load. We are not a waste hauler, a landfill operator or a dumpster company, and we pass no details to anyone.' },
 ];
 const jsonLd = [webApplicationSchema({ name: 'Dump fee calculator', description: 'What a load costs at a public landfill or transfer station, from its own published fee schedule, with mattresses, tires and appliances added line by line.', path: route('home', lang), lang }), websiteSchema(lang), organizationSchema(lang), faqSchema(faqs, lang)];
 // Citable answer (§21), folded after its first sentence (Clamp), so the page does not open on a wall of text.
 const free = defAll.filter((x) => E.isFreeResident(x.e)).map((x) => `${x.f.place.replace(/^City of /, '')}, ${x.f.state}`);
-const answer = `What a dump run costs depends on the site’s rule more than on the load. On the ${n} public price lists we checked on ${h.D.read}, a pickup with ${h.num(DEF.lbs)} lbs of household junk pays ${fee(defPay.e.total as number)} at the cheapest site that charges for it (${defPay.f.name}, ${defPay.f.metro}), ${fee(defMid.e.total as number)} in the middle of the list and ${fee(defHi.e.total as number)} at the most expensive (${defHi.f.name}, ${defHi.f.metro}). Residents of ${free.join(' and of ')} who meet the local rules get one free load a month, up to a ton. Sites charge in one of three ways: a price per ton with a minimum charge, a flat price per car or pickup, or a mix of the two. Mattresses, tires and fridges often add an item fee on top. Bring proof of address, because many sites charge more for waste from outside the county or city, or refuse it. Pick your state and your dump in the calculator to see the line of the price list that applies to you.`;
+const answer = `What a dump run costs depends on the site’s rule more than on the load. On the ${n} public price lists we checked on ${h.D.read}, a pickup with ${h.num(DEF.lbs)} lbs of household junk pays ${fee(defPay.e.total as number)} at the cheapest site where you pay (${defPay.f.name}, ${defPay.f.metro}), ${fee(defMid.e.total as number)} in the middle of the list and ${fee(defHi.e.total as number)} at the most expensive (${defHi.f.name}, ${defHi.f.metro}). Residents of ${free.join(' and of ')} who meet the local rules get one free load a month, up to a ton. Sites charge in one of three ways: a price per ton with a minimum charge, a flat price per car or pickup, or a mix of the two. Mattresses, tires and fridges often add an item fee on top. Bring proof of address, because many sites charge more for waste from outside the county or city, or refuse it. Pick your state and your dump in the calculator to see the line of the price list that applies to you.`;
 const groups = GROUPS_ORDER.map((g) => ({ g, pages: PAGES.filter((p) => p.group === g) })).filter((x) => x.pages.length);
 ---
 <PageLayout title="Dump Fees by State 2026: Landfill Cost Calculator by Load" description="Dump fees by state for 2026: what your car or pickup load costs at a public landfill or transfer station, from its own fee schedule, with mattresses and tires." lang={lang} jsonLd={jsonLd} faqs={faqs}>
   <header class="mb-3">
     <h1 class="text-[1.75rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">Dump fees by state: what your load will cost at a public landfill</h1>
-    <p class="mt-2 text-base text-navy-700 sm:text-lg">Pick your state, the public dump nearest you, your vehicle and a rough weight. You get the fee from the county or city price list, with its date and a link, and the same load at the {n - 1} other public sites we checked.</p>
-    <p class="mt-1 text-sm text-navy-700">Covers {n} public dumps in {states} states ({stateCodes.join(', ')}). Not covered yet: Los Angeles County itself (nearest on our list: Orange County and Riverside County), Houston, Chicago, New York City.</p>
-    <p class="mt-1 text-xs text-navy-600">Independent site, not a waste hauler or a landfill operator.</p>
+    <p class="mt-2 text-base text-navy-800 sm:text-lg">A pickup with {h.num(DEF.lbs)} lbs of household junk pays <strong>{fee(defPay.e.total as number)} to {fee(defHi.e.total as number)}</strong> at the {n} public dumps we checked, and nothing once a month for qualifying residents of {freeNames.join(' and ')}. Pick your state below to see the price at yours, from its own price list.</p>
+    <p class="mt-1 text-xs text-navy-700">Independent site, not a waste hauler or a landfill operator. No ZIP code, no phone number.</p>
   </header>
-  <div data-outil class="mb-4"><Tool tool={{ kind: 'dump' }} primary={true} /></div>
+  <div data-outil id="calculator" class="mb-4 scroll-mt-20"><Tool tool={{ kind: 'dump' }} primary={true} /></div>
   <nav aria-labelledby="areas-title" class="mb-4 text-sm">
-    <p id="areas-title" class="font-semibold text-navy-900">A page for your area</p>
-    <ul class="mt-1 flex flex-wrap gap-x-4 gap-y-1">{areaPages.map(({ p, st }) => <li><a href={route(p.id, lang)} class="text-accent-700 underline underline-offset-2">{st} · {p.nav}</a></li>)}</ul>
+    <p id="areas-title" class="font-semibold text-navy-900">The full price list of your area</p>
+    <ul class="mt-1 space-y-1">{areaByState.map((x) => <li><span class="text-navy-800">{x.name}:</span> {x.pages.map((pg, i) => <>{i > 0 ? ' · ' : ''}<a href={route(pg.id, lang)} class="text-accent-700 underline underline-offset-2">{pg.nav}</a></>)}</li>)}</ul>
+    <p class="mt-1 text-navy-700">No price list read yet for Los Angeles County, the San Francisco Bay Area, Houston, Chicago or New York City: see below how to find the site that serves you.</p>
   </nav>
-  <p class="mb-8 text-sm text-navy-600">{n} public dumps, plus Austin’s drop-off center (which takes no trash), in {metros} areas of {states} states. Price lists checked on <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-US')}</time> · {AUTHOR_NAME} · <a href={route('method', lang)} class="underline hover:text-navy-900">How the fees are read and priced</a> · <a href={route('about', lang)} class="underline hover:text-navy-900">Who publishes this site</a></p>
+  <section id="which-dump" aria-labelledby="which-dump-title" class="mb-6 border-l-2 border-navy-300 pl-3 text-sm">
+    <h2 id="which-dump-title" class="text-base font-semibold text-navy-900">Not sure which dump serves you?</h2>
+    <p class="mt-1 text-navy-800">Search for your county’s name with “landfill” or “transfer station”: the county or city solid waste page names the public sites that take trash from homes, with their hours. A transfer station is a drop-off site that trucks the waste on to a landfill, and it is often the nearest one. The <a href={route('landfills-by-state', lang)} class="text-accent-700 underline underline-offset-2">landfills by state</a> list shows every open landfill of your state, public or private.</p>
+  </section>
+  <p class="mb-8 text-sm text-navy-700">{n} public dumps, plus Austin’s drop-off center (which takes no trash), in {metros} areas of {states} states. Price lists checked on <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-US')}</time> · {AUTHOR_NAME} · <a href={route('method', lang)} class="underline hover:text-navy-900">How the fees are read and priced</a> · <a href={route('about', lang)} class="underline hover:text-navy-900">Who publishes this site</a></p>
 
   <Clamp text={answer} id="clamp-home" class="mb-6" />
   <div class="prose prose-slate max-w-none">
-    <p>The example above is a pickup with {h.num(DEF.lbs)} lbs of household junk at {ex.name}, near {ex.metro}: the county charges a flat {fee(ex.flat!.pickup!)} for a pickup, whatever the weight. For the same load, the middle of the {defAll.length} sites is {fee(defMid.e.total as number)}, the cheapest that charges is {fee(defPay.e.total as number)} and the most expensive {fee(defHi.e.total as number)}. Pick your state and your dump to see your own price.</p>
+    <p>The example in the calculator is {ex.name}, near {ex.metro}: the county charges a flat {fee(ex.flat!.pickup!)} for a pickup, whatever the weight. Once you pick your own state, the calculator shows your site’s price and the other sites of your state.</p>
     <p>Every price comes from a page published by a county, a city or a public waste authority, and the calculator shows which line of it applies. Most pages on dump fees give a national range with no source, then ask for your ZIP code so that a hauler can call you. This site sells nothing and asks for nothing.</p>
 
     <h2>Before you go</h2>
@@ -124,10 +132,10 @@ const groups = GROUPS_ORDER.map((g) => ({ g, pages: PAGES.filter((p) => p.group 
     <h2>How a public landfill prices a load</h2>
     <p>A landfill buries the waste. A transfer station is a drop-off site that reloads it onto trucks for a landfill further away. Both build the price of your load from a few pieces:</p>
     <ul>
-      <li><strong>Price per ton</strong> (county pages call it the “tipping fee” or “gate rate”): your vehicle is weighed on the way in and on the way out, and you pay for the difference.</li>
+      <li><strong>Price per ton</strong>, which county pages call the “tipping fee” or “gate rate”: your vehicle is weighed on the way in and on the way out, and you pay for the difference.</li>
       <li><strong>Minimum charge</strong>: the least any load pays. {sea.name} in Seattle charge {fee(sea.minCharge!)} for anything up to {h.num(sea.minCoversLbs!)} lbs. A car or pickup of household junk rarely weighs more than a few hundred pounds, so this is what most residents pay at a site with a scale.</li>
       <li><strong>Flat vehicle rate</strong>: no scale, one price per car or pickup. {sl.name} charges {fee(sl.flat!.pickup!)}, whatever it weighs. A bargain for heavy loads, expensive for a few bags. Orange County in California mixes the two: flat under {h.num(F('oc-ca').flatMaxLbs!.pickup!)} lbs, weighed above.</li>
-      <li><strong>Item fees</strong> for mattresses, tires and fridges or air conditioners (their cooling gas must be removed). {mat} of the {n} price lists print a mattress price, {tir} of all {E.FACILITIES.length} a tire price and {fre} a fridge price.</li>
+      <li><strong>Item fees</strong> for mattresses, tires and fridges or air conditioners (their cooling gas must be removed). Of the {n} public dumps, {mat} print a mattress price, {tirDumps} a tire price and {fre} a fridge price.</li>
       <li><strong>Resident rules</strong>: in Phoenix, residents who pay for city trash service bring one load a month, up to a ton, free. Some sites charge more for waste from outside the county or city.</li>
     </ul>
   </div>
@@ -151,7 +159,7 @@ const groups = GROUPS_ORDER.map((g) => ({ g, pages: PAGES.filter((p) => p.group 
       {loadStats.map((x, i) => (
         <li class="grid gap-2 border-b border-navy-200 pb-4 md:grid-cols-[14rem_1fr]">
           <p class="font-semibold text-navy-900">{i + 1}. {x.name} <span class="block text-sm font-normal text-navy-600">{h.num(x.L.lbs)} lbs, {E.VEHICLE_LABEL[x.L.vehicle]}, no mattress</span></p>
-          <p class="text-navy-800">Cheapest <strong class="tabular-nums">{fee(x.lo.e.total as number)}</strong> at {x.lo.f.name} ({x.lo.f.metro}){E.isFreeResident(x.lo.e) ? ', a free resident load' : ''}; middle of the {x.n} sites <strong class="tabular-nums">{fee(x.mid.e.total as number)}</strong> at {x.mid.f.name} ({x.mid.f.metro}); most expensive <strong class="tabular-nums">{fee(x.hi.e.total as number)}</strong> at {x.hi.f.name} ({x.hi.f.metro}).</p>
+          <p class="text-navy-800">{E.isFreeResident(x.lo.e) ? <>Free for qualifying residents of {x.lo.f.place.replace(/^City of /, '')}; cheapest for everyone else <strong class="tabular-nums">{fee(x.pay.e.total as number)}</strong> at {x.pay.f.name} ({x.pay.f.metro})</> : <>Cheapest <strong class="tabular-nums">{fee(x.lo.e.total as number)}</strong> at {x.lo.f.name} ({x.lo.f.metro})</>}; middle of the {x.n} sites <strong class="tabular-nums">{fee(x.mid.e.total as number)}</strong> at {x.mid.f.name} ({x.mid.f.metro}); most expensive <strong class="tabular-nums">{fee(x.hi.e.total as number)}</strong> at {x.hi.f.name} ({x.hi.f.metro}).</p>
         </li>
       ))}
     </ol>
@@ -181,17 +189,17 @@ const groups = GROUPS_ORDER.map((g) => ({ g, pages: PAGES.filter((p) => p.group 
 
     </details>
 
-    <h2>What the calculator leaves out</h2>
+    <details class="section"><summary><h2>What the calculator leaves out</h2></summary>
     <p>It uses the resident rate for household waste unless you answer No to “You live in the area it serves”, and it applies only the lines printed on the price list we read. It does not include sales tax where a site adds it, card fees, penalties for uncovered or mixed loads, or rates for commercial accounts. When a price list prints no fee for an item, the calculator says so instead of guessing. Flat rates depend on the size of the vehicle as judged at the gate, and some sites refuse certain items altogether. The method page lists every rule, and the fee is always the one on the site’s current price list: if it has changed since we read it, the weigh station at the gate is right and we are not.</p>
+    </details>
   </div>
 
-  <div class="prose prose-slate max-w-none">
+  <details class="section prose prose-slate max-w-none"><summary><h2>Where the figures come from</h2></summary>
     <Sources lang={lang} intro="Every fee, landfill count and load weight on this page comes from a county or city price list, an EPA file or the IRS mileage table listed here, all read on" />
-    <p>Fees come from {E.FACILITIES.length} official pages, each linked in the table above with its effective date. The landfill list is the EPA’s <Fragment set:html={h.src('lmop', 'LMOP Landfill and Project Database')} />, a public-domain U.S. government work (<Fragment set:html={h.src('epa_disclaimers', 'EPA disclaimers')} />); load weights come from the EPA’s <Fragment set:html={h.src('epa_vw', 'volume-to-weight conversion factors')} />; refrigerant rules from the EPA’s <Fragment set:html={h.src('epa_608', 'Section 608 safe disposal page')} />; the driving cost from the <Fragment set:html={h.src('irs_mileage', 'IRS standard mileage rates')} />. The engine is tested on every build against cases worked by hand from the schedules, including the county’s own example on the Sacramento North Area page.</p>
-  </div>
+    <p>Fees come from the official pages of the {n} public dumps and of Austin’s drop-off center, each linked in the price list table above (“Show the {n} price lists”) with its date. The landfill list is the EPA’s <Fragment set:html={h.src('lmop', 'LMOP Landfill and Project Database')} />, a public-domain U.S. government work (<Fragment set:html={h.src('epa_disclaimers', 'EPA disclaimers')} />); load weights come from the EPA’s <Fragment set:html={h.src('epa_vw', 'volume-to-weight conversion factors')} />; refrigerant rules from the EPA’s <Fragment set:html={h.src('epa_608', 'Section 608 safe disposal page')} />; the driving cost from the <Fragment set:html={h.src('irs_mileage', 'IRS standard mileage rates')} />. The engine is tested on every build against cases worked by hand from the schedules, including the county’s own example on the Sacramento North Area page.</p>
+  </details>
 
-  <section class="mt-12" aria-labelledby="guides-title">
-    <h2 id="guides-title" class="text-2xl font-bold text-navy-900">Every page on the site</h2>
+  <details class="section mt-12" aria-labelledby="guides-title"><summary><h2 id="guides-title" class="text-2xl font-bold text-navy-900">Every page on the site</h2></summary>
     <div class="mt-4 grid gap-8 md:grid-cols-2">
       {groups.map(({ g, pages }) => (
         <div>
@@ -200,5 +208,5 @@ const groups = GROUPS_ORDER.map((g) => ({ g, pages: PAGES.filter((p) => p.group 
         </div>
       ))}
     </div>
-  </section>
+  </details>
 </PageLayout>

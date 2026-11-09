@@ -34,17 +34,17 @@ export function scheduleRows(f: Facility): Array<[string, string]> {
   for (const v of ['car', 'pickup', 'trailer'] as const) if (f.flat?.[v] != null) r.push([`${V[v]}, flat${f.flatMaxLbs?.[v] ? ` (under ${formatNumber(f.flatMaxLbs[v]!, 0)} lbs)` : ''}`, fee(f.flat[v]!)]);
   // One line per vehicle: “$86 / $86 / $156” read as a riddle (naive test, 2nd round).
   if (f.nonRes?.flat) for (const v of ['car', 'pickup', 'trailer'] as const) if (f.nonRes.flat[v] != null) r.push([`${V[v]}, flat, ${f.nonRes.label}`, fee(f.nonRes.flat[v]!)]);
-  if (f.htFlat) r.push(['Hard-to-handle flat rate, car or pickup', fee(f.htFlat.pickup!)]);
+  if (f.htFlat) r.push(['Bulky-load flat rate (a mattress in the load), car or pickup', fee(f.htFlat.pickup!)]);
   if (f.perTon != null) r.push(['Trash, per ton', f.perTonExtra ? `${fee(f.perTon + f.perTonExtra)}: ${fee(f.perTon)} rate + ${f.perTonExtraLabel ?? `${fee(f.perTonExtra)} in fees`}` : fee(f.perTon)]);
   if (f.nonRes?.perTon) r.push([`Per ton, ${f.nonRes.label}`, fee(f.nonRes.perTon)]);
-  if (f.htPerTon) r.push(['Per ton with hard-to-handle items', fee(f.htPerTon)]);
+  if (f.htPerTon) r.push(['Per ton with bulky items (over six feet)', fee(f.htPerTon)]);
   if (f.minByVehicle) { for (const v of ['car', 'pickup', 'trailer'] as const) if (f.minByVehicle[v] != null) r.push([`Minimum charge, ${V[v].toLowerCase()}`, fee(f.minByVehicle[v]!)]); }
   else if (f.minCharge != null) r.push(['Minimum charge (the least any load pays)', `${fee(f.minCharge)}${f.minCoversLbs ? ` (up to ${formatNumber(f.minCoversLbs, 0)} lbs)` : ''}`]);
   if (f.perLoadExtra) r.push([f.perLoadExtraLabel ?? 'Per-load fee', fee(f.perLoadExtra)]);
   if (f.yard) r.push(['Yard waste', [f.yard.flat?.pickup != null ? `${fee(f.yard.flat.pickup)} pickup flat` : '', f.yard.perTon != null ? `${fee(f.yard.perTon)} a ton` : '', f.yard.min ? `${fee(f.yard.min)} minimum` : ''].filter(Boolean).join(', ')]);
   if (f.cd) r.push([`Construction debris (${f.cd.label})`, `${fee(f.cd.perTon)} a ton`]);
   if (f.mattress != null) r.push(['Mattress or box spring', f.mattress === 0 ? 'no charge (household)' : `${fee(f.mattress)} each`]);
-  if (f.htAdd != null) r.push(['Hard-to-handle item on a flat load', fee(f.htAdd)]);
+  if (f.htAdd != null) r.push(['Item over six feet (furniture, mattress) on a flat load', fee(f.htAdd)]);
   if (f.tire != null) r.push(['Passenger tire', `${f.tireMode === 'load' ? `${fee(f.tire)} per load` : `${fee(f.tire)} each`}${f.tireFree ? `, first ${f.tireFree} free` : ''}${f.tireMax ? `, ${f.tireMax} at most` : ''}`]);
   if (f.freon != null) r.push(['Appliance with refrigerant', `${fee(f.freon)} each${f.freonFree ? `, first ${f.freonFree} free` : ''}`]);
   return r;
@@ -64,6 +64,8 @@ export function helpers(strict = false) {
   return {
     P,
     E,
+    /** The calculator's default load: a pickup with 600 lbs of household junk. */
+    LOAD,
     a,
     F,
     fl,
@@ -83,6 +85,20 @@ export function helpers(strict = false) {
     table,
     /** Table of one facility's schedule with its link and date. */
     schedule: (id: string) => { const f = E.byId(id); return table(['Line of the price list', 'Fee'], scheduleRows(f).map(([a, b]) => [a, b]), `${f.operator}: <a href="${f.url}" target="_blank" rel="nofollow noopener noreferrer">${f.name} fee schedule</a>, ${f.effective ? `effective ${displayDate(f.effective, 'en-US')}` : f.effectiveText}, read on ${displayDate(P.retrieved_at, 'en-US')}.`, ['l', 'r']); },
+    /**
+     * Standfirst of an area page: the answer in one sentence, for the same load as the calculator's default
+     * (a pickup with 600 lbs of household junk), from the engine (brief of 2026-11-09).
+     */
+    areaIntro: (id: string, also: string[] = []) => {
+      const who = (f: Facility) => f.place.replace(/^City of/, 'the City of');
+      const say = (x: string, first: boolean) => {
+        const f = F(x); const e = est(x); const w = first ? who(f).replace(/^the/, 'The') : who(f);
+        if (e.total == null) return `${w} prints no price for it at ${f.name}`;
+        if (E.isFreeResident(e)) return `${w} charges qualifying residents nothing at ${f.name}`;
+        return `${w} charges ${e.from ? 'from ' : ''}${fee(e.total)} at ${f.name}`;
+      };
+      return `${say(id, true)} for a pickup with ${formatNumber(LOAD.lbs, 0)} lbs of household junk${also.length ? `; ${also.map((x) => say(x, false)).join('; ')}` : ''}. Change the weight or add a mattress below.`;
+    },
     src: (key: SourceKey, text?: string) => { const s = P.sources[key]; return `<a href="${s.url}" target="_blank" rel="nofollow noopener noreferrer">${text ?? s.label.en}</a>`; },
     box: (title: string, html: string, kind: 'info' | 'tip' | 'warning' | 'example' = 'info') => `<div class="callout callout-${kind}"><span class="callout-title">${title}</span>${html}</div>`,
   };

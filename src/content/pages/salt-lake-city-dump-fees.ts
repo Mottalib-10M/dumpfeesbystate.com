@@ -4,7 +4,7 @@ export default definePage({
   id: 'salt-lake-city-dump-fees',
   group: 'metro',
   order: 550,
-  tool: { kind: 'dump', props: { facility: 'salt-lake', also: 'washington-ut', lbs: 900, mattresses: 1, tires: 2 } },
+  tool: { kind: 'dump', props: { facility: 'salt-lake', also: 'washington-ut' } },
   related: ['construction-debris-disposal', 'tire-disposal', 'truckload-dump-cost', 'home'],
   sources: ['f_salt_lake', 'f_washington_ut'],
   slug: 'salt-lake-city-dump-fees',
@@ -13,7 +13,7 @@ export default definePage({
   title: 'Salt Lake City Dump Fees: The Valley Landfill Flat Rate 2026',
   description: 'Salt Lake City dump fees at the Salt Lake Valley Landfill: one flat rate for a car, pickup or hand-unloaded trailer, item fees, and St. George’s free loads.',
   h1: 'Salt Lake City dump fees: one flat rate for most household loads',
-  intro: 'The calculator opens on a 900 lb pickup load with a mattress and two tires at the Salt Lake Valley Landfill.',
+  intro: (h) => h.areaIntro('salt-lake', ['washington-ut']),
   resume: (h) => {
     const f = h.F('salt-lake');
     return `The Salt Lake Valley Landfill, owned by Salt Lake County, has one of the simplest schedules we read: ${h.fee(f.flat!.pickup!)} for a car, an SUV, a pickup up to a one-ton truck, or a trailer unloaded by hand, whatever the weight. Heavier trailers towed by trucks of one ton or more are weighed at ${h.fee(f.perTon!)} a ton with a ${h.fee(f.minCharge!)} minimum. Mixed household trash may include green waste, concrete, asphalt, soil and sod at the flat rate, and clean loads of concrete, asphalt, soil or sod alone have a lower weighed rate of ${h.fee(f.cd!.perTon!)} a ton. Items are added on top: ${h.fee(f.mattress!)} per mattress or box spring for residents, ${h.fee(f.freon!)} per refrigerant appliance and ${h.fee(f.tire!)} per tire, ${f.tireMax} a load at most. The county’s page prints no effective date for this schedule; we read it on ${h.D.read}.`;

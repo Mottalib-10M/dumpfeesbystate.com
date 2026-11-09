@@ -4,7 +4,7 @@ export default definePage({
   id: 'atlanta-dump-fees',
   group: 'metro',
   order: 560,
-  tool: { kind: 'dump', props: { facility: 'dekalb', lbs: 450, mattresses: 0 } },
+  tool: { kind: 'dump', props: { facility: 'dekalb' } },
   related: ['dumpster-vs-dump-run', 'tire-disposal', 'landfill-prices-per-ton', 'home'],
   sources: ['f_dekalb'],
   slug: 'atlanta-dump-fees',
@@ -13,7 +13,7 @@ export default definePage({
   title: 'Atlanta Dump Fees 2026: Seminole Road Landfill Weight Bands',
   description: 'Atlanta dump fees at DeKalb County’s Seminole Road Landfill in 2026: five weight bands for loads under a ton, the rate per ton above, tires and appliances.',
   h1: 'Atlanta dump fees: DeKalb County’s weight bands at Seminole Road',
-  intro: 'The calculator opens on a 450 lb pickup load at the Seminole Road Landfill. Move the weight across the bands to see the fee step up.',
+  intro: (h) => h.areaIntro('dekalb'),
   resume: (h) => {
     const f = h.F('dekalb'); const t = f.tiers!;
     return `DeKalb County, on the east side of the Atlanta area, is the only public operator among those we read that prices small loads in weight bands rather than with a single minimum. At the Seminole Road Landfill in 2026, a load up to ${h.num(t[0].maxLbs)} lbs pays ${h.fee(t[0].fee)}, up to ${h.num(t[1].maxLbs)} lbs ${h.fee(t[1].fee)}, up to ${h.num(t[2].maxLbs)} lbs ${h.fee(t[2].fee)}, up to ${h.num(t[3].maxLbs)} lbs ${h.fee(t[3].fee)} and up to ${h.num(t[4].maxLbs)} lbs ${h.fee(t[4].fee)}. From one ton, the load is charged ${h.fee(f.perTon!)} a ton. The county’s three transfer stations charge more per ton than the landfill. The schedule also lists tires, from ${h.fee(f.tire!)} for a passenger tire under eighteen inches off the rim, and ${h.fee(f.freon!)} for an appliance with refrigerant. It also prints a separate minimum processing fee that we leave out, because the schedule does not say how it combines with the weight bands.`;

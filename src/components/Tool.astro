@@ -18,6 +18,14 @@ const spec = mini ? getSpec(mini) : null;
 const href = spec?.ctaPage ? route(spec.ctaPage, 'en') : undefined;
 const numDefaults: Record<string, number> = {};
 for (const [k, v] of Object.entries(props)) if (typeof v === 'number') numDefaults[k] = v;
+// Area page of each facility (its full price list), for the link under the calculator's result.
+const areaHref: Record<string, string> = {};
+for (const f of DUMPS) {
+  const pg = PAGES.find((p) => p.group === 'metro' && (p.tool?.props?.facility === f.id || (p.tool?.props?.also as string | undefined)?.split(',').includes(f.id)));
+  if (pg) areaHref[f.id] = route(pg.id, 'en');
+}
+const here = Astro.url.pathname;
+const findHref = `${route('home', 'en')}#which-dump`;
 // Finder: per state, the area pages whose schedules we read (else the calculator preset on the facility).
 const schedules: Record<string, Array<{ name: string; href: string }>> = {};
 if (kind === 'finder') for (const f of DUMPS) {
@@ -25,6 +33,6 @@ if (kind === 'finder') for (const f of DUMPS) {
   (schedules[f.state] ??= []).push({ name: f.name, href: pg ? route(pg.id, "en") : f.url });
 }
 ---
-{kind === 'dump' && <DumpCalc client:load {...props} methodHref={methodHref} weightHref={route('truckload-dump-cost', 'en')} idPrefix={idPrefix ?? 'dc'} />}
+{kind === 'dump' && <DumpCalc client:load {...props} methodHref={methodHref} weightHref={route('truckload-dump-cost', 'en')} versusHref={route('dumpster-vs-dump-run', 'en')} findHref={findHref} areaHref={areaHref} here={here} idPrefix={idPrefix ?? 'dc'} />}
 {kind === 'finder' && <LandfillFinder client:load state={props.state ?? 'UT'} schedules={schedules} idPrefix={idPrefix ?? 'lf'} />}
-{mini && <MiniSim client:load kind={mini} href={href} defaults={numDefaults} primary={primary} idPrefix={idPrefix ?? (primary ? 'p' : 'm')} />}
+{mini && <MiniSim client:load kind={mini} href={href} defaults={numDefaults} primary={primary} idPrefix={idPrefix ?? (primary ? 'p' : 'm')} findHref={findHref} />}

@@ -13,7 +13,7 @@
  *   id uniques ; `defaults` : valeurs de la page ;
  * - champs `avance` : rangés dans un repli dont le titre montre la valeur actuelle de chacun.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import NumberField from '../ui/NumberField';
 import SelectField from '../ui/SelectField';
 import { getSpec } from '../../lib/mini-specs';
@@ -23,20 +23,42 @@ import { formatNumber } from '../../lib/format';
 import type { MiniInput } from '../../lib/mini-types';
 import { DUMPS } from '../../lib/engine/fees';
 import { STATE_NAMES } from '../../lib/states';
+import { savedDump, saveDump } from '../../lib/choice';
 
-interface Props { kind: string; lang?: string; href?: string; title?: string; defaults?: Record<string, number>; primary?: boolean; idPrefix?: string; saisiParLeLecteur?: boolean }
+interface Props { kind: string; lang?: string; href?: string; title?: string; defaults?: Record<string, number>; primary?: boolean; idPrefix?: string; saisiParLeLecteur?: boolean; findHref?: string }
 
-export default function MiniSim({ kind, lang = 'en', href, title, defaults = {}, primary = false, idPrefix = 'm', saisiParLeLecteur = false }: Props) {
+export default function MiniSim({ kind, lang = 'en', href, title, defaults = {}, primary = false, idPrefix = 'm', saisiParLeLecteur = false, findHref }: Props) {
   const spec = getSpec(kind);
   const [v, setV] = useState<Record<string, number>>(() => Object.fromEntries(spec.inputs.map((i) => [i.id, defaults[i.id] ?? i.def])));
   const [touched, setTouched] = useState<Record<string, boolean>>(() => (saisiParLeLecteur ? Object.fromEntries(spec.inputs.map((i) => [i.id, true])) : {}));
   const out = useMemo(() => spec.run(v, touched), [v, spec, touched]);
   const [picked, setPicked] = useState(defaults.fac != null);
-  const set = (id: string) => (x: number) => { if (id === 'fac') setPicked(true); setV((o) => ({ ...o, [id]: x })); setTouched((o) => (o[id] ? o : { ...o, [id]: true })); };
+  const set = (id: string) => (x: number) => { if (id === 'fac') { setPicked(true); if (DUMPS[x]) saveDump(DUMPS[x].id); } setV((o) => ({ ...o, [id]: x })); setTouched((o) => (o[id] ? o : { ...o, [id]: true })); };
+  // Same form as the main calculator: the state first, then the dumps of that state only (naive test, 4th round).
+  const facInput = spec.inputs.find((i) => i.id === 'fac' && i.options);
+  const facOf = (o: { value: string }) => DUMPS[Number(o.value)];
+  const states = facInput ? [...new Set(facInput.options!.map((o) => facOf(o)?.state).filter(Boolean) as string[])].sort((a, b) => (STATE_NAMES[a] ?? a).localeCompare(STATE_NAMES[b] ?? b)) : [];
+  const curState = facInput ? DUMPS[v.fac]?.state ?? states[0] : '';
+  const pickState = (st: string) => { const o = facInput?.options!.find((x) => facOf(x)?.state === st); if (o) set('fac')(Number(o.value)); };
+  // The dump picked on an earlier page of this visit (this tab only), instead of the example.
+  useEffect(() => {
+    if (!facInput || defaults.fac != null || saisiParLeLecteur) return;
+    const kept = savedDump(); const idx = kept ? DUMPS.findIndex((x) => x.id === kept) : -1;
+    if (idx >= 0 && facInput.options!.some((o) => o.value === String(idx))) { setPicked(true); setV((o) => ({ ...o, fac: idx })); setTouched((o) => ({ ...o, fac: true })); }
+  }, []);
   // The site a tool opens on is marked as an example until the reader picks one (naive test, 2nd round).
   const exFac = spec.inputs.some((i) => i.id === 'fac') && !picked ? DUMPS[v.fac] : null;
   const fid = (id: string) => `${idPrefix}-${kind}-${id}`;
-  const champ = (i: MiniInput) => (i.options
+  const champ = (i: MiniInput) => (i === facInput
+    ? <div key="fac" className="grid gap-3">
+      <div>
+        <SelectField id={fid('st')} label={exFac ? 'First, pick your state' : 'Your state'} value={curState} onChange={pickState} options={states.map((c) => ({ value: c, label: STATE_NAMES[c] ?? c }))} />
+        {exFac && <p className="mt-1 text-sm font-medium text-navy-900">Until you do, the figures are an example for {exFac.metro}, {STATE_NAMES[exFac.state] ?? exFac.state}.</p>}
+      </div>
+      <SelectField id={fid(i.id)} label="Public dump" value={String(v[i.id])} onChange={(x) => set(i.id)(Number(x))} options={i.options!.filter((o) => facOf(o)?.state === curState).map((o) => ({ ...o, label: o.label.replace(/^[A-Z]{2} · /, '') }))} help={i.help} />
+      {findHref && <a href={findHref} className="-mt-1 text-sm text-accent-700 underline underline-offset-2">Not sure which dump serves you?</a>}
+    </div>
+    : i.options
     ? <SelectField key={i.id} id={fid(i.id)} label={i.label} value={String(v[i.id])} onChange={(x) => set(i.id)(Number(x))} options={i.options} help={i.help} />
     : <NumberField key={i.id} id={fid(i.id)} label={i.label} value={v[i.id]} onChange={set(i.id)} unit={i.unit} max={i.max} decimals={i.decimals} help={i.help} />);
   const avances = spec.inputs.filter((i) => i.avance);
@@ -57,7 +79,7 @@ export default function MiniSim({ kind, lang = 'en', href, title, defaults = {},
           )}
         </form>
         <div aria-live="polite" {...(primary ? { 'data-resultat': '' } : {})} className="self-start border-l-4 border-accent-500 bg-accent-50 p-4">
-          {exFac && <p data-exemple className="mb-2 text-xs font-semibold uppercase tracking-wide text-accent-800">Example: {exFac.metro}, {STATE_NAMES[exFac.state] ?? exFac.state}. Pick your own dump.</p>}
+          {exFac && <p data-exemple className="mb-2 text-xs font-semibold uppercase tracking-wide text-accent-800">Example, not your price yet: {exFac.metro}, {STATE_NAMES[exFac.state] ?? exFac.state}</p>}
           {!exFac && <MentionExemple lang={lang} touched={touched} />}
           <p className="text-sm font-medium text-navy-700">{out.head[0]}</p>
           <p className="tabular-nums mt-1 text-4xl font-bold text-navy-900">{out.head[1]}</p>

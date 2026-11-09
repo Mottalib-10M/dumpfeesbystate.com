@@ -5,6 +5,8 @@
  */
 import RAW from '../../data/fees-2026.json';
 import { P } from './params';
+import { displayDate, formatMoney } from '../format';
+import { STATE_NAMES } from '../states';
 
 export type Vehicle = 'car' | 'pickup' | 'trailer';
 export type Material = 'trash' | 'yard' | 'cd';
@@ -26,6 +28,8 @@ export interface Facility {
   mattress?: number; freon?: number; freonFree?: number; freonNote?: string;
   tire?: number; tireMode?: 'each' | 'load'; tireFree?: number; tireMax?: number;
   next?: { effective: string; url: string; minCharge?: number; perTon?: number; note: string };
+  /** Who answers Yes or No to “You live in the area it serves”, in the site's own terms. */
+  residentHelp?: string;
   notes: string[];
 }
 export const FACILITIES = RAW.facilities as Facility[];
@@ -65,7 +69,9 @@ export const LBS_PER_TON = 2000;
 export const VEHICLE_LABEL: Record<Vehicle, string> = { car: 'Car, SUV or minivan', pickup: 'Pickup or cargo van', trailer: 'Pickup towing a trailer' };
 export const MATERIAL_LABEL: Record<Material, string> = { trash: 'Household trash and junk', yard: 'Yard waste and brush', cd: 'Construction debris' };
 
-export interface Load { vehicle: Vehicle; lbs: number; material: Material; mattresses: number; tires: number; freon: number; resident: boolean }
+export interface Load { vehicle: Vehicle; lbs: number; material: Material; mattresses: number; tires: number; freon: number; resident: boolean;
+  /** Couches, sofas and other large furniture: no fee of their own, but they trigger a bulky-load rule where the schedule has one. */
+  bulky?: number }
 export interface Line { label: string; amount: number }
 export interface Estimate {
   /** null when the schedule prints no fee for this kind of load. */
@@ -104,7 +110,9 @@ export function baseFee(f: Facility, L: Load): { fee: number | null; rule: strin
     return { fee: null, rule: 'No yard waste rate for this vehicle on this schedule' };
   }
   // Household trash.
-  const ht = L.mattresses > 0;
+  // Furniture triggers the bulky rule only where the schedule names it: OC's “items longer than six feet (wood,
+  // furniture, mattresses)”. Riverside's ordinance names mattresses only, so a couch is left to the gate there.
+  const ht = L.mattresses > 0 || ((L.bulky ?? 0) > 0 && f.htAdd != null);
   if (f.smallLoad && lbs <= f.smallLoad.maxLbs) return { fee: f.smallLoad.fee, rule: f.smallLoad.label, from: f.smallLoad.from };
   if (f.tiers && lbs < 2000) {
     const t = f.tiers.find((x) => lbs <= x.maxLbs);
@@ -114,7 +122,7 @@ export function baseFee(f: Facility, L: Load): { fee: number | null; rule: strin
   const flat = (ht && f.htFlat?.[L.vehicle] != null ? f.htFlat[L.vehicle] : flatTable?.[L.vehicle]);
   const flatMax = f.flatMaxLbs?.[L.vehicle];
   if (flat != null && (flatMax == null || lbs < flatMax)) {
-    const label = ht && f.htFlat?.[L.vehicle] != null ? 'Flat higher fee for a load with a mattress or other bulky item' : `${flatMax != null ? `Flat fee for this vehicle under ${flatMax.toLocaleString('en-US')} lbs; heavier loads are weighed` : 'Flat fee for this vehicle, whatever the weight'}${nr?.flat ? ` (${nr.label})` : ''}`;
+    const label = ht && f.htFlat?.[L.vehicle] != null ? 'Flat bulky-load rate: a mattress or other bulky item puts the whole load on it' : `${flatMax != null ? `Flat fee for this vehicle under ${flatMax.toLocaleString('en-US')} lbs; heavier loads are weighed` : 'Flat fee for this vehicle, whatever the weight'}${nr?.flat ? ` (${nr.label})` : ''}`;
     return { fee: flat, rule: label };
   }
   const rate = ht && f.htPerTon ? f.htPerTon : (nr?.perTon ?? f.perTon);
@@ -136,6 +144,8 @@ export function estimate(f: Facility, L: Load): Estimate {
     else if (f.htAdd != null && b.rule.startsWith('Flat')) lines.push({ label: 'Bulky item fee (item over six feet, such as a mattress)', amount: f.htAdd });
     else if (!(f.htFlat || f.htPerTon)) missing.push('mattress fee not printed');
   }
+  const k = Math.max(0, Math.round(L.bulky ?? 0));
+  if (k > 0 && m === 0 && f.htAdd != null && b.rule.startsWith('Flat')) lines.push({ label: 'Bulky item fee (item over six feet, such as a couch)', amount: f.htAdd });
   const t = Math.max(0, Math.round(L.tires));
   if (t > 0) {
     if (f.tire == null) missing.push('tire fee not printed');
@@ -209,4 +219,43 @@ export function versusQuote(f: Facility, L: Load, trips: number, milesRound: num
   const driving = r2(tripsN * Math.max(0, milesRound) * Math.max(0, centsPerMile) / 100);
   const self = r2(fees + driving);
   return { trips: tripsN, fees, driving, self, quote, diff: r2(quote - self) };
+}
+
+/** Date of a price list in plain words: “effective July 1, 2026” or “no date printed on it”. */
+export const effPhrase = (f: Facility) => (f.effective ? `effective ${displayDate(f.effective, 'en-US')}` : f.effectiveText);
+/** “Salt Lake County price list (no date printed on it)” (naive test, 4th round: “price list current schedule, no effective date printed”). */
+export const priceListLine = (f: Facility) => `${f.place} price list (${effPhrase(f)})`;
+/** True when the Yes/No resident question changes the price at this site. */
+export const hasResidentRule = (f: Facility) => !!(f.nonRes || f.residentFree);
+/** Help under the resident question, in the site's own terms. */
+export function residentHelp(f: Facility): string | undefined {
+  if (f.residentHelp) return f.residentHelp;
+  if (f.residentFree) return `Yes = ${f.residentFree.label.replace(/,\s*free$/, '')}: free. No = everyone else.`;
+  if (f.nonRes) return `No = ${f.nonRes.label}, which pays more.`;
+  return undefined;
+}
+/** True when the price list has no mattress rule at all (no fee, no bulky-load rate). */
+export const noMattressRule = (f: Facility) => f.mattress == null && f.htAdd == null && !f.htFlat && !f.htPerTon;
+/** True when the price list has a bulky-load rule that a couch or large furniture triggers. */
+export const hasBulkyRule = (f: Facility) => f.htAdd != null;
+
+const money0 = (n: number) => (Math.abs(n - Math.round(n)) < 0.005 ? formatMoney(Math.round(n), 0) : formatMoney(n, 2));
+/**
+ * Rank of a site in its own state first (naive test, 4th round: “the most expensive of the 24” worried a San Diego
+ * reader without telling him where to go), then a plain national count instead of an ordinal.
+ */
+export function rankInState(f: Facility, all: Array<{ f: Facility; e: Estimate }>): { state: string; national: string } {
+  const mine = all.find((x) => x.f.id === f.id);
+  const st = STATE_NAMES[f.state] ?? f.state;
+  if (!mine || mine.e.total == null) return { state: '', national: '' };
+  const same = all.filter((x) => x.f.state === f.state);
+  const less = all.filter((x) => (x.e.total as number) < (mine.e.total as number) - 0.004).length;
+  const national = less === 0 ? `No public site we priced in any state charges less for this load.` : `${less} of the ${all.length} public sites we priced nationwide charge less for this load.`;
+  if (same.length <= 1) return { state: `The only ${st} site we priced.`, national };
+  const lessHere = same.filter((x) => (x.e.total as number) < (mine.e.total as number) - 0.004);
+  const lo = same[0];
+  const free = (x: { e: Estimate }) => (isFreeResident(x.e) ? ' for residents' : '');
+  if (lessHere.length === 0) return { state: `Cheapest of the ${same.length} ${st} sites we priced.`, national };
+  if (same[same.length - 1].f.id === f.id || same.filter((x) => (x.e.total as number) > (mine.e.total as number) + 0.004).length === 0) return { state: `Most expensive of the ${same.length} ${st} sites we priced: ${lo.f.name} (${lo.f.metro}) charges ${money0(lo.e.total as number)}${free(lo)} for the same load.`, national };
+  return { state: `${lessHere.length} of the ${same.length} ${st} sites we priced charge less: ${lo.f.name} (${lo.f.metro}) charges ${money0(lo.e.total as number)}${free(lo)}.`, national };
 }

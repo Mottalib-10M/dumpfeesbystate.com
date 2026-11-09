@@ -4,7 +4,7 @@ export default definePage({
   id: 'phoenix-dump-fees',
   group: 'metro',
   order: 530,
-  tool: { kind: 'dump', props: { facility: 'phoenix', lbs: 1500, mattresses: 0 } },
+  tool: { kind: 'dump', props: { facility: 'phoenix' } },
   related: ['dumpster-vs-dump-run', 'transfer-station-fees', 'load-weight-calculator', 'home'],
   sources: ['f_phoenix', 'f_tucson'],
   slug: 'phoenix-dump-fees',
@@ -13,7 +13,7 @@ export default definePage({
   title: 'Phoenix Dump Fees: One Free Load a Month and $55 a Ton After',
   description: 'Phoenix dump fees at the 27th Avenue and North Gateway transfer stations: one free load a month up to a ton for residents, then $55 a ton, and Tucson beside it.',
   h1: 'Phoenix dump fees: the free monthly load and what comes after',
-  intro: 'The calculator opens on a 1,500 lb load at a Phoenix transfer station by a resident. Answer No to “You live in the area it serves” to see the rate for everyone else.',
+  intro: (h) => h.areaIntro('phoenix'),
   resume: (h) => {
     const f = h.F('phoenix'); const t = h.F('tucson');
     return `Phoenix lets its residents dump for free once a month. A household that pays for full city trash service may bring one load of up to one ton, once per calendar month, to the 27th Avenue or North Gateway transfer station at no charge. Anything above one ton is charged at ${h.fee(f.perTon!)} a ton, and other customers pay ${h.fee(f.perTon!)} a ton with a ${h.fee(f.minCharge!)} minimum. The city also takes up to five automobile tires a year from a resident, rims removed. Phoenix’s page prints no effective date for these rates; we read it on ${h.D.read}. In Tucson, the city’s Los Reales Sustainability Campus charges residents who bring their own load ${h.fee(t.smallLoad!.fee)} a load up to ${h.num(t.smallLoad!.maxLbs)} lbs plus a ${h.fee(t.perLoadExtra!)} environmental fee, under a schedule effective July 1, 2026.`;

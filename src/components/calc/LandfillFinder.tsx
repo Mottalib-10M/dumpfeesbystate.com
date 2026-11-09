@@ -3,11 +3,13 @@
  * ownership and, where we read one, a link to the fee schedule of a public site in that state.
  * Data: `data/landfills-lite.json`, built by scripts/data/build-landfills.py. First render = defaults.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import SelectField from '../ui/SelectField';
 import Toggle from '../ui/Toggle';
 import LITE from '../../data/landfills-lite.json';
 import { STATE_NAMES } from '../../lib/states';
+import { savedDump } from '../../lib/choice';
+import { DUMPS } from '../../lib/engine/fees';
 
 type Row = [string, string, string, string, string, string];
 const ROWS = LITE as Row[];
@@ -25,14 +27,20 @@ export default function LandfillFinder({ state = 'TX', idPrefix = 'lf', schedule
   const pickState = (x: string) => { setSt(x); setAll(false); setPicked(true); };
   const [own, setOwn] = useState('all');
   const [all, setAll] = useState(false);
+  // The state of the dump picked on an earlier page of this visit, instead of the example.
+  useEffect(() => { const k = savedDump(); const f = k ? DUMPS.find((x) => x.id === k) : null; if (f && ROWS.some((r) => r[3] === f.state)) { setSt(f.state); setPicked(true); } }, []);
   const sch0 = schedules[st] ?? [];
-  // Sites whose price list we read come first, then public ones, then the rest.
-  const known = (r: Row) => sch0.some((s) => s.name.toLowerCase() === r[0].toLowerCase());
+  // Sites whose price list we read come first, then public ones, then the rest. The EPA writes “LF” for
+  // “Landfill”: compare spelled-out names (naive test, 4th round: Salt Lake Valley came 14th).
+  const norm = (x: string) => spell(x).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const known = (r: Row) => sch0.some((s) => norm(s.name) === norm(r[0]) || (norm(r[0]).length > 12 && norm(s.name).includes(norm(r[0]))) || (norm(s.name).length > 12 && norm(r[0]).includes(norm(s.name))));
   const list = useMemo(() => ROWS.filter((r) => r[3] === st && (own === 'all' || r[4] === 'P')).map((r, i) => ({ r, i, k: (known(r) ? 0 : 2) + (r[4] === 'P' ? 0 : 1) })).sort((a, b) => a.k - b.k || a.i - b.i).map((x) => x.r), [st, own]);
   const visible = all ? list : list.slice(0, FIRST);
   const pub = ROWS.filter((r) => r[3] === st && r[4] === 'P').length;
   const tot = ROWS.filter((r) => r[3] === st).length;
   const sch = schedules[st] ?? [];
+  const nKnown = list.filter(known).length;
+  const order = nKnown > 0 ? 'sites with a price list we checked first, then public ones' : 'public ones first';
   return (
     <div data-chrome className="rechner border border-navy-300 bg-white p-4 sm:p-5">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,20rem)_1fr]">
@@ -51,7 +59,7 @@ export default function LandfillFinder({ state = 'TX', idPrefix = 'lf', schedule
         </div>
       </div>
       <div className="mt-4 border-t border-navy-200 pt-3">
-        <p className="mb-2 text-sm text-navy-800">{list.length > FIRST && !all ? `Showing ${FIRST} of ${list.length}: sites with a price list we checked first, then public ones.` : `All ${list.length} shown: sites with a price list we checked first, then public ones.`}</p>
+        <p className="mb-2 text-sm text-navy-800">{list.length > FIRST && !all ? `Showing ${FIRST} of ${list.length}: ${order}.` : `All ${list.length} shown: ${order}.`} Call before you drive: some landfills take no loads from residents.</p>
         <table className="w-full text-sm"><thead><tr><th scope="col" className="py-1 pr-2 text-left text-xs uppercase text-navy-700">Landfill</th><th scope="col" className="py-1 pr-2 text-left text-xs uppercase text-navy-700">City, county</th><th scope="col" className="py-1 text-left text-xs uppercase text-navy-700">Owner</th></tr></thead>
           <tbody>{visible.map((r) => <tr key={r[0] + r[1]} className="border-b border-navy-100"><td className="py-1 pr-2 text-navy-900">{spell(r[0])}</td><td className="py-1 pr-2 text-navy-700">{[r[1], r[2] && `${r[2]} County`].filter(Boolean).join(', ')}</td><td className="py-1 text-navy-700">{OWN[r[4]]}{r[5] ? `: ${r[5]}` : ''}</td></tr>)}</tbody>
         </table>

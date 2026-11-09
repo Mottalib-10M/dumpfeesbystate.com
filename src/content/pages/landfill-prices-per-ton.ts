@@ -9,10 +9,10 @@ export default definePage({
   sources: ['f_seattle', 'f_king_county', 'f_wake', 'f_swaco', 'f_dallas', 'f_miami_dade', 'f_orange_fl', 'f_dekalb'],
   slug: 'landfill-prices-per-ton',
   nav: 'Landfill prices per ton',
-  card: 'The per-ton gate rate of every public landfill and transfer station we read, from the lowest to the highest, and what a weighed load pays.',
+  card: 'The price per ton at the gate of every public landfill and transfer station we read, from the lowest to the highest, and what a weighed load pays.',
   title: 'Landfill Prices per Ton 2026: Public Gate Rates Compared',
   description: 'Landfill prices per ton in 2026, read on county and city fee schedules: the gate rate of each public site, its minimum charge, and what your weighed load pays.',
-  h1: 'Landfill prices per ton: the gate rate printed by each public site',
+  h1: 'Landfill prices per ton: the rate printed by each public site',
   intro: 'Pick the public dump nearest you and a weight. The fee comes from that site’s own price list, then the same load is priced at every other site we checked. A site that charges a flat fee per vehicle shows that fee instead.',
   resume: (h) => {
     const t = h.E.perTonTable(); const lo = t[0]; const hi = t[t.length - 1];

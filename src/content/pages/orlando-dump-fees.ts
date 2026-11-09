@@ -4,7 +4,7 @@ export default definePage({
   id: 'orlando-dump-fees',
   group: 'metro',
   order: 570,
-  tool: { kind: 'dump', props: { facility: 'orange-fl', also: 'miami-dade,jacksonville', lbs: 700, mattresses: 0 } },
+  tool: { kind: 'dump', props: { facility: 'orange-fl', also: 'miami-dade,jacksonville' } },
   related: ['construction-debris-disposal', 'yard-waste-disposal', 'landfill-prices-per-ton', 'home'],
   sources: ['f_orange_fl', 'f_miami_dade', 'f_jacksonville'],
   slug: 'orlando-dump-fees',
@@ -13,7 +13,7 @@ export default definePage({
   title: 'Orlando Dump Fees: Orange County Landfill Rates, Oct 2026',
   description: 'Orlando dump fees at the Orange County Landfill and transfer stations from October 1, 2026: garbage, debris, yard waste, plus Miami-Dade and Jacksonville.',
   h1: 'Orlando dump fees: Orange County’s landfill and transfer stations',
-  intro: 'The calculator is set on Orange County with a 700 lb load. Switch to Miami-Dade or Jacksonville to compare Florida’s other public sites.',
+  intro: (h) => h.areaIntro('orange-fl', ['miami-dade', 'jacksonville']),
   resume: (h) => {
     const f = h.F('orange-fl'); const md = h.F('miami-dade'); const j = h.F('jacksonville');
     return `Orange County Utilities runs the Orange County Landfill and two transfer stations, Porter and McLeod Road, and under the rates effective October 1, 2026 all three charge ${h.fee(f.perTon!)} a ton for Class I household garbage, with a ${h.fee(f.minCharge!)} minimum. A light pickup load therefore costs little more than the minimum. Yard waste is ${h.fee(f.yard!.perTon!)} a ton at the landfill, but pays the garbage rate at a transfer station. Class III material, meaning construction debris, furniture and clean fill, goes to the landfill only, at ${h.fee(f.cd!.perTon!)} a ton. Passenger tires are ${h.fee(f.tire!)} each up to ${f.tireMax}. Elsewhere in Florida the spread is wide: Miami-Dade charges ${h.fee(md.perTon!)} a ton to non-contract customers, while Jacksonville’s Trail Ridge Landfill lists ${h.fee(j.perTon!)} a ton, with a one-dollar charge for the first ${h.num(j.smallLoad!.maxLbs)} lbs.`;

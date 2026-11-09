@@ -4,7 +4,7 @@ export default definePage({
   id: 'sacramento-dump-fees',
   group: 'metro',
   order: 540,
-  tool: { kind: 'dump', props: { facility: 'sac-kiefer', also: 'sac-nars', mattresses: 2, tires: 4, freon: 1 } },
+  tool: { kind: 'dump', props: { facility: 'sac-kiefer', also: 'sac-nars' } },
   related: ['appliance-disposal', 'mattress-disposal', 'tire-disposal', 'home'],
   sources: ['f_sac_kiefer', 'f_sac_nars'],
   slug: 'sacramento-dump-fees',
@@ -13,7 +13,7 @@ export default definePage({
   title: 'Sacramento Dump Fees 2026: Kiefer and North Area Station',
   description: 'Sacramento dump fees in 2026 at Kiefer Landfill and the North Area Recovery Station: flat vehicle rates, free mattresses, four free tires, two free appliances.',
   h1: 'Sacramento dump fees: Kiefer Landfill and the North Area Recovery Station',
-  intro: 'The calculator is set on Kiefer Landfill with two mattresses, four tires and a refrigerator in a pickup. Switch to the North Area Recovery Station to compare.',
+  intro: (h) => h.areaIntro('sac-kiefer', ['sac-nars']),
   resume: (h) => {
     const k = h.F('sac-kiefer'); const n = h.F('sac-nars');
     return `Sacramento County runs two public sites for people who bring their own load, Kiefer Landfill and the North Area Recovery Station, a transfer station. Both charge a flat rate by vehicle under the fee schedule effective January 1, 2026: ${h.fee(k.flat!.car!)} for a car or small SUV at either site, ${h.fee(k.flat!.pickup!)} for a pickup at Kiefer and ${h.fee(n.flat!.pickup!)} at North Area. Small vans and large SUVs pay ${h.fee(20)} at both sites, large vans a little more than a pickup, and vehicles with trailers are weighed. What sets Sacramento apart is its item policy. Household mattresses go in free, the first ${k.freonFree} large appliances of the day are free, and the first ${k.tireFree} passenger tires a day are free, then ${h.fee(k.tire!)} each up to ${k.tireMax}. A pickup of junk with two mattresses, four tires and a fridge therefore costs the same as the pickup alone: ${h.fee(h.tot('sac-kiefer', { mattresses: 2, tires: 4, freon: 1 }))} at Kiefer.`;

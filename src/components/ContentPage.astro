@@ -16,7 +16,7 @@ import { helpers } from '../lib/helpers';
 import { P } from '../lib/engine/params';
 import { articleSchema, faqSchema, breadcrumbSchema, webPageSchema, webApplicationSchema } from '../lib/seo';
 import { AUTHOR_NAME } from '../data/site-config';
-import type { PageDef, ToolDef } from '../lib/guide-types';
+import { introText, type PageDef, type ToolDef } from '../lib/guide-types';
 interface Props { page: PageDef }
 const { page } = Astro.props;
 const lang = 'en';
@@ -41,8 +41,8 @@ for (let i = 0; i < parts.length; i += 3) { chunks.push({ html: parts[i] }); if 
     <header class="mb-3">
       <p class="kicker">{groupLabel(page.group)}</p>
       <h1 class="mt-1 text-[1.75rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">{page.h1}</h1>
-      <p class="mt-2 text-base text-navy-700 sm:text-lg">{page.intro}</p>
-      <p class="mt-1 text-xs text-navy-600">Independent site, not a waste hauler or a landfill operator.</p>
+      <p class="mt-2 text-base text-navy-800 sm:text-lg">{introText(page, h)}</p>
+      <p class="mt-1 text-xs text-navy-700">Independent site, not a waste hauler or a landfill operator.{page.tool?.kind !== 'dump' && <> <a href={`${route('home', lang)}#calculator`} class="text-accent-700 underline underline-offset-2">Not sure where to start? The main calculator asks three things: your state, your dump, your load.</a></>}</p>
     </header>
     {page.tool && <div data-outil class="mb-4"><Tool tool={page.tool} primary={true} /></div>}
     <Clamp text={page.resume(h)} id={`clamp-${page.id}`} class="mb-3" />

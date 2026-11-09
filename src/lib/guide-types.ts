@@ -25,7 +25,8 @@ export interface PageDef {
   title: string;
   description: string;
   h1: string;
-  intro: string;
+  /** Standfirst: the visitor's question answered in one sentence, figures from the engine (brief of 2026-11-09). */
+  intro: string | ((h: Helpers) => string);
   /** Citable block, 120 words or more, one paragraph (RECETTE §21). */
   resume: (h: Helpers) => string;
   faqs: (h: Helpers) => FAQ[];
@@ -33,3 +34,4 @@ export interface PageDef {
   body: (h: Helpers) => string;
 }
 export const definePage = (g: PageDef): PageDef => g;
+export const introText = (p: PageDef, h: Helpers) => (typeof p.intro === 'function' ? p.intro(h) : p.intro);

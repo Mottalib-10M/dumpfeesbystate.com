@@ -4,16 +4,16 @@ export default definePage({
   id: 'orange-county-dump-fees',
   group: 'metro',
   order: 610,
-  tool: { kind: 'dump', props: { facility: 'oc-ca', lbs: 600, mattresses: 1 } },
+  tool: { kind: 'dump', props: { facility: 'oc-ca' } },
   related: ['mattress-disposal', 'san-diego-dump-fees', 'inland-empire-dump-fees', 'home'],
   sources: ['f_oc_ca'],
   slug: 'orange-county-dump-fees',
   nav: 'Orange County, California',
-  card: 'OC Waste & Recycling: $15 for a car under 360 lbs, $30 for a pickup under 880 lbs, then by the ton, and the hard-to-handle fee.',
+  card: 'OC Waste & Recycling: $15 for a car under 360 lbs, $30 for a pickup under 880 lbs, then by the ton, and the fee for items over six feet.',
   title: 'Orange County Dump Fees 2026: Olinda Alpha, Prima Deshecha',
   description: 'Orange County dump fees in 2026 at the Olinda Alpha and Prima Deshecha landfills: flat rates for light car and pickup loads, a rate per ton, and bulky items.',
   h1: 'Orange County dump fees: Olinda Alpha and Prima Deshecha',
-  intro: 'The calculator opens on a 600 lb pickup load with a mattress at the OC Waste & Recycling landfills.',
+  intro: (h) => h.areaIntro('oc-ca'),
   resume: (h) => {
     const f = h.F('oc-ca');
     return `OC Waste & Recycling runs the public landfills of Orange County, California, and its schedule effective July 1, 2026 through June 30, 2027 has a flat rate for light loads and a per-ton rate for the rest. Autos, minivans and SUVs pay ${h.fee(f.flat!.car!)} for a load under ${h.num(f.flatMaxLbs!.car!)} lbs; pickups and vans pay ${h.fee(f.flat!.pickup!)} for a load under ${h.num(f.flatMaxLbs!.pickup!)} lbs. Heavier loads are weighed at ${h.fee(f.perTon!)} a ton, or ${h.fee(f.htPerTon!)} if they hold hard-to-handle items. On a flat-rate load, items longer than six feet, such as wood, furniture or a mattress, add ${h.fee(f.htAdd!)}. This page covers Olinda Alpha and Prima Deshecha, the two landfills named on the schedule we read. Orange County sits in the Los Angeles area, where the sanitation districts that serve Los Angeles County could not be opened when we checked them, so we print no figure for them.`;
