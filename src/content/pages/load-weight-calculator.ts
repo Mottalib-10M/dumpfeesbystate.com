@@ -13,7 +13,7 @@ export default definePage({
   title: 'Load Weight Calculator: Cubic Yards to Pounds, EPA Factors',
   description: 'Load weight calculator for a dump run: turn the size of a pile into cubic yards, pounds and tons with the EPA factors for trash, brush, drywall and concrete.',
   h1: 'Load weight calculator: from the size of a pile to pounds',
-  intro: 'Choose the material and type the size of the pile in feet: the load weight calculator gives cubic yards, pounds and tons, using the EPA conversion factor for that material.',
+  intro: 'Choose the material and type the size of the pile in feet: the load weight calculator gives cubic yards, pounds and tons, using the conversion factor of the federal environment agency (EPA) for that material.',
   resume: (h) => {
     const D = h.E.DENSITY;
     return `A load weight calculator turns the volume of a pile into the weight a landfill scale will read, so you can tell in advance whether a load stays under the minimum charge or how many tons you will pay for. The volume is length times width times height in feet, divided by 27 to get cubic yards. The weight is that volume times a density for the material. This tool uses the factors the EPA published in April 2016 for converting waste volumes to weights: about ${h.num(D.msw.lbs)} lbs a cubic yard for loose household trash, ${h.num(D.yard.lbs)} for yard waste, ${h.num(D.drywall.lbs)} for drywall, ${h.num(D.roofing.lbs)} for asphalt shingles and ${h.num(D.concrete.lbs)} for broken concrete. The same space can therefore weigh three or four times more depending on what fills it. Wet or compacted material weighs more than these loose figures.`;

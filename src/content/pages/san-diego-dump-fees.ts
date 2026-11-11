@@ -8,7 +8,7 @@ export default definePage({
   related: ['orange-county-dump-fees', 'inland-empire-dump-fees', 'yard-waste-disposal', 'home'],
   sources: ['f_san_diego'],
   slug: 'san-diego-dump-fees',
-  nav: 'San Diego: Miramar Landfill',
+  nav: 'California: San Diego (Miramar)',
   card: 'Miramar Landfill’s flat rates for cars and pickups, the higher rate for waste from outside the city, green waste and debris.',
   title: 'San Diego Dump Fees: Miramar Landfill Rates from July 2026',
   description: 'San Diego dump fees at Miramar Landfill from July 1, 2026: the flat rate for a car or pickup, the rate for waste from outside the city, green waste and debris.',

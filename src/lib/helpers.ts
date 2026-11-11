@@ -98,7 +98,7 @@ export function helpers(strict = false) {
         if (E.isFreeResident(e)) return `${w} charges qualifying residents nothing at ${f.name}`;
         return `${w} charges ${e.from ? 'from ' : ''}${fee(e.total)} at ${f.name}`;
       };
-      return `${area} dump fees for a pickup with ${formatNumber(LOAD.lbs, 0)} lbs of household junk: ${say(id)}.${also.length ? ` Also on this page: ${also.map((x) => say(x)).join('; ')}.` : ''} Change the weight or add a mattress below.`;
+      return `${area} dump fees for a pickup with ${formatNumber(LOAD.lbs, 0)} lbs of household junk: ${say(id)}.${also.length ? ` Also on this page: ${also.map((x) => say(x)).join('; ')}.` : ''} ${E.noMattressRule(F(id)) ? 'Change the weight, or add a couch or remodel debris, below. This price list has no mattress price.' : 'Change the weight, or add a couch, a mattress or remodel debris, below.'}`;
     },
     src: (key: SourceKey, text?: string) => { const s = P.sources[key]; return `<a href="${s.url}" target="_blank" rel="nofollow noopener noreferrer">${text ?? s.label.en}</a>`; },
     box: (title: string, html: string, kind: 'info' | 'tip' | 'warning' | 'example' = 'info') => `<div class="callout callout-${kind}"><span class="callout-title">${title}</span>${html}</div>`,

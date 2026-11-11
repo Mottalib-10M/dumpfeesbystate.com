@@ -8,7 +8,12 @@ export const GROUPS_ORDER: Group[] = ['fees', 'items', 'metro', 'tools'];
 export const groupLabel = (g: Group) => GROUP_LABEL[g];
 export const label = (id: string, _lang: Locale = 'en') => CORE[id] ?? pageById(id)?.nav ?? id;
 const link = (id: string, lang: Locale): NavLink => ({ href: route(id, lang), label: label(id, lang) });
-const inGroup = (g: Group, lang: Locale) => PAGES.filter((p) => p.group === g).map((p) => link(p.id, lang));
+// Areas sorted by state, with the home list of all states at the end (naive test, 2026-11-10: Colorado, New York,
+// North Carolina, Ohio and Tennessee had no entry, and readers thought their state was not covered).
+const inGroup = (g: Group, lang: Locale) => {
+  const xs = PAGES.filter((p) => p.group === g).map((p) => link(p.id, lang));
+  return g === 'metro' ? [...xs.sort((a, b) => a.label.localeCompare(b.label)), { href: `${route('home', lang)}#areas-title`, label: 'Other states: Colorado, New York, North Carolina, Ohio, Tennessee' }] : xs;
+};
 function categoriesCompletes(lang: Locale): NavCategory[] {
   return GROUPS_ORDER.map((g) => ({ label: GROUP_LABEL[g], links: inGroup(g, lang) })).filter((c) => c.links.length);
 }

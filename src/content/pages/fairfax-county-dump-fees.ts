@@ -8,7 +8,7 @@ export default definePage({
   related: ['transfer-station-fees', 'mattress-disposal', 'construction-debris-disposal', 'home'],
   sources: ['f_fairfax'],
   slug: 'fairfax-county-dump-fees',
-  nav: 'Fairfax County, Virginia',
+  nav: 'Virginia: Fairfax County',
   card: 'Fairfax County’s residential rates for July 2026 to June 2027 at the I-66 Transfer Station and I-95 Landfill Complex: minimums by vehicle, bags, items.',
   title: 'Fairfax County Dump Fees: I-66 and I-95 Rates for FY 2027',
   description: 'Fairfax County dump fees from July 1, 2026 at the I-66 and I-95 sites: minimums by vehicle size, bag rates, brush, debris, mattresses and appliances alike.',
@@ -21,7 +21,7 @@ export default definePage({
   faqs: (h) => [
     { q: 'Which minimum applies to my vehicle in Fairfax County?', a: `The schedule prints three weighed minimums, small, medium and large: ${h.fee(h.F('fairfax').minByVehicle!.car!)}, ${h.fee(h.F('fairfax').minByVehicle!.pickup!)} and ${h.fee(h.F('fairfax').minByVehicle!.trailer!)}. We match them to a car, a pickup and a vehicle with a trailer; the weigh station at the gate decides the category of your vehicle. Above the minimum, the load is charged ${h.fee(h.F('fairfax').perTon!)} a ton.` },
     { q: 'Can I bring just a few bags to the I-66 Transfer Station?', a: `Yes, and Fairfax County prices them without weighing the car: ${h.fee(h.F('fairfax').bags![0].fee)} for one to five bags and ${h.fee(h.F('fairfax').bags![1].fee)} for six to ten. Residents aged 60 or over pay a lower fee for one or two bags. For more than ten bags, the load is weighed and pays at least the minimum for the vehicle.` },
-    { q: 'How much shingle and concrete can I bring to the I-95 complex?', a: `The county takes brick, concrete, dirt, rock and shingles from residents at ${h.fee(h.F('fairfax').cd!.perTon)} a ton, up to two cubic yards a day. At the EPA factor for broken concrete, two cubic yards weigh about ${h.num(2 * h.P.weights.concrete)} lbs, so that limit comes before the payload of most pickups.` },
+    { q: 'How much shingle and concrete can I bring to the I-95 complex?', a: `The county takes brick, concrete, dirt, rock and shingles from residents at ${h.fee(h.F('fairfax').cd!.perTon)} a ton, up to two cubic yards a day. At the factor of the federal environment agency (EPA) for broken concrete, two cubic yards weigh about ${h.num(2 * h.P.weights.concrete)} lbs, so that limit comes before the payload of most pickups.` },
   ],
   body: (h) => {
     const f = h.F('fairfax');

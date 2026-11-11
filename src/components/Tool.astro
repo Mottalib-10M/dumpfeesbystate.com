@@ -33,6 +33,6 @@ if (kind === 'finder') for (const f of DUMPS) {
   (schedules[f.state] ??= []).push({ name: f.name, href: pg ? route(pg.id, "en") : f.url });
 }
 ---
-{kind === 'dump' && <DumpCalc client:load {...props} methodHref={methodHref} weightHref={route('truckload-dump-cost', 'en')} versusHref={route('dumpster-vs-dump-run', 'en')} findHref={findHref} areaHref={areaHref} here={here} idPrefix={idPrefix ?? 'dc'} />}
+{kind === 'dump' && <DumpCalc client:load {...props} methodHref={methodHref} weightHref={route('truckload-dump-cost', 'en')} versusHref={route('dumpster-vs-dump-run', 'en')} findHref={findHref} stateListHref={route('landfills-by-state', 'en')} areaHref={areaHref} here={here} idPrefix={idPrefix ?? 'dc'} />}
 {kind === 'finder' && <LandfillFinder client:load state={props.state ?? 'UT'} schedules={schedules} idPrefix={idPrefix ?? 'lf'} />}
 {mini && <MiniSim client:load kind={mini} href={href} defaults={numDefaults} primary={primary} idPrefix={idPrefix ?? (primary ? 'p' : 'm')} findHref={findHref} />}

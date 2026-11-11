@@ -8,7 +8,7 @@ export default definePage({
   related: ['construction-debris-disposal', 'yard-waste-disposal', 'landfill-prices-per-ton', 'home'],
   sources: ['f_orange_fl', 'f_miami_dade', 'f_jacksonville'],
   slug: 'orlando-dump-fees',
-  nav: 'Orlando and Florida sites',
+  nav: 'Florida: Orlando, Miami, Jacksonville',
   card: 'Orange County’s landfill and transfer station rates from October 2026, with Miami-Dade and Jacksonville beside them.',
   title: 'Orlando Dump Fees: Orange County Landfill Rates, Oct 2026',
   description: 'Orlando dump fees at the Orange County Landfill and transfer stations from October 1, 2026: garbage, debris, yard waste, plus Miami-Dade and Jacksonville.',

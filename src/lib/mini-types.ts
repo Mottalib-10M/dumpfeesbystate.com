@@ -2,7 +2,9 @@
 export interface MiniInput { id: string; label: string; def: number; unit?: string; max?: number; decimals?: number; help?: string; options?: Array<{ value: string; label: string }>;
   /** Champ facultatif rangé dans le repli « Plus de détails » ; sa valeur actuelle reste lisible dans le titre du repli. */
   avance?: boolean }
-export interface MiniOut { head: [string, string]; rows: Array<[string, string]>; note?: string }
+export interface MiniOut { head: [string, string]; rows: Array<[string, string]>; note?: string;
+  /** Ce que suppose le gros chiffre, sur une ligne juste dessous (testeurs naïfs du 2026-11-10, règle 1). */
+  assumes?: string }
 export interface MiniSpec {
   title: string; cta: string; ctaPage?: string; inputs: MiniInput[];
   /** `touched` : les champs que le lecteur a modifiés (testeurs naïfs du 2026-11-08). Tant qu'il est vide,

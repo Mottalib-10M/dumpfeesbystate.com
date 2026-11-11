@@ -163,6 +163,23 @@ export function estimate(f: Facility, L: Load): Estimate {
   return { total, base: b.fee, rule: b.rule, lines, missing, from: !!b.from };
 }
 
+/**
+ * Junk with remodel debris in the same trip (naive test, 2026-11-10: three testers out of three had a couch, a
+ * mattress and debris, and got no figure). No price list we read says how a mixed load is charged, so the
+ * load is priced both ways the gate may do it: all of it as household trash, or the debris on its own at the
+ * site's debris rate (a second weighing, with its own minimum). Where the site prints no debris rate, only the
+ * first way exists. Items (couch, mattress, tires, fridges) ride with the junk in both.
+ */
+export function mixedLoad(f: Facility, L: Load, debrisLbs: number) {
+  const d = Math.max(0, debrisLbs);
+  const asTrash = estimate(f, { ...L, material: 'trash', lbs: Math.max(0, L.lbs) + d });
+  if (!f.cd || d === 0) return { asTrash, junk: null, debris: null, apart: null as number | null };
+  const junk = estimate(f, { ...L, material: 'trash' });
+  const debris = estimate(f, { ...L, material: 'cd', lbs: d, mattresses: 0, bulky: 0, tires: 0, freon: 0 });
+  const apart = junk.total != null && debris.total != null ? r2(junk.total + debris.total) : null;
+  return { asTrash, junk, debris, apart };
+}
+
 /** Plain-words version of an item the schedule does not price: [what, what it means]. */
 export function missingText(m: string): [string, string] {
   const item = m.startsWith('mattress') ? 'Mattress' : m.startsWith('tire') ? 'Tires' : m.startsWith('appliance') ? 'Fridge or air conditioner' : null;
@@ -271,7 +288,9 @@ export function rankInState(f: Facility, all: Array<{ f: Facility; e: Estimate }
   const lo = same[0];
   // Two sentences, the lowest site named with its own verb (naive test, 2026-11-09: “Most expensive …: Washington
   // County charges $0” was read as Washington County being the most expensive).
-  const loTxt = isFreeResident(lo.e) ? `${lo.f.name} (${lo.f.metro}) is free for its qualifying residents for the same load.` : `${lo.f.name} (${lo.f.metro}) charges ${money0(lo.e.total as number)} for the same load.`;
+  // “Badlands, Blythe, Lamb Canyon and El Sobrante landfills charges” (naive test, 2026-11-10): plural names take a plural verb.
+  const many = /(landfills|stations|sites)$/i.test(lo.f.name);
+  const loTxt = isFreeResident(lo.e) ? `${lo.f.name} (${lo.f.metro}) ${many ? 'are' : 'is'} free for qualifying residents for the same load.` : `${lo.f.name} (${lo.f.metro}) ${many ? 'charge' : 'charges'} ${money0(lo.e.total as number)} for the same load.`;
   if (lessHere.length === 0) return { state: `Cheapest of the ${same.length} ${st} sites we priced.`, national };
   if (same[same.length - 1].f.id === f.id || same.filter((x) => (x.e.total as number) > (mine.e.total as number) + 0.004).length === 0) return { state: `The highest of the ${same.length} ${st} sites we priced. ${loTxt}`, national };
   return { state: `${lessHere.length} of the ${same.length} ${st} sites we priced charge less. ${loTxt}`, national };

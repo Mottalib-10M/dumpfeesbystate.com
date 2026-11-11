@@ -8,7 +8,7 @@ export default definePage({
   related: ['mattress-disposal', 'tire-disposal', 'orange-county-dump-fees', 'home'],
   sources: ['f_riverside', 'f_san_bernardino'],
   slug: 'inland-empire-dump-fees',
-  nav: 'Riverside and San Bernardino',
+  nav: 'California: Riverside and San Bernardino',
   card: 'Riverside County’s flat rates and its higher rate for a load with a mattress, and San Bernardino County’s 300 lb small-load fee.',
   title: 'Inland Empire Dump Fees: Riverside and San Bernardino 2026',
   description: 'Inland Empire dump fees in 2026: Riverside County’s flat rate for a car or pickup and its hard-to-handle rate, and San Bernardino’s fee up to 300 lbs.',

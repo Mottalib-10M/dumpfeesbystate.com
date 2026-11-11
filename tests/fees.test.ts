@@ -122,9 +122,9 @@ describe('naive test, 4th round (2026-11-09)', () => {
     const L = { vehicle: 'pickup' as const, lbs: 600, material: 'trash' as const, mattresses: 0, tires: 0, freon: 0, resident: true };
     const all = compare(L);
     const sd = rankInState(byId('san-diego'), all);
-    expect(sd.state).toMatch(/^The highest of the \d+ California sites we priced\. Badlands, Blythe, Lamb Canyon and El Sobrante landfills \(Riverside County\) charges \$15\.70 for the same load\.$/);
+    expect(sd.state).toMatch(/^The highest of the \d+ California sites we priced\. Badlands, Blythe, Lamb Canyon and El Sobrante landfills \(Riverside County\) charge \$15\.70 for the same load\.$/);
     // The free site gets its own verb, never “charges $0” after “most expensive” (naive test, 2026-11-09).
-    expect(rankInState(byId('salt-lake'), all).state).toMatch(/^The highest of the 2 Utah sites we priced\. .+ is free for its qualifying residents for the same load\.$/);
+    expect(rankInState(byId('salt-lake'), all).state).toMatch(/^The highest of the 2 Utah sites we priced\. .+ is free for qualifying residents for the same load\.$/);
     const rv = rankInState(byId('riverside'), all);
     expect(rv.state).toMatch(/^Cheapest of the \d+ California sites we priced\.$/);
     expect(rankInState(byId('dallas'), all).national).toMatch(/^\d+ of the 24 public sites we priced nationwide charge less for this load\.$/);
@@ -156,5 +156,18 @@ describe('naive test, 4th round (2026-11-09)', () => {
     expect(priceListLine(byId('dallas'))).toBe('City of Dallas price list (effective October 1, 2026)');
     expect(residentHelp(byId('san-diego'))).toContain('Poway, El Cajon, Chula Vista');
     expect(hasResidentRule(byId('salt-lake'))).toBe(false);
+  });
+});
+
+describe('naive test, 2026-11-10: junk and remodel debris in one trip', () => {
+  it('priced both ways at a site with a debris rate, as trash only elsewhere', async () => {
+    const { mixedLoad, estimate } = await import('../src/lib/engine/fees');
+    const L = { vehicle: 'pickup' as const, lbs: 600, material: 'trash' as const, mattresses: 1, bulky: 1, tires: 0, freon: 0, resident: true };
+    const sd = mixedLoad(byId('san-diego'), L, 400);
+    expect(sd.asTrash.total).toBe(estimate(byId('san-diego'), { ...L, lbs: 1000 }).total);
+    expect(sd.apart).toBe((estimate(byId('san-diego'), L).total as number) + (estimate(byId('san-diego'), { ...L, lbs: 400, material: 'cd', mattresses: 0, bulky: 0 }).total as number));
+    const none = mixedLoad(byId('dallas'), L, 400);
+    expect(byId('dallas').cd).toBeUndefined();
+    expect(none.apart).toBeNull();
   });
 });

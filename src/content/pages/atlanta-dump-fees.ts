@@ -8,7 +8,7 @@ export default definePage({
   related: ['dumpster-vs-dump-run', 'tire-disposal', 'landfill-prices-per-ton', 'home'],
   sources: ['f_dekalb'],
   slug: 'atlanta-dump-fees',
-  nav: 'Atlanta: DeKalb County',
+  nav: 'Georgia: Atlanta (DeKalb County)',
   card: 'DeKalb County’s Seminole Road Landfill: five weight bands for loads under a ton, then $99.80 a ton, with its tire and appliance fees.',
   title: 'Atlanta Dump Fees 2026: Seminole Road Landfill Weight Bands',
   description: 'Atlanta dump fees at DeKalb County’s Seminole Road Landfill in 2026: five weight bands for loads under a ton, the rate per ton above, tires and appliances.',

@@ -8,7 +8,7 @@ export default definePage({
   related: ['mattress-disposal', 'san-diego-dump-fees', 'inland-empire-dump-fees', 'home'],
   sources: ['f_oc_ca'],
   slug: 'orange-county-dump-fees',
-  nav: 'Orange County, California',
+  nav: 'California: Orange County',
   card: 'OC Waste & Recycling: $15 for a car under 360 lbs, $30 for a pickup under 880 lbs, then by the ton, and the fee for items over six feet.',
   title: 'Orange County Dump Fees 2026: Olinda Alpha, Prima Deshecha',
   description: 'Orange County dump fees in 2026 at the Olinda Alpha and Prima Deshecha landfills: flat rates for light car and pickup loads, a rate per ton, and bulky items.',
@@ -20,8 +20,8 @@ export default definePage({
   },
   faqs: (h) => [
     { q: 'What does it cost to dump a pickup load in Orange County?', a: `${h.fee(h.F('oc-ca').flat!.pickup!)} if the load weighs under ${h.num(h.F('oc-ca').flatMaxLbs!.pickup!)} lbs, plus ${h.fee(h.F('oc-ca').htAdd!)} if it includes items longer than six feet. A heavier load is weighed: 1,200 lbs of routine trash costs about ${h.fee(h.tot('oc-ca', { lbs: 1200 }))}. The fee schedule is the same at both landfills open to the public.` },
-    { q: 'Is a mattress hard-to-handle at the OC landfills?', a: 'The schedule names items longer than six feet, including wood, furniture and mattresses, as hard-to-handle. On a flat-rate load they add a fixed fee once per load. On a weighed load the whole load moves to the hard-to-handle rate per ton. Either way, one mattress costs the same as several.' },
-    { q: 'Do Los Angeles County residents pay the Orange County rates?', a: 'The OC schedule we read does not print a separate rate for residents of other counties. The fee pages of the Los Angeles County Sanitation Districts could not be opened when we checked them, so we cannot compare their rates here. Call the site before driving across the county line.' },
+    { q: 'Is a mattress hard-to-handle at the Orange County landfills?', a: 'The schedule names items longer than six feet, including wood, furniture and mattresses, as hard-to-handle. On a flat-rate load they add a fixed fee once per load. On a weighed load the whole load moves to the hard-to-handle rate per ton. Either way, one mattress costs the same as several.' },
+    { q: 'Do Los Angeles County residents pay the Orange County rates?', a: 'The Orange County schedule we read does not print a separate rate for residents of other counties. The fee pages of the Los Angeles County Sanitation Districts could not be opened when we checked them, so we cannot compare their rates here. Call the site before driving across the county line.' },
   ],
   body: (h) => `
 <h2>Orange County dump fees from July 1, 2026 (OC Waste & Recycling)</h2>

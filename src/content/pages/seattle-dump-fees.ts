@@ -8,7 +8,7 @@ export default definePage({
   related: ['transfer-station-fees', 'yard-waste-disposal', 'appliance-disposal', 'home'],
   sources: ['f_seattle', 'f_king_county', 'f_king_county_next'],
   slug: 'seattle-dump-fees',
-  nav: 'Seattle and King County',
+  nav: 'Washington: Seattle and King County',
   card: 'The minimum charge and per-ton rate at Seattle’s two city transfer stations and the King County stations, 2026 and 2027.',
   title: 'Seattle Dump Fees 2026: City Stations and King County Rates',
   description: 'Seattle dump fees in 2026: the $37 minimum and per-ton rate at the North and South transfer stations, King County station rates, and the 2027 rise announced.',

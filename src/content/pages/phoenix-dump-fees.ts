@@ -8,7 +8,7 @@ export default definePage({
   related: ['dumpster-vs-dump-run', 'transfer-station-fees', 'load-weight-calculator', 'home'],
   sources: ['f_phoenix', 'f_tucson'],
   slug: 'phoenix-dump-fees',
-  nav: 'Phoenix transfer stations',
+  nav: 'Arizona: Phoenix',
   card: 'Phoenix residents’ free monthly load up to a ton, the $55 a ton rate above it, and Tucson’s Los Reales for comparison.',
   title: 'Phoenix Dump Fees: One Free Load a Month and $55 a Ton After',
   description: 'Phoenix dump fees at the 27th Avenue and North Gateway transfer stations: one free load a month up to a ton for residents, then $55 a ton, and Tucson beside it.',

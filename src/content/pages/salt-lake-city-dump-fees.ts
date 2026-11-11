@@ -8,7 +8,7 @@ export default definePage({
   related: ['construction-debris-disposal', 'tire-disposal', 'truckload-dump-cost', 'home'],
   sources: ['f_salt_lake', 'f_washington_ut'],
   slug: 'salt-lake-city-dump-fees',
-  nav: 'Salt Lake Valley Landfill',
+  nav: 'Utah: Salt Lake City and St. George',
   card: 'The $17 flat rate for cars, pickups and hand-unloaded trailers at Salt Lake Valley Landfill, item fees, and St. George’s free resident loads.',
   title: 'Salt Lake City Dump Fees: The Valley Landfill Flat Rate 2026',
   description: 'Salt Lake City dump fees at the Salt Lake Valley Landfill: one flat rate for a car, pickup or hand-unloaded trailer, item fees, and St. George’s free loads.',

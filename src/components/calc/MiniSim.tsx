@@ -84,6 +84,7 @@ export default function MiniSim({ kind, lang = 'en', href, title, defaults = {},
           {!exFac && <MentionExemple lang={lang} touched={touched} />}
           <p className="text-sm font-medium text-navy-700">{out.head[0]}</p>
           <p className="tabular-nums mt-1 text-4xl font-bold text-navy-900">{out.head[1]}</p>
+          {out.assumes && <p data-fixe className="mt-1 text-navy-700">{out.assumes}</p>}
           <table className="ledger mt-3 w-full text-sm"><tbody>
             {out.rows.map(([l, x]) => <tr key={l}><td className="pr-3 text-navy-700">{l}</td><td className="tabular-nums text-right text-navy-900">{x}</td></tr>)}
           </tbody></table>
